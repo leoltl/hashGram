@@ -1,14 +1,16 @@
 import './env';
 import express from 'express';
-import db from './database/database';
+import path from 'path';
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'templates'));
+
 app.get('/', async (req, res) => {
-  const u = await db.select('id').from('users');
-  res.send(`welcome to hashGram ${JSON.stringify(u)}`);
+  res.render('test');
 });
 
 app.listen(PORT, () => {
