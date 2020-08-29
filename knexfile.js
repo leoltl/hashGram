@@ -4,6 +4,20 @@ const path = require('path');
 
 module.exports = {
 
+  test: {
+    client: 'sqlite3',
+    connection: {
+      filename: ':memory:',
+    },
+    migrations: {
+      directory: path.join(__dirname, '/knex/mmigrations'),
+    },
+    seeds: {
+      directory: path.join(__dirname, '/knex/seeds/test'),
+    },
+    useNullAsDefault: true,
+  },
+
   development: {
     client: 'postgresql',
     connection: {
@@ -16,7 +30,7 @@ module.exports = {
       directory: path.join(__dirname, '/knex/mmigrations'),
     },
     seeds: {
-      directory: path.join(__dirname, '/knex/seeds'),
+      directory: path.join(__dirname, '/knex/seeds/development'),
     },
   },
 

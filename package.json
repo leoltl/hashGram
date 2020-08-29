@@ -17,17 +17,21 @@
     "@babel/core": "^7.11.4",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.3.0",
     "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "jest": "^26.4.2",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "regenerator-runtime": "^0.13.7"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "knex": "^0.21.5",
     "pg": "^8.3.3",
-    "pug": "^3.0.0"
+    "pug": "^3.0.0",
+    "sqlite3": "^5.0.0"
   }
 }
