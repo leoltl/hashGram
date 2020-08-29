@@ -27,21 +27,22 @@ const baseModel = {
       };
     }, {});
   },
-  safeQuery: async function safeQuery(q) {
+  safeQuery: async function safeQuery(query, where = null) {
     let res;
     try {
-      res = await q;
+      res = await (where ? query.where(this.makeDOASnakeCase(where)) : query);
     } catch (e) {
       if (new RegExp(/no such column/).test(e.message)) {
         return [];
       }
+      throw e;
     }
     return this.makeDOACamelCase(res);
   },
-  safeInsert: async function safeInsert(q) {
+  safeInsert: async function safeInsert(query, dataObject) {
     let res;
     try {
-      res = await q;
+      res = await query.insert(this.makeDOASnakeCase(dataObject));
     } catch (e) {
       if (new RegExp(/NOT NULL constraint failed/).test(e.message)) {
         const field = e.message.split(/NOT NULL constraint failed/)[1].split('.')[1];

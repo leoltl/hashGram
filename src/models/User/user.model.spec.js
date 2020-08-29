@@ -2,8 +2,6 @@ import makeUser from './user.model';
 import db from '../../../knex/knex';
 import baseModel, { DOAError } from '../model';
 
-const User = makeUser(db, baseModel);
-
 beforeEach(async () => {
   await db.migrate.rollback();
   await db.migrate.latest();
@@ -13,6 +11,8 @@ beforeEach(async () => {
 afterAll(async () => {
   await db.destroy();
 });
+
+const User = makeUser(db, baseModel);
 
 describe('user model', () => {
   describe('getAll', () => {
@@ -75,7 +75,7 @@ describe('user model', () => {
         lastName: 'last',
         password: 'hashedPassword',
       };
-      await expect(User.create(missingEmail)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): email'}));
+      await expect(User.create(missingEmail)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): email' }));
     });
     it('handles duplicating columns', async () => {
       const duplicateEmail = {
