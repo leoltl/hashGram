@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node src/index.js",
     "start:dev": "nodemon --exec babel-node src/index.js",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "Leo Lee",
