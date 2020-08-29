@@ -2,8 +2,8 @@ import './env';
 import express from 'express';
 import path from 'path';
 
-import makeUser from "./models/User/user.model";
-import db from "../knex/knex";
+import makeUser from './models/User/user.model';
+import db from '../knex/knex';
 
 const User = makeUser(db);
 
