@@ -1,3 +1,4 @@
+/* eslint-disable key-spacing */
 const path = require('path');
 // Update with your config settings.
 
