@@ -11,6 +11,7 @@ exports.seed = function(knex) {
           password: 'dorwssap',
           first_name: 'nigel',
           last_name: 'L',
+          handle: 'nigelL',
         },
         {
           id: 2,
@@ -18,6 +19,7 @@ exports.seed = function(knex) {
           password: 'password1',
           first_name: 'nakaz',
           last_name: 'L',
+          handle: 'nakazL',
         },
         {
           id: 3,
@@ -25,6 +27,7 @@ exports.seed = function(knex) {
           password: 'password123',
           first_name: 'jaywon',
           last_name: 'L',
+          handle: 'jaywonL',
         },
       ])
     ));

@@ -30,7 +30,7 @@ describe('Post model', () => {
   describe('get', () => {
     it('happy path', async () => {
       const post = await Post.get({ id: 1 });
-      expect(post[0].userId).toBe(1);
+      expect(post[0].handle).toBe('nigelL');
       expect(post[0].caption).toBe('Have an amazing weekend #Toronto #TorontoWaterfront #CNTower #Night #nightTO - @thelandofdustin');
     });
     it('should return empty array for an invalid column passed into queryObject', async () => {
