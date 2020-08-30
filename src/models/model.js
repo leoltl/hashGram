@@ -9,8 +9,8 @@ export class DOAError extends Error {
 }
 
 const baseModel = {
-  makeDOACamelCase: function makeDOACamelCase(res) {
-    return res.map((row) => Object.entries(row).reduce((DOA, [key, value]) => {
+  makeDOACamelCase: function makeDOACamelCase(dbRows) {
+    return dbRows.map((row) => Object.entries(row).reduce((DOA, [key, value]) => {
       const camelCaseKey = makeCamelCaseAlias(key);
       return {
         ...DOA,
@@ -27,10 +27,22 @@ const baseModel = {
       };
     }, {});
   },
+  addTableNameToId: function addTableNameToId(dataObject, tableName) {
+    if ('id' in dataObject) {
+      const { id, ...rest } = dataObject;
+      return { [`${tableName}.id`]: id, ...rest };
+    }
+    return dataObject;
+  },
   safeQuery: async function safeQuery(query, where = null) {
     let res;
+    // const currentTable = query.toSQL().sql.match(new RegExp(/from `([^`]*)`/))[1];
+    // eslint-disable-next-line no-underscore-dangle
+    const currentTable = query._single.table;
     try {
-      res = await (where ? query.where(this.makeDOASnakeCase(where)) : query);
+      res = await (where
+        ? query.where(this.makeDOASnakeCase(this.addTableNameToId(where, currentTable)))
+        : query);
     } catch (e) {
       if (new RegExp(/no such column/).test(e.message)) {
         return [];

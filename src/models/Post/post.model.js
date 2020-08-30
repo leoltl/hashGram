@@ -1,17 +1,14 @@
 function makePost(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['posts.id', 'user_id', 'image_url', 'caption'];
+  const DEFAULT_GET_COLUMNS = ['posts.id', 'image_url', 'caption', 'users.handle', 'users.first_name'];
 
   function getAll(options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
-    return baseModel.safeQuery(db('posts').select(returnColumns));
+    return baseModel.safeQuery(db('posts').select(returnColumns).join('users', 'posts.user_id', 'users.id'));
   }
 
   async function get(queryObject, options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
-    const join = Object.keys(queryObject).some((key) => key.includes('.'));
-    const query = join
-      ? db('posts').select(returnColumns).join('users', 'posts.user_id', 'users.id')
-      : db('posts').select(returnColumns);
+    const query = db('posts').select(returnColumns).join('users', 'posts.user_id', 'users.id');
     return baseModel.safeQuery(query, queryObject);
   }
 
