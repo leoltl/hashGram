@@ -1,0 +1,14 @@
+nav {
+  width: 100vw;
+  height: var(--navbar-height);
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: var(--element-bg-color);
+}
+
+.logo {
+  font-size: var(--step-up-2);
+}

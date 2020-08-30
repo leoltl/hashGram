@@ -1,0 +1,15 @@
+@import './reset.css';
+@import './global-vars.css';
+@import './type-scale.css';
+@import './partials/layout.css';
+@import './partials/_post.css';
+@import './partials/_nav.css';
+
+:root {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: var(--font);
+}

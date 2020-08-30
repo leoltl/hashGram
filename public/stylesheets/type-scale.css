@@ -1,0 +1,11 @@
+:root {
+  --step-up-5: 4.209em;
+  --step-up-4: 3.157em;
+  --step-up-3: 2.369em;
+  --step-up-2: 1.7777em;
+  --step-up-1: 1.3333em;
+  /* baseline: 1em */
+  --step-down-1: 0.75em;
+  --step-down-2: 0.563em;
+  --step-down-3: 0.422em;
+}

@@ -1,0 +1,38 @@
+:root {
+  --primary-color: red;
+  --bg-color: #fafafa;
+  --element-bg-color: #fff;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --navbar-height: 44px;
+
+  --margin-xs: 0.25em;
+  --margin-sm: 0.5em;
+  --margin-md: 1em;
+  --margin-lg: 1.5em;
+  --margin-xl: 3em;
+
+  --padding-xs: 0.25em;
+  --padding-sm: 0.5em;
+  --padding-md: 1em;
+  --padding-lg: 1.5em;
+  --padding-xl: 3em;
+}
+
+
+@media screen and (min-width: 600px) {
+  :root {
+    --navbar-height: 54px;
+
+    --margin-xs: 0.3em;
+    --margin-sm: 0.6em;
+    --margin-md: 1.2em;
+    --margin-lg: 1.8em;
+    --margin-xl: 3.6em;
+
+    --padding-xs: 0.3em;
+    --padding-sm: 0.6em;
+    --padding-md: 1.2em;
+    --padding-lg: 1.8em;
+    --padding-xl: 3.6em;
+  } 
+}

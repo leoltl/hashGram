@@ -1,0 +1,9 @@
+main {
+  padding-top: var(--navbar-height)
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
