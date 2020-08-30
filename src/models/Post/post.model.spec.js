@@ -52,4 +52,30 @@ describe('Post model', () => {
       expect(post.length).toBe(3);
     });
   });
+  describe('create', () => {
+    it('happy path', async () => {
+      const newPost = {
+        userId: 2,
+        imageUrl: 'https://instagram.fcxh3-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118523282_121765046060913_5209181211252721492_n.jpg?_nc_ht=instagram.fcxh3-1.fna.fbcdn.net&_nc_cat=1&_nc_ohc=rs2Y-Y1V_vgAX_0X9cX&oh=d56c0cad6e9576b6104e1294a875ca0d&oe=5F7434D8',
+        caption: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
+      };
+      const post = await Post.create(newPost);
+      expect(post[0].caption).toBe('This popular jerk chicken joint just opened a second Toronto location @coolrunningsres');
+    });
+    it('handles optional field', async () => {
+      const optionCaption = {
+        userId: 2,
+        imageUrl: 'https://instagram.fcxh3-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118523282_121765046060913_5209181211252721492_n.jpg?_nc_ht=instagram.fcxh3-1.fna.fbcdn.net&_nc_cat=1&_nc_ohc=rs2Y-Y1V_vgAX_0X9cX&oh=d56c0cad6e9576b6104e1294a875ca0d&oe=5F7434D8',
+      };
+      const post = await Post.create(optionCaption);
+      expect(post[0].caption).toBe('');
+    });
+    it('handles missing required columns', async () => {
+      const MissingURL = {
+        userId: 2,
+        caption: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
+      };
+      await expect(Post.create(MissingURL)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): image_url' }));
+    });
+  });
 });
