@@ -18,11 +18,18 @@ describe('Post model', () => {
   describe('getAll', () => {
     it('happy path', async () => {
       const posts = await Post.getAll();
-      expect(posts.length).not.toBe(0);
-      expect(posts[0].password).toBeUndefined();
+      expect(posts.length).toBe(3);
+    });
+    it('should return posts for given user', async () => {
+      const posts = await Post.getAll({ handle: 'nigelL' });
+      expect(posts.length).toBe(2);
+    });
+    it('should return accepct string for querying given user', async () => {
+      const posts = await Post.getAll('nigelL');
+      expect(posts.length).toBe(2);
     });
     it('should return empty array for an invalid column passed into columns of options', async () => {
-      const posts = await Post.getAll({ columns: ['idd'] });
+      const posts = await Post.getAll({}, { columns: ['idd'] });
       expect(posts).toBeDefined();
       expect(posts.length).toBe(0);
     });
@@ -45,11 +52,11 @@ describe('Post model', () => {
     });
     it('should return posts for a given user-id', async () => {
       const post = await Post.get({ 'users.id': 1 });
-      expect(post.length).toBe(3);
+      expect(post.length).toBe(2);
     });
     it('should return posts for a given user email', async () => {
       const post = await Post.get({ 'users.email': 'nigel@email.com' });
-      expect(post.length).toBe(3);
+      expect(post.length).toBe(2);
     });
   });
   describe('create', () => {

@@ -15,14 +15,15 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'templates'));
 
-app.get('/', async (req, res) => {
-  const posts = await Post.getAll();
-  res.render('index', {
+app.use('/stylesheets', express.static(path.join(__dirname, '..', 'public', 'stylesheets')));
+
+app.get('/:handle?', async (req, res) => {
+  const { handle = {} } = req.params;
+  const posts = await Post.getAll(handle);
+  res.render('profile', {
     posts,
   });
 });
-
-app.use('/stylesheets', express.static(path.join(__dirname, '..', 'public', 'stylesheets')));
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

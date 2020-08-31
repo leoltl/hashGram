@@ -17,7 +17,7 @@ exports.seed = function (knex) {
       },
       {
         id: 3,
-        user_id: 1,
+        user_id: 2,
         image_url: 'https://instagram.fyvr1-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118368984_905904556563839_1739735206128910038_n.jpg?_nc_ht=instagram.fyvr1-1.fna.fbcdn.net&_nc_cat=111&_nc_ohc=fcpycqEGqDAAX_hA3EQ&oh=195bb200e21b8a43f5c275efaca6f320&oe=5F74E716',
         caption: 'Not your average corn maze #Caledon #Ontario #ExploreOntario #DixieOrchards #CornMaze #Canada #ExploreCanada #travelTO - @aryanmojiri',
       },
