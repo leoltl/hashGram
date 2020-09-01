@@ -1,5 +1,5 @@
 function makeUser(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['users.id', 'email', 'first_name', 'last_name'];
+  const DEFAULT_GET_COLUMNS = ['users.id', 'email', 'first_name', 'last_name', 'handle'];
 
   async function getAll(options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
@@ -8,7 +8,11 @@ function makeUser(db, baseModel) {
 
   async function get(queryObject, options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
-    return baseModel.safeQuery(db('users').select(returnColumns), queryObject);
+    const query = db('users').select(returnColumns);
+    if (typeof queryObject === 'string') {
+      return baseModel.safeQuery(query, { handle: queryObject });
+    }
+    return baseModel.safeQuery(query, queryObject);
   }
 
   async function create(dataObject, options = {}) {

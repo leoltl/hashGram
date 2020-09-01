@@ -19,9 +19,14 @@ app.use('/stylesheets', express.static(path.join(__dirname, '..', 'public', 'sty
 
 app.get('/:handle?', async (req, res) => {
   const { handle = {} } = req.params;
+  console.log(handle);
   const posts = await Post.getAll(handle);
-  res.render('profile', {
+  const [user] = await User.get(handle);
+  console.log(user)
+  const template = req.params.handle ? 'profile' : 'index';
+  res.render(template, {
     posts,
+    user,
   });
 });
 

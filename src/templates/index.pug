@@ -1,16 +1,8 @@
+extends layout
 include mixins/_post
-include mixins/_nav
 
-doctype html
-html
-  head
-    title #hashGram
-    link(rel="stylesheet" href='/stylesheets/styles.css')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-  body
-    +_nav(user)
-    main
-      section.post-list
-        each post in posts
-          +post(post)
-    
+block main
+  main.index
+    section.post-list
+      each post in posts
+        +_post(post)

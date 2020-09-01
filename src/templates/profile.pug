@@ -1,0 +1,11 @@
+extends layout
+include mixins/_gallery_image
+include mixins/_profile_header
+
+block main
+  main.profile
+    header.profile__header
+      +_profile_header(user)
+    section.profile__gallery
+      each post in posts
+        +_gallery_image(post)

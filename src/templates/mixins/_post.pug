@@ -1,12 +1,13 @@
-mixin post(post)
+mixin _post(post)
   article.post
     header.post__header
       .post__user-header-wrapper
-      p.post__username 
-        | #{post.handle}
-    div.post__main-image
+      a(href='/' + post.handle)
+        p.post__username 
+          | #{post.handle}
+    .post__main-image
       img(src=post.imageUrl)
-    div.post__footer
+    .post__footer
       p.post__caption 
         span.post__caption-username #{post.handle}
         | #{post.caption}
