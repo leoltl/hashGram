@@ -5,11 +5,13 @@ main.profile {
 section.profile__gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: calc((min(100vw, 600px) - var(--margin-sm) * 2) / 3 );
+  /* set rows height equals width with 100 vw - two grid gaps / 3 cols*/
+  grid-auto-rows: calc((min(100vw, 725px) - var(--margin-sm) * 2) / 3 ); 
   grid-gap: var(--margin-sm);
   overflow: hidden;
-  width: 100vw;
-  max-width: 600px;
+  width: 100%;
+  max-width: 725px;
+  margin: 0 auto;
 }
 
 .gallery__image {
@@ -24,6 +26,8 @@ section.profile__gallery {
 .profile__header {
   display: flex;
   flex-wrap: wrap;
+  max-width: 975px;
+  margin: 0 auto;
 }
 
 .profile__header-image {
@@ -63,6 +67,7 @@ section.profile__gallery {
   border-radius: 3px;
   text-transform: capitalize;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .profile__header-about {
@@ -97,8 +102,15 @@ section.profile__gallery {
 
 
 @media screen and (min-width: 600px) {
+  section.profile__gallery {
+    grid-auto-rows: calc((min(100vw, 725px) - var(--margin-lg) * 2) / 3 ); 
+    grid-gap: var(--margin-lg);
+  }
+
   .profile__header {
+    margin: 0 auto;
     display: grid;
+    grid-column-gap: calc(2* var(--margin-lg));
     grid-template-columns: 1fr 3fr;
     grid-template-rows: repeat(3, auto);
     padding: var(--padding-md);
@@ -106,13 +118,15 @@ section.profile__gallery {
   }
 
   .profile__header-image {
+    width: 100%;
+    margin: 0;
     grid-row: 1 / 4;
     grid-column: 1 / 2;
-    margin: auto;
+    display: flex;
+    justify-content: center;
   }
-
+  
   .profile__image-wrapper {
-    margin: 0 auto;
     width: 150px;
     height: 150px;
   }
@@ -120,13 +134,19 @@ section.profile__gallery {
   .profile__header-title {
     display: block;
     width: auto;
-  }  
+    margin: var(--margin-xs) 0;
+  }
+
+  .profile__header-handle {
+    margin-right: var(--margin-sm);
+  }
   
   .profile__header-stats {
     order: initial;
     width: auto;
     border: none;
     padding: 0;
+    width: 70%;
   }
 
   .profile__header-stats > div {
@@ -137,6 +157,7 @@ section.profile__gallery {
   .profile__stats-label {
     padding: 0 var(--padding-sm);
     font-size: initial;
+    color: initial;
   }
 
   .profile__header-about {
@@ -144,5 +165,23 @@ section.profile__gallery {
     grid-column: 2 / 3;
     width: auto;
     padding: 0;
+  }
+
+  .profile__name {
+    padding: var(--padding-sm) 0;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  section.profile__gallery {
+    max-width: 935px;
+    grid-auto-rows: calc((min(100vw, 935px) - var(--margin-lg) * 2) / 3 ); 
+    grid-gap: var(--margin-lg);
+  }
+
+  .profile__header {
+    display: grid;
+    grid-template-columns: 200px auto;
+    grid-template-rows: repeat(3, auto);
   }
 }
