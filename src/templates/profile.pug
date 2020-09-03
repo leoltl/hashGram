@@ -2,6 +2,9 @@ extends layout
 include mixins/_gallery_image
 include mixins/_profile_header
 
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/profile.css")
+
 block main
   main.profile
     header.profile__header

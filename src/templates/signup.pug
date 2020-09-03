@@ -1,0 +1,21 @@
+extends layout
+include mixins/_text-input
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/signup.css")
+
+block main
+  main.signup
+    if error_msg 
+        .flash-errors #{error_msg}
+    form.signup-form(action="/signup", method="post")
+      +_text-input('signup', 'handle', 'User handle', prevFilled && prevFilled.handle)
+      +_text-input('signup', 'fullName', 'Full name', prevFilled && prevFilled.fullname)
+      +_text-input('signup', 'email', 'Email', prevFilled && prevFilled.email)
+      +_text-input('signup', 'password', 'Password')
+      +_text-input('signup', 'passwordConfirm', 'Confirm Password')
+      button.signup-form__input-submit(type='submit') Sign Up
+    div.signin-box
+      p 
+        | Have an account? 
+        a(href='/signin') Sign In

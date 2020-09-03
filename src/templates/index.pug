@@ -1,6 +1,9 @@
 extends layout
 include mixins/_post
 
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/post.css")
+
 block main
   main.index
     section.post-list

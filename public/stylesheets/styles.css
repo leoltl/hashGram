@@ -1,11 +1,8 @@
 @import './reset.css';
 @import './global-vars.css';
 @import './type-scale.css';
-@import './partials/layout.css';
-@import './partials/_post.css';
+@import './partials/_layout.css';
 @import './partials/_nav.css';
-@import './partials/_profile.css';
-@import './partials/_signin.css';
 
 :root {
   box-sizing: border-box;
@@ -43,4 +40,14 @@ input {
   background-color: var(--bg-color);
   border: var(--default-border);
   padding: var(--padding-sm);
+  border-radius: 2px;
+}
+
+.flash-errors {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin-top: var(--margin-sm);
+  padding: var(--padding-sm) var(--padding-md);
 }

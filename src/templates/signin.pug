@@ -1,11 +1,16 @@
 extends layout
 include mixins/_text-input
 
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/signin.css")
+
 block main
   main.signin
+    if error_msg 
+      .flash-errors #{error_msg}
     form.signin-form(action="/signin", method="post")
       +_text-input('signin', 'handle', 'Username')
-      +_text-input('signin', 'password', 'Password')
+      +_text-input('signin', 'password', 'Password')    
       button.signin-form__input-submit(type='submit') Sign In
     div.signup-box
       p 

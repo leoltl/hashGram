@@ -3,21 +3,21 @@ import bcrypt from 'bcrypt';
 import { DOAError, ClientError } from '../../lib/errors';
 import domainValidators from '../../models/domainValidators';
 
-export function makeCreateUser(createUserInDB, hashFunction, validNewUser) {
+export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserField) {
   return async function createUser(req, res, next) {
-    const { payload } = req.body;
+    const payload = req.body || {};
     try {
-      if (validNewUser(payload)) {
-        /* exclude password confirm for new user creation */
-        const { passwordConfirm, ...newUser } = payload;
-        newUser.password = hashFunction(newUser.password);
-        const [handle] = await createUserInDB(newUser);
-        req.session.user_handle = handle;
-        res.redirect('/');
-      }
+      throwOnInvalidUserField(payload);
+      const { passwordConfirm, ...newUser } = payload; // exclude password confirm
+      newUser.password = hashFunction(newUser.password);
+      const [handle] = await createUserInDB(newUser);
+      req.session.user_handle = handle;
+      res.redirect('/');
     } catch (e) {
-      if (e instanceof DOAError) {
-        return next(new ClientError({ message: e.message }));
+      if (e instanceof ClientError || e instanceof DOAError) {
+        req.session.error_msg = e.message;
+        req.session.prevFilled = payload;
+        return res.redirect('/signup');
       }
       next(e);
     }
@@ -45,13 +45,12 @@ export function makeSigninUser(getUserFromDB, compareHash) {
 }
 
 export function signinPage(req, res) {
-  console.log(req.session.error_msg);
   if (res.locals.authUser) {
     return res.redirect('/');
   }
   if (req.session.error_msg) {
     res.locals.error_msg = req.session.error_msg;
-    req.session.error_msg = '';
+    req.session.error_msg = null;
   }
   res.render('signin');
 }
@@ -59,6 +58,14 @@ export function signinPage(req, res) {
 export function signupPage(req, res) {
   if (res.locals.authUser) {
     res.redirect('/');
+  }
+  if (req.session.error_msg) {
+    res.locals.error_msg = req.session.error_msg;
+    req.session.error_msg = null;
+  }
+  if (req.session.prevFilled) {
+    res.locals.prevFilled = req.session.prevFilled;
+    req.session.prevFilled = null;
   }
   res.render('signup');
 }
@@ -75,9 +82,10 @@ export default function installAuthControllers(router, userModel) {
   );
 
   router.get('/signin', signinPage);
+  router.post('/signin', signinUser);
+
   router.get('/signup', signupPage);
   router.post('/signup', createUser);
-  router.post('/signin', signinUser);
 
   return router;
 }

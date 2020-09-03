@@ -19,7 +19,11 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'templates'));
 
 if (process.env.NODE_ENV !== 'production') {
-  app.use(morgan('dev'));
+  app.use(morgan('dev', {
+    skip(req) {
+      return req.path.match(/(png|svg|jpeg|woff2|css|js|)$/ig)[0];
+    },
+  }));
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
