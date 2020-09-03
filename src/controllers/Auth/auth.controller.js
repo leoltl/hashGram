@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import { DOAError, ClientError } from '../../lib/errors';
 import domainValidators from '../../models/domainValidators';
 
-function makeSignupRoutes(createUserInDB, hashFunction, validNewUser) {
-  async function createUser(req, res, next) {
+export function makeCreateUser(createUserInDB, hashFunction, validNewUser) {
+  return async function createUser(req, res, next) {
     const { payload } = req.body;
     try {
       if (validNewUser(payload)) {
@@ -21,24 +21,14 @@ function makeSignupRoutes(createUserInDB, hashFunction, validNewUser) {
       }
       next(e);
     }
-  }
-
-  function signupPage(req, res) {
-    if (res.locals.authUser) {
-      res.redirect('/');
-    }
-    res.render('signup');
-  }
-
-  return function installRoutes(router) {
-    /* hooking up controllers to router */
-    router.get('/signup', signupPage);
-    router.post('/signup', createUser);
   };
 }
 
-function makeSigninRoutes(getUserFromDB, compareHash) {
-  async function signInUser(req, res, next) {
+export function makeSigninUser(getUserFromDB, compareHash) {
+  return async function signInUser(req, res, next) {
+    if (res.locals.authUser) {
+      return res.redirect('/');
+    }
     const { payload: { handle, password: plainPassword } } = req.body;
     try {
       const [user] = await getUserFromDB(handle, { columns: ['handle', 'password'] });
@@ -46,36 +36,43 @@ function makeSigninRoutes(getUserFromDB, compareHash) {
         req.session.user_handle = user.handle;
         return res.redirect('/');
       }
+      req.session.error_msg = 'Authentication failed. Please try again.';
       res.redirect('/signin');
     } catch (e) {
       next(e);
     }
-  }
-
-  function signinPage(req, res) {
-    if (res.locals.authUser) {
-      res.redirect('/');
-    }
-    res.render('signin');
-  }
-
-  return function installRoutes(router) {
-    /* hooking up controllers to router */
-    router.post('/signin', signInUser);
-    router.get('/signin', signinPage);
   };
 }
 
+export function signinPage(req, res) {
+  if (res.locals.authUser) {
+    res.redirect('/');
+  }
+  res.render('signin');
+}
+
+export function signupPage(req, res) {
+  if (res.locals.authUser) {
+    res.redirect('/');
+  }
+  res.render('signup');
+}
+
 export default function installAuthControllers(router, userModel) {
-  makeSignupRoutes(
+  const createUser = makeCreateUser(
     userModel.create,
     (password) => bcrypt.hashSync(password, 10),
     domainValidators.User,
-  )(router);
-  makeSigninRoutes(
-    router,
+  );
+  const signinUser = makeSigninUser(
     userModel.get,
     bcrypt.compareSync,
-  )(router);
+  );
+
+  router.get('/signin', signinPage);
+  router.get('/signup', signupPage);
+  router.post('/signup', createUser);
+  router.post('signin', signinUser);
+
   return router;
 }
