@@ -29,10 +29,10 @@ export function makeSigninUser(getUserFromDB, compareHash) {
     if (res.locals.authUser) {
       return res.redirect('/');
     }
-    const { payload: { handle, password: plainPassword } } = req.body;
+    const { handle, password: plainPassword } = req.body;
     try {
       const [user] = await getUserFromDB(handle, { columns: ['handle', 'password'] });
-      if (handle === user.handle && compareHash(plainPassword, user.password)) {
+      if (user && compareHash(plainPassword, user.password)) {
         req.session.user_handle = user.handle;
         return res.redirect('/');
       }
@@ -45,8 +45,13 @@ export function makeSigninUser(getUserFromDB, compareHash) {
 }
 
 export function signinPage(req, res) {
+  console.log(req.session.error_msg);
   if (res.locals.authUser) {
-    res.redirect('/');
+    return res.redirect('/');
+  }
+  if (req.session.error_msg) {
+    res.locals.error_msg = req.session.error_msg;
+    req.session.error_msg = '';
   }
   res.render('signin');
 }
@@ -72,7 +77,7 @@ export default function installAuthControllers(router, userModel) {
   router.get('/signin', signinPage);
   router.get('/signup', signupPage);
   router.post('/signup', createUser);
-  router.post('signin', signinUser);
+  router.post('/signin', signinUser);
 
   return router;
 }

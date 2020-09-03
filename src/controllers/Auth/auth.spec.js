@@ -59,7 +59,7 @@ describe('signInUser', () => {
 
   it('should set session user_handle prop to handle if the user credential is correct', async () => {
     const res = mockResponse();
-    const req = mockRequest({ payload: { handle: 'test', password: '123' } });
+    const req = mockRequest({ handle: 'test', password: '123' });
     const next = jest.fn();
     await signInUserController(req, res, next);
     expect(req.session.user_handle).toBe('test');
@@ -67,7 +67,7 @@ describe('signInUser', () => {
 
   it('should set a error_msg to session and redirect to signin if credentials is not correct', async () => {
     const res = mockResponse();
-    const req = mockRequest({ payload: { handle: 'test', password: '234' } });
+    const req = mockRequest({ handle: 'test', password: '234' });
     const next = jest.fn();
     await signInUserController(req, res, next);
     expect(req.session.error_msg).toContain('Authentication failed');
