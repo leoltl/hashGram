@@ -61,6 +61,11 @@ const baseModel = {
         const field = e.message.split(/UNIQUE constraint failed/)[1].split('.')[1];
         throw new DOAError({ type: 'insert', message: `Field(s) provided: (${field}) is duplicated` });
       }
+      if (new RegExp(/duplicate key value violates unique constraint/).test(e.message)) {
+        const field = e.message.match(new RegExp(/unique constraint "(.*)_unique"/))[1];
+        throw new DOAError({ type: 'insert', message: `Field(s) provided: (${field}) is duplicated` });
+      }
+
       throw e;
     }
     return res;

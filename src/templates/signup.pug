@@ -10,7 +10,7 @@ block main
         .flash-errors #{error_msg}
     form.signup-form(action="/signup", method="post")
       +_text-input('signup', 'handle', 'User handle', prevFilled && prevFilled.handle)
-      +_text-input('signup', 'fullName', 'Full name', prevFilled && prevFilled.fullname)
+      +_text-input('signup', 'fullName', 'Full name', prevFilled && prevFilled.fullName)
       +_text-input('signup', 'email', 'Email', prevFilled && prevFilled.email)
       +_text-input('signup', 'password', 'Password')
       +_text-input('signup', 'passwordConfirm', 'Confirm Password')
