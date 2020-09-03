@@ -1,0 +1,3 @@
+mixin _text-input(form, field, placeholder)
+  label.sr-only(for=`${field}`) #{field}
+  input(class=`${form}-form__input` type='text' name=`${field}` placeholder= placeholder ? placeholder : '')

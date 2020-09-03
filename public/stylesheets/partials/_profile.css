@@ -58,18 +58,6 @@ section.profile__gallery {
   font-size: var(--step-up-2);
 }
 
-
-.profile__header-title button {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: var(--padding-sm) var(--padding-md);
-  border-radius: 3px;
-  text-transform: capitalize;
-  font-weight: 600;
-  cursor: pointer;
-}
-
 .profile__header-about {
   width: 100vw;
   padding: var(--padding-md);

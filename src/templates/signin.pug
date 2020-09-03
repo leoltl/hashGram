@@ -1,0 +1,13 @@
+extends layout
+include mixins/_text-input
+
+block main
+  main.signin
+    form.signin-form(action="/signin", method="post")
+      +_text-input('signin', 'handle', 'Username')
+      +_text-input('signin', 'password', 'Password')
+      button.signin-form__input-submit(type='submit') Sign In
+    div.signup-box
+      p 
+        | Don't have an account? 
+        a(href='/signup') Sign Up

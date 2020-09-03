@@ -5,6 +5,7 @@
 @import './partials/_post.css';
 @import './partials/_nav.css';
 @import './partials/_profile.css';
+@import './partials/_signin.css';
 
 :root {
   box-sizing: border-box;
@@ -13,4 +14,33 @@
 body {
   background-color: var(--bg-color);
   font-family: var(--font);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* added line */
+  border: 0;
+}
+
+button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  text-transform: capitalize;
+  font-weight: 600;
+  cursor: pointer;
+  padding: var(--padding-btn);
+}
+
+input {
+  background-color: var(--bg-color);
+  border: var(--default-border);
+  padding: var(--padding-sm);
 }
