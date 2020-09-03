@@ -1,6 +1,7 @@
 import makePost from './post.model';
 import db from '../../../knex/knex';
-import baseModel, { DOAError } from '../model';
+import baseModel from '../model';
+import { DOAError } from '../../lib/errors';
 
 beforeEach(async () => {
   await db.migrate.rollback();

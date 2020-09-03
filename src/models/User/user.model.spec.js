@@ -1,6 +1,7 @@
 import makeUser from './user.model';
 import db from '../../../knex/knex';
-import baseModel, { DOAError } from '../model';
+import baseModel from '../model';
+import { DOAError } from '../../lib/errors';
 
 beforeEach(async () => {
   await db.migrate.rollback();
@@ -24,8 +25,7 @@ describe('user model', () => {
     it('should return user\'s required fields', async () => {
       const users = await User.getAll();
       expect(users[0].email).toBeDefined();
-      expect(users[0].firstName).toBeDefined();
-      expect(users[0].lastName).toBeDefined();
+      expect(users[0].fullName).toBeDefined();
     });
     it('should not return user\'s credentials', async () => {
       const users = await User.getAll();
@@ -60,29 +60,29 @@ describe('user model', () => {
   describe('create', () => {
     const userObject = {
       email: 'test@gmail.com',
-      firstName: 'first',
-      lastName: 'last',
+      fullName: 'first',
       password: 'hashedPassword',
+      handle: 'testL',
     };
     it('happy path', async () => {
       const user = await User.create(userObject);
       expect(user).toBeDefined();
-      expect(user[0].email).toBe(userObject.email);
+      expect(user[0].handle).toBe(userObject.handle);
     });
     it('handles missing required columns', async () => {
       const missingEmail = {
-        firstName: 'first',
-        lastName: 'last',
+        fullName: 'first',
         password: 'hashedPassword',
+        handle: 'testL',
       };
       await expect(User.create(missingEmail)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): email' }));
     });
     it('handles duplicating columns', async () => {
       const duplicateEmail = {
         email: 'nigel@email.com',
-        firstName: 'first',
-        lastName: 'last',
+        fullName: 'first',
         password: 'hashedPassword',
+        handle: 'testL',
       };
       await expect(User.create(duplicateEmail)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Field(s) provided: (email) is duplicated' }));
     });

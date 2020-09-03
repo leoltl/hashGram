@@ -1,5 +1,5 @@
 function makePost(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['posts.id', 'image_url', 'caption', 'users.handle', 'users.first_name'];
+  const DEFAULT_GET_COLUMNS = ['posts.id', 'image_url', 'caption', 'users.handle', 'users.full_name'];
 
   function getAll(queryObject = {}, options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;

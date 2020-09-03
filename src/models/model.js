@@ -1,12 +1,5 @@
 import { makeCamelCaseAlias, camelToSnakeCase } from '../lib/utils';
-
-export class DOAError extends Error {
-  constructor({ type, message }) {
-    super(message);
-    this.type = type;
-    this.message = message;
-  }
-}
+import { DOAError } from '../lib/errors';
 
 const baseModel = {
   makeDOACamelCase: function makeDOACamelCase(dbRows) {
@@ -58,6 +51,10 @@ const baseModel = {
     } catch (e) {
       if (new RegExp(/NOT NULL constraint failed/).test(e.message)) {
         const field = e.message.split(/NOT NULL constraint failed/)[1].split('.')[1];
+        throw new DOAError({ type: 'insert', message: `Missing required field(s): ${field}` });
+      }
+      if (new RegExp(/violates not-null constraint/).test(e.message)) {
+        const field = e.message.match(new RegExp(/value in column "(.*)" violates/))[1];
         throw new DOAError({ type: 'insert', message: `Missing required field(s): ${field}` });
       }
       if (new RegExp(/UNIQUE constraint failed/).test(e.message)) {
