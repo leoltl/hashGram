@@ -16,6 +16,14 @@ module.exports = {
       directory: path.join(__dirname, '/knex/seeds/test'),
     },
     useNullAsDefault: true,
+    log: {
+      warn(message) {
+        if (!message.includes('FS-related option specified for migration configuration')
+          && !message.includes('.returning() is not supported by sqlite3')) {
+          console.warn(message);
+        }
+      },
+    },
   },
 
   development: {

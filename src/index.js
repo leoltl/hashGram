@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import db from '../knex/knex';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
 import { makeUser, makePost } from './models';
-import { installAuthControllers } from './controllers';
+import { installAuthControllers, installUserControllers, installPostControllers } from './controllers';
 
 const PORT = process.env.PORT || 3000;
 
@@ -40,17 +40,8 @@ const PostModel = makePost(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
 
 installAuthControllers(router, UserModel);
-
-router.get('/:handle?', async (req, res) => {
-  const { handle = {} } = req.params;
-  const posts = await PostModel.getAll(handle);
-  const [user] = await UserModel.get(handle);
-  const template = req.params.handle ? 'profile' : 'index';
-  res.render(template, {
-    posts,
-    user,
-  });
-});
+installUserControllers(router, UserModel, PostModel);
+installPostControllers(router, PostModel);
 
 app.use(router);
 app.use(errorHandler);

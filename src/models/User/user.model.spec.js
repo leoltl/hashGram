@@ -40,11 +40,11 @@ describe('user model', () => {
   describe('get', () => {
     it('happy path', async () => {
       const user = await User.get({ id: 1 });
-      expect(user[0].email).toBe('nigel@email.com');
+      expect(user.email).toBe('nigel@email.com');
     });
     it('should not return user\'s credentials', async () => {
       const users = await User.get({ id: 1 });
-      expect(users[0].password).toBeUndefined();
+      expect(users.password).toBeUndefined();
     });
     it('should return empty array for an invalid column passed into queryObject', async () => {
       const users = await User.get({ iddd: 1 });
@@ -67,7 +67,7 @@ describe('user model', () => {
     it('happy path', async () => {
       const user = await User.create(userObject);
       expect(user).toBeDefined();
-      expect(user[0].handle).toBe(userObject.handle);
+      expect(user.handle).toBe(userObject.handle);
     });
     it('handles missing required columns', async () => {
       const missingEmail = {
@@ -85,6 +85,43 @@ describe('user model', () => {
         handle: 'testL',
       };
       await expect(User.create(duplicateEmail)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Field(s) provided: (email) is duplicated' }));
+    });
+  });
+
+  describe('getFollower', () => {
+    it('happy path', async () => {
+      const dataObj = { 'u.handle': 'nigelL' };
+      const result = await User.getFollower(dataObj);
+      expect(result[0].handle).toEqual('nakazL');
+    });
+    it('returns empty array for non-existence user handle ', async () => {
+      const nonExistingUser = 'nonExistingUser';
+      const result = await User.getFollower(nonExistingUser);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(0);
+    });
+    it('gets count of follower with aggration option set to count', async () => {
+      const dataObj = { 'u.handle': 'nigelL' };
+      const result = await User.getFollower(dataObj, { aggregration: 'count' });
+      expect(result.count).toEqual(2);
+    });
+  });
+
+  describe('follow', () => {
+    it('happy path', async () => {
+      const dataObj = { userhandle: 'nakazL', followerhandle: 'jaywonL' };
+      await User.addFollower(dataObj);
+      const result = await User.getFollower('nakazL');
+      expect(result[1].handle).toBe('jaywonL');
+    });
+    it('handle duplicate following', async () => {
+      const dataObj = { userhandle: 'nigelL', followerhandle: 'nakazL' };
+      await expect(User.addFollower(dataObj)).rejects
+        .toThrow(new DOAError({ type: 'insert', message: 'Field(s) provided: (user_id, following) is duplicated' }));
+    });
+    it('handle missing user handle', async () => {
+      const dataObj = { followerhandle: 'nakazL' };
+      await expect(User.addFollower(dataObj)).rejects.toThrow();
     });
   });
 });

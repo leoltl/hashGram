@@ -7,6 +7,8 @@ nav {
   align-items: center;
   position: fixed;
   background: var(--element-bg-color);
+  font-family: var(--brand-font);
+  padding: var(--padding-xs) 0;
 }
 
 .logo {

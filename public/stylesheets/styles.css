@@ -3,6 +3,7 @@
 @import './type-scale.css';
 @import './partials/_layout.css';
 @import './partials/_nav.css';
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 :root {
   box-sizing: border-box;

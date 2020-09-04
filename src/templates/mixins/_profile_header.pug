@@ -10,10 +10,10 @@ mixin _profile_header(user)
       div # 
       .profile__stats-label posts
     .profile__follwers
-      div # 
+      div #{user.followersCount}
       .profile__stats-label followers
     .profile__following
-      div # 
+      div #{user.followingCount}
       .profile__stats-label following
   .profile__header-about
     .profile__name

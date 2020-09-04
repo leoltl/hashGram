@@ -3,6 +3,7 @@ import { DOAError } from '../lib/errors';
 
 const baseModel = {
   makeDOACamelCase: function makeDOACamelCase(dbRows) {
+    if (!Array.isArray(dbRows)) return dbRows;
     return dbRows.map((row) => Object.entries(row).reduce((DOA, [key, value]) => {
       const camelCaseKey = makeCamelCaseAlias(key);
       return {
@@ -47,7 +48,9 @@ const baseModel = {
   safeInsert: async function safeInsert(query, dataObject) {
     let res;
     try {
-      res = await query.insert(this.makeDOASnakeCase(dataObject));
+      res = await (dataObject
+        ? query.insert(this.makeDOASnakeCase(dataObject))
+        : query);
     } catch (e) {
       if (new RegExp(/NOT NULL constraint failed/).test(e.message)) {
         const field = e.message.split(/NOT NULL constraint failed/)[1].split('.')[1];
