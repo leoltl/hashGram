@@ -50,15 +50,15 @@ describe('signupPage', () => {
 });
 
 describe('signInUser', () => {
-  const getUser = jest.fn().mockReturnValue([{ handle: 'test', password: '123' }]);
+  const getUser = jest.fn().mockReturnValue({ handle: 'test', password: '123' });
   const compareHash = (a, b) => a && b && a === b;
-  const signInUserController = makeSigninUser(getUser, compareHash);
+  const signInUser = makeSigninUser(getUser, compareHash);
 
   it('should redirect to index if authUser exists in res.locals (ie already authenticated)', () => {
     const res = mockResponse({ handler: 'user-1' });
     const req = mockRequest();
     const next = jest.fn();
-    signInUserController(req, res, next);
+    signInUser(req, res, next);
     expect(res.redirect).toBeCalledWith('/');
   });
 
@@ -66,7 +66,7 @@ describe('signInUser', () => {
     const res = mockResponse();
     const req = mockRequest({ handle: 'test', password: '123' });
     const next = jest.fn();
-    await signInUserController(req, res, next);
+    await signInUser(req, res, next);
     expect(req.session.user_handle).toBe('test');
   });
 
@@ -74,9 +74,7 @@ describe('signInUser', () => {
     const res = mockResponse();
     const req = mockRequest({ handle: 'test', password: '234' });
     const next = jest.fn();
-    await signInUserController(req, res, next);
+    await signInUser(req, res, next);
     expect(req.session.error_msg).toContain('Authentication failed');
   });
 });
-
-
