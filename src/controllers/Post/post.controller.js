@@ -1,6 +1,6 @@
-export function makeGetAllPosts(PostModel) {
+export function makeGetAllPosts(getAllPostFromDB) {
   return async function getAllPosts(req, res) {
-    const posts = await PostModel.getAll();
+    const posts = await getAllPostFromDB();
     res.render('index', {
       posts,
     });
@@ -8,6 +8,6 @@ export function makeGetAllPosts(PostModel) {
 }
 
 export default function installPostControllers(router, postModel) {
-  router.get('/', makeGetAllPosts(postModel));
+  router.get('/', makeGetAllPosts(postModel.getAll));
   return router;
 }
