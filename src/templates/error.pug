@@ -1,0 +1,11 @@
+extends layout
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/error.css")
+
+block main
+  main.error
+    .error-msg
+      p #{error}
+    button
+      a(href="/") Return Home

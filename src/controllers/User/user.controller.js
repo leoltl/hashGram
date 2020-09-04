@@ -1,30 +1,39 @@
-import { DOAError, ClientError } from '../../lib/errors';
+import { DOAError, ClientError, HTTPError } from '../../lib/errors';
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
 
-export function makeGetUserProfile(UserModel, PostModel) {
+export function makeGetUserProfile(getUserInDB, getAllPostInDB, getFollowerInDB, getFollowingInDB) {
   return async function getUserProfile(req, res, next) {
     const { handle = {} } = req.params;
     try {
-      const [user] = await UserModel.get(handle);
-      const posts = await PostModel.getAll(handle);
-      const { count: followersCount } = await UserModel.getFollower(handle, { aggregration: 'count' });
-      const { count: followingCount } = await UserModel.getFollowing(handle, { aggregration: 'count' });
+      const user = await getUserInDB(handle);
+      if (!user) {
+        throw new ClientError({ message: 'Profile you are finding does not exists.' });
+      }
+      const posts = await getAllPostInDB(handle);
+      const { count: followersCount } = await getFollowerInDB(handle, { aggregration: 'count' });
+      const { count: followingCount } = await getFollowingInDB(handle, { aggregration: 'count' });
       res.render('profile', {
         posts,
         user: { ...user, followersCount, followingCount },
       });
     } catch (e) {
+      if (e instanceof HTTPError) {
+        res.render('error', {
+          error: e.message,
+        });
+        return;
+      }
       next(e);
     }
   };
 }
 
-export function makeFollowUser(UserModel) {
+export function makeFollowUser(addFollowerInDB) {
   return async function followUser(req, res, next) {
     try {
-      const { handle: userhandle } = res.locals.authUser;
-      const { followerhandle } = req.body;
-      await UserModel.addFollower({ userhandle, followerhandle });
+      const { handle: followerhandle } = res.locals.authUser;
+      const { userhandle } = req.body;
+      await addFollowerInDB({ userhandle, followerhandle });
       res.status(200).end();
     } catch (e) {
       if (e instanceof DOAError) {
@@ -36,7 +45,12 @@ export function makeFollowUser(UserModel) {
 }
 
 export default function installUserControllers(router, UserModel, PostModel) {
-  router.get('/:handle', makeGetUserProfile(UserModel, PostModel));
-  router.post('/api/follow', authenticationRequired, makeFollowUser(UserModel));
+  router.get('/:handle', makeGetUserProfile(
+    UserModel.get,
+    PostModel.getAll,
+    UserModel.getFollower,
+    UserModel.getFollowing,
+  ));
+  router.post('/api/follow', authenticationRequired, makeFollowUser(UserModel.addFollower));
   return router;
 }

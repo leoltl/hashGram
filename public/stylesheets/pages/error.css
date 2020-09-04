@@ -1,0 +1,13 @@
+@import '../styles.css';
+
+main.error {
+  height: calc(100vh - var(--navbar-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.error button {
+  margin-top: var(--margin-lg);
+}
