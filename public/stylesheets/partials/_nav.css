@@ -9,8 +9,56 @@ nav {
   background: var(--element-bg-color);
   font-family: var(--brand-font);
   padding: var(--padding-xs) 0;
+  z-index: 99;
+}
+
+.nav__links {
+  position: fixed;
+  bottom: 0;
+  background: var(--element-bg-color);
+  width: 100vw;
+  height: var(--navbar-height);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.nav__links > * {
+  justify-self: center;
+  align-self: center;
 }
 
 .logo {
   font-size: var(--step-up-2);
+}
+
+@media screen and (min-width: 770px) {
+  nav {
+    width: calc(100vw - 2 * var(--padding-lg));
+    justify-content: space-between;
+    padding: 0 var(--padding-lg);
+  }
+
+  .nav__links {
+    position: initial;
+    width: 25vw;
+  }
+
+  #new-post {
+    order: 2;
+  }
+
+  #profile {
+    order: 3;
+  }
+
+}
+
+@media screen and (min-width: 1080px) {
+  nav {
+    width: calc(100vw - 4 * var(--padding-lg));
+    padding: 0 calc(2 * var(--padding-lg));
+  }
+  .nav__links {
+    width: 20vw;
+  }
 }

@@ -36,6 +36,16 @@ button {
   cursor: pointer;
   padding: var(--padding-btn);
 }
+.btn-secondary {
+  background: none;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 3px;
+  text-transform: capitalize;
+  cursor: pointer;
+  padding: var(--padding-btn) calc(3*var(--padding-btn));
+  text-align: center;
+}
 
 input {
   background-color: var(--bg-color);

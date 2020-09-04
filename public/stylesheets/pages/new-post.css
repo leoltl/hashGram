@@ -1,0 +1,52 @@
+@import '../styles.css';
+
+main.post-form {
+  width: calc(100vw - (2.5 * var(--navgar-height)));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form.post-form {
+  border: var(--default-border);
+  padding: var(--padding-lg);
+  margin-top: var(--margin-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+form.post-form > * {
+  margin: var(--margin-sm);
+}
+
+.post-form__preview {
+  margin-top: var(--margin-lg);
+  width: 95vw;
+  max-width: 500px;
+  height: clamp(100px, 50vh, 95vw);
+  overflow: hidden;
+  border: var(--default-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-form__preview > img {
+  width: 100%;
+  text-align: center;
+}
+
+label {
+  font-size: 0.8em;
+}
+
+label svg {
+  margin-right: var(--margin-xs);
+}
+
+@media screen and (min-width: 600px) {
+  .post-form__preview {
+    height: clamp(100px, 95vw, 500px);
+  }
+}
