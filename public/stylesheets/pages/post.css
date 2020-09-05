@@ -12,7 +12,7 @@
 }
 
 .post__main-image img {
-  width: 100%;
+  width: 99.6%;
 }
 
 .post__header {
@@ -64,4 +64,4 @@
   .post__footer {
     padding: var(--padding-md);
   }
-}e 
+}

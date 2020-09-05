@@ -17,7 +17,7 @@ function makePost(db, baseModel) {
   }
 
   async function create(dataObject, options = {}) {
-    const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
+    const returnColumns = options.columns || ['posts.id', 'image_url', 'caption'];
     const res = await baseModel.safeInsert(db('posts').returning(returnColumns), dataObject);
     if (process.env.NODE_ENV === 'test') {
       // workaround sqlite3 driver does not return fields for inserted row

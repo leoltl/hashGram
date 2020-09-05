@@ -18,6 +18,7 @@ section.profile__gallery {
 
 .gallery__image {
   width: 100%;
+  overflow: hidden;
 }
 
 .gallery__image img {

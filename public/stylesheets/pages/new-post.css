@@ -14,6 +14,7 @@ form.post-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: clamp(100px, 95vw, 500px);
 }
 
 form.post-form > * {
@@ -48,5 +49,10 @@ label svg {
 @media screen and (min-width: 600px) {
   .post-form__preview {
     height: clamp(100px, 95vw, 500px);
+  }
+
+  form.post-form {
+    display: flex;
+    width: clamp(100px, 95vw, 500px);
   }
 }

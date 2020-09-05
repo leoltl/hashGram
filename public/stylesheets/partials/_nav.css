@@ -1,7 +1,7 @@
 nav {
   width: 100vw;
   height: var(--navbar-height);
-  border-bottom: 1px solid #ddd;
+  border-bottom: var(--default-border);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +20,7 @@ nav {
   height: var(--navbar-height);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  border-top: var(--default-border);
 }
 
 .nav__links > * {
@@ -28,12 +29,11 @@ nav {
 }
 
 .logo {
-  font-size: var(--step-up-2);
+  font-size: var(--step-up-1);
 }
 
 @media screen and (min-width: 770px) {
   nav {
-    width: calc(100vw - 2 * var(--padding-lg));
     justify-content: space-between;
     padding: 0 var(--padding-lg);
   }
@@ -41,6 +41,8 @@ nav {
   .nav__links {
     position: initial;
     width: 25vw;
+    border-top: none;
+    border-bottom: var(--default-border);
   }
 
   #new-post {
@@ -50,12 +52,15 @@ nav {
   #profile {
     order: 3;
   }
+  
+  .logo {
+    font-size: var(--step-up-2);
+  }
 
 }
 
 @media screen and (min-width: 1080px) {
   nav {
-    width: calc(100vw - 4 * var(--padding-lg));
     padding: 0 calc(2 * var(--padding-lg));
   }
   .nav__links {

@@ -8,7 +8,7 @@ block styles
 block main
   main.profile
     header.profile__header
-      +_profile_header(user)
+      +_profile_header(user, authUser)
     section.profile__gallery
       each post in posts
         +_gallery_image(post)

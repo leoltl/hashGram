@@ -10,11 +10,14 @@ export function makeGetUserProfile(getUserInDB, getAllPostInDB, getFollowerInDB,
         throw new ClientError({ message: 'Profile you are finding does not exists.' });
       }
       const posts = await getAllPostInDB(handle);
+      const postsCount = posts.length;
       const { count: followersCount } = await getFollowerInDB(handle, { aggregration: 'count' });
       const { count: followingCount } = await getFollowingInDB(handle, { aggregration: 'count' });
       res.render('profile', {
         posts,
-        user: { ...user, followersCount, followingCount },
+        user: {
+          ...user, followersCount, followingCount, postsCount,
+        },
       });
     } catch (e) {
       if (e instanceof HTTPError) {

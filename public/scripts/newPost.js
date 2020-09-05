@@ -21,7 +21,7 @@
   }
 
   async function getSignedRequest(file) {
-    const res = await fetch(`/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+    const res = await fetch(`/api/sign-s3?file-name=${file.name}&file-type=${file.type}`);
     if (res.ok) {
       const data = await res.json();
       uploadFile(file, data.signedRequest, data.url);

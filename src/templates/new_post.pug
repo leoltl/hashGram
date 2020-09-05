@@ -19,8 +19,8 @@ block main
             </g>
           </svg>
           | Choose an image
-      input(type='file' name="file" id="file-upload" accept='image/*' class='sr-only')
-      input(class='sr-only' type='text' name='imgUrl' id='img-url')
+      input(type='file' id="file-upload" accept='image/*' class='sr-only')
+      input(class='sr-only' type='text' name='imageUrl' id='img-url')
       +_text-input(post, 'caption', 'Write a caption...')
       button(type='submit') Share
 
