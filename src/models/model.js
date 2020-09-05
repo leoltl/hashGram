@@ -68,6 +68,13 @@ const baseModel = {
         const field = e.message.match(new RegExp(/unique constraint "(.*)_unique"/))[1];
         throw new DOAError({ type: 'insert', message: `Field(s) provided: (${field}) is duplicated` });
       }
+      if (new RegExp(/violates foreign key constraint/).test(e.message)) {
+        const field = e.message.match(new RegExp(/key constraint "(.*)_foreign"/))[1];
+        throw new DOAError({ type: 'insert', message: `Violated foreign key constraint: (${field})` });
+      }
+      if (new RegExp(/SQLITE_CONSTRAINT: FOREIGN KEY constraint failed/).test(e.message)) {
+        throw new DOAError({ type: 'insert', message: 'Violated foreign key constraint' });
+      }
 
       throw e;
     }

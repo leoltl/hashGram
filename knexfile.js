@@ -24,6 +24,12 @@ module.exports = {
         }
       },
     },
+    pool: {
+      // sqlite3 foreign key constraint is off by default, turn on manually.
+      afterCreate: (conn, cb) => {
+        conn.run('PRAGMA foreign_keys = ON', cb);
+      },
+    },
   },
 
   development: {

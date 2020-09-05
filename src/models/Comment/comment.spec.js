@@ -39,8 +39,16 @@ describe('Comment model', () => {
         postId: 1,
         body: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
       };
-      const comments = await Comment.create(newComment);
-      expect(comments[0].body).toBe('This popular jerk chicken joint just opened a second Toronto location @coolrunningsres');
+      const comment = await Comment.create(newComment);
+      expect(comment[0].body).toBe('This popular jerk chicken joint just opened a second Toronto location @coolrunningsres');
+    });
+    it('handles invalid post id', async () => {
+      const inValidUserID = {
+        userId: 1,
+        postId: 999,
+        body: 'abc',
+      };
+      await expect(Comment.create(inValidUserID)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Violated foreign key constraint' }));
     });
     it('handles optional field', async () => {
       const MissingBody = {
