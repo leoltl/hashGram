@@ -1,8 +1,9 @@
-
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('posts', (table) => {
     table.increments('id').primary();
-    table.integer('user_id').references('id').inTable('users').onDelete('CASCADE');
+    table.integer('user_id')
+      .references('id').inTable('users').onDelete('CASCADE')
+      .notNullable();
     table.string('image_url', 1023).notNullable();
     table.text('caption').defaultTo('');
     table.timestamp('created_at').defaultTo(knex.fn.now());
@@ -10,6 +11,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema.dropTableIfExists('posts');
 };
