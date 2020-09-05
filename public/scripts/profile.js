@@ -4,9 +4,8 @@
   const followers = document.querySelector('.profile__follower-count');
   const userhandle = followBtn.dataset.userHandle;
 
-  const { action } = followBtn.dataset;
-
   followBtn.onclick = async () => {
+    const { action } = followBtn.dataset;
     const res = await fetch(`/api/follow?action=${action}`, {
       method: 'POST',
       headers: {
@@ -20,6 +19,7 @@
       const delta = action === 'follow' ? 1 : -1;
       followers.textContent = parseInt(followers.textContent, 10) + delta;
       followBtn.textContent = action === 'follow' ? 'unfollow' : 'follow';
+      followBtn.dataset.action = action === 'follow' ? 'unfollow' : 'follow';
     }
   };
 }());
