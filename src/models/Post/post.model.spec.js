@@ -25,7 +25,7 @@ describe('Post model', () => {
       const posts = await Post.getAll({ handle: 'nigelL' });
       expect(posts.length).toBe(2);
     });
-    it('should return accepct string for querying given user', async () => {
+    it('should accepct string for querying given user', async () => {
       const posts = await Post.getAll('nigelL');
       expect(posts.length).toBe(2);
     });
