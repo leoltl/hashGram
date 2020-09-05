@@ -41,12 +41,17 @@ export function makeGetUserProfile(
   };
 }
 
-export function makeFollowUser(addFollowerInDB) {
+export function makeFollowUser(addFollowerInDB, removeFollowerInDB) {
   return async function followUser(req, res, next) {
     try {
+      const { action } = req.query;
       const { handle: followerhandle } = res.locals.authUser;
       const { userhandle } = req.body;
-      await addFollowerInDB({ userhandle, followerhandle });
+      if (action === 'follow') {
+        await addFollowerInDB({ userhandle, followerhandle });
+      } else if (action === 'unfollow') {
+        await removeFollowerInDB({ userhandle, followerhandle });
+      }
       res.status(200).end();
     } catch (e) {
       if (e instanceof DOAError) {
@@ -65,6 +70,6 @@ export default function installUserControllers(router, UserModel, PostModel) {
     UserModel.getFollowing,
     UserModel.isFollowing,
   ));
-  router.post('/api/follow', authenticationRequired, makeFollowUser(UserModel.addFollower));
+  router.post('/api/follow', authenticationRequired, makeFollowUser(UserModel.addFollower, UserModel.removeFollower));
   return router;
 }

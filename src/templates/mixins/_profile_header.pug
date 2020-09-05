@@ -6,9 +6,8 @@ mixin _profile_header(user, authUser)
     span.profile__header-handle #{user.handle}
     if (authUser && authUser.handle != user.handle)
       if (user.isFollowing)
-        button.profile__unfollow-btn(data-user-handle=user.handle) unfollow
-      else
-        button.profile__follow-btn(data-user-handle=user.handle) follow
+      - var label = user.isFollowing ? 'unfollow' : 'follow'
+        button(class=`profile__follow-btn` data-user-handle=user.handle data-action=label) #{label}
     //- else
       //- button.secondary Edit Profile
   .profile__header-stats

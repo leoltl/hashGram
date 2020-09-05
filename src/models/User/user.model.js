@@ -83,11 +83,25 @@ function makeUser(db, baseModel) {
     const upsert = db.raw(`
       ? ON CONFLICT(user_id, follower_id)
           DO UPDATE SET
-            is_active = true
-            WHERE is_active = false;
+            is_active = true;
     `, [insert]);
 
     return baseModel.safeInsert(upsert);
+  }
+
+  async function removeFollower(dataObject) {
+    const { userhandle, followerhandle } = dataObject;
+    if (!userhandle || !followerhandle) {
+      throw new ClientError({ message: 'User and follwer handles are required.' });
+    }
+    return db('following').update({ is_active: false }).where({
+      user_id() {
+        this.select('id').from('users').where('handle', userhandle);
+      },
+      follower_id() {
+        this.select('id').from('users').where('handle', followerhandle);
+      },
+    });
   }
 
   async function isFollowing(user, follower) {
@@ -96,6 +110,7 @@ function makeUser(db, baseModel) {
       .join('users as follower', 'following.follower_id', 'follower.id')
       .where({ 'u.handle': user })
       .andWhere({ 'follower.handle': follower })
+      .andWhere({ is_active: true })
       .limit(1);
     return Boolean(res.length);
   }
@@ -106,6 +121,7 @@ function makeUser(db, baseModel) {
     create,
     getFollower,
     addFollower,
+    removeFollower,
     getFollowing,
     isFollowing,
   };

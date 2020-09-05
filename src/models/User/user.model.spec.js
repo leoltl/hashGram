@@ -123,4 +123,16 @@ describe('user model', () => {
       await expect(User.addFollower(dataObj)).rejects.toThrow();
     });
   });
+
+  describe('unfollow', () => {
+    it('happy path', async () => {
+      const dataObj = { userhandle: 'nigelL', followerhandle: 'nakazL' };
+      await User.removeFollower(dataObj);
+      expect(await User.isFollowing(dataObj.userhandle, dataObj.followerhandle)).toBe(false);
+    });
+    it('handles non existing users', async () => {
+      const dataObj = { userhandle: 'notexist', followerhandle: 'notexist' };
+      expect(() => User.removeFollower(dataObj)).not.toThrow();
+    });
+  });
 });

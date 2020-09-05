@@ -4,11 +4,10 @@
   const followers = document.querySelector('.profile__follower-count');
   const userhandle = followBtn.dataset.userHandle;
 
+  const { action } = followBtn.dataset;
+
   followBtn.onclick = async () => {
-    console.log(userhandle, JSON.stringify({
-      userhandle,
-    }));
-    const res = await fetch('/api/follow', {
+    const res = await fetch(`/api/follow?action=${action}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -18,8 +17,9 @@
       }),
     });
     if (res.ok) {
-      console.log(followers.textContent);
-      followers.textContent = parseInt(followers.textContent, 10) + 1;
+      const delta = action === 'follow' ? 1 : -1;
+      followers.textContent = parseInt(followers.textContent, 10) + delta;
+      followBtn.textContent = action === 'follow' ? 'unfollow' : 'follow';
     }
   };
 }());
