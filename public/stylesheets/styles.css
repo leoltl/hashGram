@@ -48,11 +48,25 @@ button.secondary,
   text-align: center;
 }
 
+button.tertiary {
+  color: var(--primary-color);
+  background: none;
+}
+
 input {
   background-color: var(--bg-color);
   border: var(--default-border);
   padding: var(--padding-sm);
   border-radius: 2px;
+}
+
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  height: auto;
+  padding: var(--padding-xs);
+  overflow-x: hidden;
+  resize: none;
 }
 
 .flash-errors {

@@ -1,4 +1,4 @@
-mixin _post(post)
+mixin _post(post, authUser)
   article.post
     header.post__header
       .post__user-header-wrapper
@@ -8,6 +8,9 @@ mixin _post(post)
     .post__main-image
       img(src=post.imageUrl)
     .post__footer
-      p.post__caption 
-        span.post__caption-username #{post.handle}
+      p.post__comment 
+        span.post__comment-username #{post.handle}
         | #{post.caption}
+      .post__new-comment
+        textarea(name='comment' data-post-id=post.id rows='1' placeholder='Add a comment...')
+        button.tertiary(data-auth=Boolean(authUser)) Post

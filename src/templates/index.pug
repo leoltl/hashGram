@@ -8,4 +8,9 @@ block main
   main.index
     section.post-list
       each post in posts
-        +_post(post)
+        +_post(post, authUser)
+
+block scripts
+  script.
+    var _authUserHandle = "#{authUser && authUser.handle}"
+  script(src="scripts/newComment.js")

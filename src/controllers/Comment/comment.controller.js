@@ -1,3 +1,5 @@
+import { authenticationRequired } from '../../middlewares/loadAuthUser';
+
 export function makeNewComment(createCommentInDB) {
   return async function newComment(req, res, next) {
     const { postId, body } = req.body;
@@ -6,12 +8,13 @@ export function makeNewComment(createCommentInDB) {
       await createCommentInDB({ userId, postId, body });
       res.status(200).end();
     } catch (e) {
+      console.log(e);
       next(e);
     }
   };
 }
 
-export function installCommentController(router, commentModel) {
-  router.post('/api/new-comment', makeNewComment(commentModel.create));
+export default function installCommentController(router, commentModel) {
+  router.post('/api/new-comment', authenticationRequired, makeNewComment(commentModel.create));
   return router;
 }

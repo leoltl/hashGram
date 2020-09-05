@@ -7,12 +7,13 @@ import morgan from 'morgan';
 
 import db from '../knex/knex';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
-import { makeUser, makePost } from './models';
+import { makeUser, makePost, makeComment } from './models';
 import {
   installAuthControllers,
   installUserControllers,
   installPostControllers,
   installFeedController,
+  installCommentControllers,
   installStorageRoute,
 } from './controllers';
 
@@ -44,6 +45,7 @@ app.use('/scripts', express.static(path.join(__dirname, '..', 'public', 'scripts
 
 const UserModel = makeUser(db);
 const PostModel = makePost(db);
+const CommentModel = makeComment(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
 
 installStorageRoute(router);
@@ -51,6 +53,7 @@ installAuthControllers(router, UserModel);
 installPostControllers(router, PostModel);
 installUserControllers(router, UserModel, PostModel);
 installFeedController(router, PostModel);
+installCommentControllers(router, CommentModel);
 
 app.use(router);
 app.use(errorHandler);

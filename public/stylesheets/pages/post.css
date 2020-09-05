@@ -50,9 +50,26 @@
   padding: var(--padding-sm);
 }
 
-.post__caption-username {
+.post__comment-username {
   font-weight: 600;
   margin-right: var(--margin-xs);
+}
+
+.post__comment {
+  margin: var(--margin-xs) 0;
+}
+
+.post__new-comment {
+  display: grid;
+  grid-template-columns: auto 50px;
+  margin-top: var(--margin-sm);
+  padding-top: var(--padding-sm);
+  border-top: var(--default-border);
+}
+
+.post__new-comment textarea {
+  border: none;
+  background: none;
 }
 
 @media screen and (min-width: 600px) {
