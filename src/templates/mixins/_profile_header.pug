@@ -4,16 +4,20 @@ mixin _profile_header(user, authUser)
       img(src='https://instagram.fyka1-1.fna.fbcdn.net/v/t51.2885-19/s150x150/12568074_1672421163017050_782833978_a.jpg?_nc_ht=instagram.fyka1-1.fna.fbcdn.net&_nc_ohc=jKWspIulthMAX_W5OAq&oh=29346213235b7f5ec2f9a60684ce8cd0&oe=5F78E391', alt='user profile picture')
   .profile__header-title
     span.profile__header-handle #{user.handle}
-    if (authUser.handle != user.handle)
-      button follow
-    else
-      button.secondary Edit Profile
+    if (authUser && authUser.handle != user.handle)
+      if (user.isFollowing)
+        button.profile__unfollow-btn(data-user-handle=user.handle) unfollow
+      else
+        button.profile__follow-btn(data-user-handle=user.handle) follow
+    //- else
+      //- button.secondary Edit Profile
   .profile__header-stats
     .profile__posts
       div #{user.postsCount} 
       .profile__stats-label posts
-    .profile__follwers
-      div #{user.followersCount}
+    .profile__followers
+      div 
+      span.profile__follower-count #{user.followersCount}
       .profile__stats-label followers
     .profile__following
       div #{user.followingCount}

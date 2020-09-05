@@ -4,15 +4,13 @@ import { DOAError } from '../lib/errors';
 const baseModel = {
   makeDOACamelCase: function makeDOACamelCase(dbRows) {
     if (!Array.isArray(dbRows)) return dbRows;
-    const tmp = dbRows.map((row) => Object.entries(row).reduce((DOA, [key, value]) => {
+    return dbRows.map((row) => Object.entries(row).reduce((DOA, [key, value]) => {
       const camelCaseKey = makeCamelCaseAlias(key);
       return {
         ...DOA,
         [camelCaseKey]: value,
       };
     }, {}));
-    console.log(tmp)
-    return tmp;
   },
   makeDOASnakeCase: function makeDOASnakeCase(dataObject) {
     return Object.entries(dataObject).reduce((DOA, [key, value]) => {
@@ -54,7 +52,6 @@ const baseModel = {
         ? query.insert(this.makeDOASnakeCase(dataObject))
         : query);
     } catch (e) {
-      console.log(e)
       if (new RegExp(/NOT NULL constraint failed/).test(e.message)) {
         const field = e.message.split(/NOT NULL constraint failed/)[1].split('.')[1];
         throw new DOAError({ type: 'insert', message: `Missing required field(s): ${field}` });

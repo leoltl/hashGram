@@ -11,9 +11,10 @@
     if (res.ok) {
       const preview = document.querySelector('.post-form__preview');
       const imgInput = document.querySelector('#img-url');
+      imgInput.value = imgUrl; // set hidden input to imgurl for posting to new-post
+      /*  replace placeholder to the actual image from s3 */
       preview.innerHTML = '';
       const img = document.createElement('img');
-      imgInput.value = imgUrl;
       img.src = imgUrl;
       img.altText = 'preview of image';
       preview.append(img);

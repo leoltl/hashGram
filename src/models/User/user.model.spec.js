@@ -116,8 +116,7 @@ describe('user model', () => {
     });
     it('handle duplicate following', async () => {
       const dataObj = { userhandle: 'nigelL', followerhandle: 'nakazL' };
-      await expect(User.addFollower(dataObj)).rejects
-        .toThrow(new DOAError({ type: 'insert', message: 'Field(s) provided: (user_id, following) is duplicated' }));
+      expect(() => User.addFollower(dataObj)).not.toThrow();
     });
     it('handle missing user handle', async () => {
       const dataObj = { followerhandle: 'nakazL' };

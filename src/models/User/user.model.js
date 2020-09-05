@@ -33,12 +33,14 @@ function makeUser(db, baseModel) {
       ? db('following')
         .join('users as u', 'following.user_id', 'u.id')
         .join('users as follower', 'following.follower_id', 'follower.id')
+        .andWhere({ is_active: true })
         .count({ count: '*' })
         .first()
       : db('following')
         .join('users as u', 'following.user_id', 'u.id')
         .join('users as follower', 'following.follower_id', 'follower.id')
-        .select(returnColumns);
+        .select(returnColumns)
+        .andWhere({ is_active: true });
     if (typeof dataObject === 'string') {
       return baseModel.safeQuery(query, { 'follower.handle': dataObject });
     }
@@ -52,11 +54,13 @@ function makeUser(db, baseModel) {
         .join('users as u', 'following.user_id', 'u.id')
         .join('users as follower', 'following.follower_id', 'follower.id')
         .count({ count: '*' })
+        .andWhere({ is_active: true })
         .first()
       : db('following')
         .join('users as u', 'following.user_id', 'u.id')
         .join('users as follower', 'following.follower_id', 'follower.id')
-        .select(returnColumns);
+        .select(returnColumns)
+        .andWhere({ is_active: true });
     if (typeof dataObject === 'string') {
       return baseModel.safeQuery(query, { 'u.handle': dataObject });
     }
@@ -68,14 +72,32 @@ function makeUser(db, baseModel) {
     if (!userhandle || !followerhandle) {
       throw new ClientError({ message: 'User and follwer handles are required.' });
     }
-    return baseModel.safeInsert(db('following').insert({
+    const insert = db('following').insert({
       user_id() {
         this.select('id').from('users').where('handle', userhandle);
       },
       follower_id() {
         this.select('id').from('users').where('handle', followerhandle);
       },
-    }));
+    }).where({ is_active: false });
+    const upsert = db.raw(`
+      ? ON CONFLICT(user_id, follower_id)
+          DO UPDATE SET
+            is_active = true
+            WHERE is_active = false;
+    `, [insert]);
+
+    return baseModel.safeInsert(upsert);
+  }
+
+  async function isFollowing(user, follower) {
+    const res = await db('following')
+      .join('users as u', 'following.user_id', 'u.id')
+      .join('users as follower', 'following.follower_id', 'follower.id')
+      .where({ 'u.handle': user })
+      .andWhere({ 'follower.handle': follower })
+      .limit(1);
+    return Boolean(res.length);
   }
 
   return {
@@ -85,6 +107,7 @@ function makeUser(db, baseModel) {
     getFollower,
     addFollower,
     getFollowing,
+    isFollowing,
   };
 }
 

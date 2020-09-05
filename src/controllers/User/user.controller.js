@@ -1,7 +1,13 @@
 import { DOAError, ClientError, HTTPError } from '../../lib/errors';
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
 
-export function makeGetUserProfile(getUserInDB, getAllPostInDB, getFollowerInDB, getFollowingInDB) {
+export function makeGetUserProfile(
+  getUserInDB,
+  getAllPostInDB,
+  getFollowerInDB,
+  getFollowingInDB,
+  isFollowingInDB,
+) {
   return async function getUserProfile(req, res, next) {
     const { handle = {} } = req.params;
     try {
@@ -13,10 +19,14 @@ export function makeGetUserProfile(getUserInDB, getAllPostInDB, getFollowerInDB,
       const postsCount = posts.length;
       const { count: followersCount } = await getFollowerInDB(handle, { aggregration: 'count' });
       const { count: followingCount } = await getFollowingInDB(handle, { aggregration: 'count' });
+      let isFollowing = false;
+      if (res.locals.authUser) {
+        isFollowing = await isFollowingInDB(handle, res.locals.authUser.handle);
+      }
       res.render('profile', {
         posts,
         user: {
-          ...user, followersCount, followingCount, postsCount,
+          ...user, followersCount, followingCount, postsCount, isFollowing,
         },
       });
     } catch (e) {
@@ -53,6 +63,7 @@ export default function installUserControllers(router, UserModel, PostModel) {
     PostModel.getAll,
     UserModel.getFollower,
     UserModel.getFollowing,
+    UserModel.isFollowing,
   ));
   router.post('/api/follow', authenticationRequired, makeFollowUser(UserModel.addFollower));
   return router;

@@ -50,6 +50,8 @@ describe('getUserProfile', () => {
         ...user,
         followersCount: followersCount.count,
         followingCount: followingCount.count,
+        isFollowing: false,
+        postsCount: 0,
       },
     });
   });
