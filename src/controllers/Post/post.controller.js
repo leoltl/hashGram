@@ -11,9 +11,10 @@ export function makeGetAllPosts(getAllPostFromDB) {
 
 export function makeNewPost(createPostInDB) {
   return async function newPost(req, res, next) {
+    /* TODO: add validation of missing imageUrl */
     const { imageUrl, caption } = req.body;
     const { id: userId } = res.locals.authUser;
-    const post = await createPostInDB({ imageUrl, caption, userId });
+    await createPostInDB({ imageUrl, caption, userId });
     res.redirect('/');
   };
 }

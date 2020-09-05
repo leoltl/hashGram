@@ -1,10 +1,7 @@
 import { makeNewComment } from './comment.controller';
 
-const mockRequest = () => ({
-  body: {
-    postId: 1,
-    body: 'testing comment',
-  },
+const mockRequest = (body) => ({
+  body,
 });
 const mockResponse = () => {
   const res = {};
@@ -18,7 +15,10 @@ describe('newComment', () => {
   const createCommentInDB = jest.fn();
   const newComment = makeNewComment(createCommentInDB);
   it('happy path', async () => {
-    const req = mockRequest(); const res = mockResponse();
+    const req = mockRequest({
+      postId: 1,
+      body: 'testing comment',
+    }); const res = mockResponse();
     await newComment(req, res);
     expect(createCommentInDB).toBeCalledWith({ userId: 1, postId: 1, body: 'testing comment' });
     expect(res.status).toBeCalledWith(200);
