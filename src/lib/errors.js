@@ -21,6 +21,18 @@ export class ClientError extends HTTPError {
   }
 }
 
+export class AuthenticationError extends HTTPError {
+  constructor({ status = 401, message }) {
+    super({ status, message });
+  }
+}
+
+export class AuthorizationError extends HTTPError {
+  constructor({ status = 403, message }) {
+    super({ status, message });
+  }
+}
+
 export class ServerError extends HTTPError {
   constructor({ status, message = 'Interval Server Error' }) {
     super({ status, message });

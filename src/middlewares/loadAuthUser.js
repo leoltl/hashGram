@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { ClientError } from "../lib/errors";
+import { AuthenticationError } from "../lib/errors";
 
 export default function makeLoadAuthUser(userModel) {
   return async function loadAuthUser(req, res, next) {
@@ -18,7 +18,7 @@ export default function makeLoadAuthUser(userModel) {
 
 export function authenticationRequired(req, res, next) {
   if (!res.locals.authUser) {
-    return next(new ClientError({ status: 401, message: 'Unauthorized Error. Please sign in to access this resource' }));
+    return next(new AuthenticationError({ message: 'Authentication Error. Please sign in to access this resource' }));
   }
   next();
 }

@@ -1,7 +1,10 @@
-import { HTTPError } from '../lib/errors';
+import { HTTPError, DOAError } from '../lib/errors';
 
 export default function errorHandler(error, req, res, next) {
-  console.log('handler', error, error instanceof HTTPError);
+  if (error instanceof DOAError) {
+    res.status(400).json({ message: error.message });
+    return;
+  }
   if (error instanceof HTTPError) {
     res.status(error.status).json({ message: error.message });
     return;
