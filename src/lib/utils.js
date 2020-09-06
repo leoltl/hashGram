@@ -12,7 +12,12 @@ export function camelToSnakeCase(camelCase) {
   return camelCase.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 }
 
+export function mapItemToKey(setFunction, array, getKey) {
+  array.forEach((item) => setFunction(getKey(item), item));
+}
+
 export default {
   makeCamelCaseAlias,
   camelToSnakeCase,
+  mapItemToKey,
 };

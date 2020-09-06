@@ -8,7 +8,7 @@ mixin _post(post, authUser)
         p.post__username 
           | #{post.handle}
     .post__main-image
-      img(src=post.imageUrl)
+      img(src=`https://hashgram.s3.amazonaws.com/user-content/${post.imageUid}`)
     .post__footer
       +_comment(post.handle, post.caption)
       if (post.comments)

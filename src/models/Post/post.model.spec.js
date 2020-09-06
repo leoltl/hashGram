@@ -19,15 +19,15 @@ describe('Post model', () => {
   describe('getAll', () => {
     it('happy path', async () => {
       const posts = await Post.getAll();
-      expect(posts.length).toBe(3);
+      expect(posts.length).toBe(5);
     });
     it('should return posts for given user', async () => {
       const posts = await Post.getAll({ handle: 'nigelL' });
-      expect(posts.length).toBe(2);
+      expect(posts.length).toBe(3);
     });
     it('should accepct string for querying given user', async () => {
       const posts = await Post.getAll('nigelL');
-      expect(posts.length).toBe(2);
+      expect(posts.length).toBe(3);
     });
     it('should return empty array for an invalid column passed into columns of options', async () => {
       const posts = await Post.getAll({}, { columns: ['idd'] });
@@ -53,18 +53,18 @@ describe('Post model', () => {
     });
     it('should return posts for a given user-id', async () => {
       const post = await Post.get({ 'users.id': 1 });
-      expect(post.length).toBe(2);
+      expect(post.length).toBe(3);
     });
     it('should return posts for a given user email', async () => {
       const post = await Post.get({ 'users.email': 'nigel@email.com' });
-      expect(post.length).toBe(2);
+      expect(post.length).toBe(3);
     });
   });
   describe('create', () => {
     it('happy path', async () => {
       const newPost = {
         userId: 2,
-        imageUrl: 'https://instagram.fcxh3-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118523282_121765046060913_5209181211252721492_n.jpg?_nc_ht=instagram.fcxh3-1.fna.fbcdn.net&_nc_cat=1&_nc_ohc=rs2Y-Y1V_vgAX_0X9cX&oh=d56c0cad6e9576b6104e1294a875ca0d&oe=5F7434D8',
+        imageUid: 'd56c0cad6e9576b6104e1294a875ca0d',
         caption: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
       };
       const post = await Post.create(newPost);
@@ -73,7 +73,7 @@ describe('Post model', () => {
     it('handles optional field', async () => {
       const optionCaption = {
         userId: 2,
-        imageUrl: 'https://instagram.fcxh3-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118523282_121765046060913_5209181211252721492_n.jpg?_nc_ht=instagram.fcxh3-1.fna.fbcdn.net&_nc_cat=1&_nc_ohc=rs2Y-Y1V_vgAX_0X9cX&oh=d56c0cad6e9576b6104e1294a875ca0d&oe=5F7434D8',
+        imageUid: 'd56c0cad6e9576b6104e1294a875ca0d',
       };
       const post = await Post.create(optionCaption);
       expect(post[0].caption).toBe('');
@@ -83,7 +83,7 @@ describe('Post model', () => {
         userId: 2,
         caption: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
       };
-      await expect(Post.create(MissingURL)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): image_url' }));
+      await expect(Post.create(MissingURL)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): image_uid' }));
     });
   });
 });

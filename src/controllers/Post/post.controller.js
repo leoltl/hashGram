@@ -1,15 +1,16 @@
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
+import { mapItemToKey } from '../../lib/utils';
 
 export function makeGetAllPosts(getAllPostFromDB, getAllCommentsFromDB) {
   return async function getAllPosts(req, res, next) {
     try {
       const posts = await getAllPostFromDB(res.locals.authUser
          && { authUserId: res.locals.authUser.id });
-
-      if (posts.length !== 0) {
+      if (posts.length) {
         const resultMap = new Map(); // use map to preserve posts order
-        posts.forEach((post) => resultMap.set(post.postId, post));
-        const comments = await getAllCommentsFromDB(Array.from(resultMap.keys()));
+        mapItemToKey(resultMap.set.bind(resultMap), posts, (p) => p.postId);
+        const postIds = Array.from(resultMap.keys());
+        const comments = await getAllCommentsFromDB(postIds);
         comments.forEach((comment) => {
           // comments is added in reference to original post objects
           const post = resultMap.get(comment.postId);
@@ -30,9 +31,11 @@ export function makeGetAllPosts(getAllPostFromDB, getAllCommentsFromDB) {
 export function makeNewPost(createPostInDB) {
   return async function newPost(req, res, next) {
     /* TODO: add validation of missing imageUrl */
-    const { imageUrl, caption } = req.body;
+    const { caption, imageUid } = req.body;
     const { id: userId } = res.locals.authUser;
-    await createPostInDB({ imageUrl, caption, userId });
+    await createPostInDB({
+      caption, userId, imageUid,
+    });
     res.redirect('/');
   };
 }

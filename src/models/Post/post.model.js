@@ -1,5 +1,5 @@
 function makePost(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['posts.id as post_id', 'posts.image_url', 'posts.caption', 'users.handle', 'users.full_name'];
+  const DEFAULT_GET_COLUMNS = ['posts.id as post_id', 'posts.image_uid', 'posts.caption', 'users.handle'];
 
   function getAll(queryObject = {}, options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
@@ -35,7 +35,7 @@ function makePost(db, baseModel) {
   }
 
   async function create(dataObject, options = {}) {
-    const returnColumns = options.columns || ['posts.id', 'image_url', 'caption'];
+    const returnColumns = options.columns || ['posts.id', 'caption', 'image_uid'];
     const res = await baseModel.safeInsert(db('posts').returning(returnColumns), dataObject);
 
     if (process.env.NODE_ENV === 'test') {

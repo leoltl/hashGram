@@ -5,23 +5,28 @@ exports.seed = function (knex) {
     .then(() => knex('posts').insert([
       {
         user_id: 1,
-        image_url: 'https://instagram.fyvr1-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118575704_128879185235227_6311767588435757593_n.jpg?_nc_ht=instagram.fyvr1-1.fna.fbcdn.net&_nc_cat=1&_nc_ohc=igQQAZ529_sAX8J_6er&oh=92d0555d2fd5c8f446c0c0c33eabd88e&oe=5F756EEE',
+        image_uid: 'dd5cc1d86b82cd06738da3300bc1c8aa',
         caption: 'Have an amazing weekend #Toronto #TorontoWaterfront #CNTower #Night #nightTO - @thelandofdustin',
       },
       {
         user_id: 1,
-        image_url: 'https://instagram.fyvr1-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118308115_762818907608657_8813286399163646952_n.jpg?_nc_ht=instagram.fyvr1-1.fna.fbcdn.net&_nc_cat=105&_nc_ohc=lELg0RLhxFkAX-H91EP&oh=eb5f3b5efb2ab61718b4f24c44d75a2c&oe=5F759A52',
+        image_uid: 'c2867ccc879fe72a1400ca62e02cef85',
         caption: 'Quack quack #Toronto #CNTower #Summer #Ducks #skylineTO #summerTO #animalsTO - @argenel',
       },
       {
         user_id: 1,
-        image_url: 'https://instagram.fyvr1-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118368984_905904556563839_1739735206128910038_n.jpg?_nc_ht=instagram.fyvr1-1.fna.fbcdn.net&_nc_cat=111&_nc_ohc=fcpycqEGqDAAX_hA3EQ&oh=195bb200e21b8a43f5c275efaca6f320&oe=5F74E716',
+        image_uid: '95d0171a91b02dd95c34bb3be23206bc',
         caption: 'Not your average corn maze #Caledon #Ontario #ExploreOntario #DixieOrchards #CornMaze #Canada #ExploreCanada #travelTO - @aryanmojiri',
       },
       {
         user_id: 2,
-        image_url: 'https://instagram.fyvr1-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/118368984_905904556563839_1739735206128910038_n.jpg?_nc_ht=instagram.fyvr1-1.fna.fbcdn.net&_nc_cat=111&_nc_ohc=fcpycqEGqDAAX_hA3EQ&oh=195bb200e21b8a43f5c275efaca6f320&oe=5F74E716',
+        image_uid: '95d0171a91b02dd95c34bb3be23206bc',
         caption: 'Not your average corn maze #Caledon #Ontario #ExploreOntario #DixieOrchards #CornMaze #Canada #ExploreCanada #travelTO - @aryanmojiri',
+      },
+      {
+        user_id: 3,
+        image_uid: '4aa01b559bef19bfb33330412703d045',
+        caption: 'Good times',
       },
     ]));
 };

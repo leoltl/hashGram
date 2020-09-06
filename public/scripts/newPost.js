@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 (function main() {
-  async function uploadFile(file, signedRequest, imgUrl) {
+  async function uploadFile(file, signedRequest, imgUrl, imageUid) {
     const res = await fetch(signedRequest, {
       method: 'PUT',
       headers: {
@@ -10,8 +10,9 @@
     });
     if (res.ok) {
       const preview = document.querySelector('.post-form__preview');
-      const imgInput = document.querySelector('#img-url');
-      imgInput.value = imgUrl; // set hidden input to imgurl for posting to new-post
+      const imgUidInput = document.querySelector('#img-uid');
+      // set hidden imageUrl and imageUid input for posting to new-post
+      imgUidInput.value = imageUid;
       /*  replace placeholder to the actual image from s3 */
       preview.innerHTML = '';
       const img = document.createElement('img');
@@ -25,7 +26,7 @@
     const res = await fetch(`/api/sign-s3?file-name=${file.name}&file-type=${file.type}`);
     if (res.ok) {
       const data = await res.json();
-      uploadFile(file, data.signedRequest, data.url);
+      uploadFile(file, data.signedRequest, data.url, data.imageUid);
     }
   }
 
