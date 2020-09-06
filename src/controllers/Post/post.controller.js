@@ -1,11 +1,16 @@
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
 
 export function makeGetAllPosts(getAllPostFromDB) {
-  return async function getAllPosts(req, res) {
-    const posts = await getAllPostFromDB();
-    res.render('index', {
-      posts,
-    });
+  return async function getAllPosts(req, res, next) {
+    try {
+      const posts = await getAllPostFromDB();
+      res.render('index', {
+        posts,
+      });
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
   };
 }
 
@@ -33,6 +38,6 @@ export function installPostControllers(router, postModel) {
 }
 
 export function installFeedController(router, postModel) {
-  router.get('/', makeGetAllPosts(postModel.getAll));
+  router.get('/', makeGetAllPosts(postModel.getFeed));
   return router;
 }

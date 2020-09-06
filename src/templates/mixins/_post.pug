@@ -1,3 +1,5 @@
+include _comment
+
 mixin _post(post, authUser)
   article.post
     header.post__header
@@ -8,9 +10,11 @@ mixin _post(post, authUser)
     .post__main-image
       img(src=post.imageUrl)
     .post__footer
-      p.post__comment 
-        span.post__comment-username #{post.handle}
-        | #{post.caption}
+      +_comment(post.handle, post.caption)
+      if (post.comments)
+        - let newestComments = post.comments.slice(-2)
+        each comment in newestComments
+          +_comment(comment.handle, comment.body)
       .post__new-comment
-        textarea(name='comment' data-post-id=post.id rows='1' placeholder='Add a comment...')
+        textarea(name='comment' data-post-id=post.post_id rows='1' placeholder='Add a comment...')
         button.tertiary(data-auth=Boolean(authUser)) Post

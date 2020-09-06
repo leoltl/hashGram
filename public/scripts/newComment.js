@@ -23,6 +23,7 @@
         }),
       });
       if (res.ok) {
+        btn.textContent = 'post';
         commentBody.value = '';
         const comment = document.createElement('p');
         const cmtUser = document.createElement('span');
@@ -33,6 +34,8 @@
         comment.append(body);
         const footer = btn.parentNode.parentNode;
         footer.insertBefore(comment, btn.parentNode);
+      } else {
+        btn.textContent = 'retry';
       }
     };
   });

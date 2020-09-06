@@ -1,9 +1,10 @@
 import { makeFollowUser, makeGetUserProfile } from './user.controller';
 
-const mockRequest = (body, params) => ({
+const mockRequest = (body, params, query) => ({
   session: {},
   body,
   params,
+  query,
 });
 const mockResponse = (authUser) => {
   const res = {};
@@ -18,8 +19,8 @@ describe('followUser', () => {
   const addFollowerInDB = jest.fn().mockReturnValue([]);
   const followUser = makeFollowUser(addFollowerInDB);
   it('happy path', async () => {
-    const req = mockRequest({ userhandle: 'jaywonL' }); const res = mockResponse({ handle: 'nigelL' });
-    await followUser(req, res);
+    const req = mockRequest({ userhandle: 'jaywonL' }, null, { action: 'follow' }); const res = mockResponse({ handle: 'nigelL' });
+    await followUser(req, res, () => {});
     expect(addFollowerInDB).toBeCalledWith({ userhandle: 'jaywonL', followerhandle: 'nigelL' });
     expect(res.status).toBeCalledWith(200);
     expect(res.end).toBeCalled();

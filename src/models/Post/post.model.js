@@ -26,10 +26,67 @@ function makePost(db, baseModel) {
     return Promise.resolve(res);
   }
 
+  async function getFeed() {
+    const result = new Map();
+    const posts = await db('posts AS p')
+      .select('p.id AS post_id', 'p.image_url AS imageUrl', 'p.caption', 'p.created_at', 'u1.handle AS handle')
+      .join('users AS u1', 'p.user_id', 'u1.id')
+      .orderBy('p.created_at', 'desc')
+      .limit(10);
+
+    posts.forEach((post) => result.set(post.post_id, post));
+
+    const comments = await db('comments AS c')
+      .select('c.body', 'c.created_at', 'u.handle', 'c.post_id')
+      .join('users AS u', 'c.user_id', 'u.id')
+      .whereIn('post_id', Array.from(result.keys()));
+
+    comments.forEach((comment) => {
+      const post = result.get(comment.post_id);
+      post.comments = post.comments || [];
+      post.comments.push(comment);
+    });
+
+    return Array.from(result, (v) => v[1]);
+  }
+
+  // async function getFeed() {
+  //   const query = `
+  //   SELECT
+  //     p.id AS post_id,
+  //     p.caption,
+  //     p.image_url,
+  //     u1.handle AS poster_handle,
+  //     u2.handle AS commenter_handle,
+  //     c1.id AS comment_id,
+  //     c1.body,
+  //     c1.created_at,
+  //     p.created_at AS post_created
+  //   FROM comments c1
+  //   JOIN posts AS p
+  //     ON c1.post_id = p.id
+  //   JOIN users AS u1
+  //     ON p.user_id = u1.id
+  //   JOIN users AS u2
+  //     ON c1.user_id = u2.id
+  //   WHERE c1.id IN (
+  //     SELECT c2.id
+  //     FROM comments AS c2
+  //     WHERE c1.post_id = c2.post_id
+  //     ORDER BY created_at desc
+  //     LIMIT 3
+  //   )
+  //   ORDER BY p.created_at, c1.created_at DESC;
+  //   `;
+  //   const res = await db.raw(query);
+  //   return Promise.resolve(res.rows);
+  // }
+
   return {
     getAll,
     get,
     create,
+    getFeed,
   };
 }
 
