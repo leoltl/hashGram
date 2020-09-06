@@ -1,0 +1,15 @@
+@import '../styles.css';
+@import '../partials/_post.css';
+
+main.index {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8vh;
+}
+
+@media screen and (min-width: 600px) {
+  main.index > article {
+    margin: var(--margin-lg);
+  } 
+}

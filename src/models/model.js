@@ -3,21 +3,24 @@ import { DOAError } from '../lib/errors';
 
 const baseModel = {
   makeDOACamelCase: function makeDOACamelCase(dbRows) {
-    if (!Array.isArray(dbRows)) return dbRows;
-    return dbRows.map((row) => Object.entries(row).reduce((DOA, [key, value]) => {
-      const camelCaseKey = makeCamelCaseAlias(key);
-      return {
-        ...DOA,
-        [camelCaseKey]: value,
-      };
-    }, {}));
+    function makeCamelCase(obj) {
+      return Object.entries(obj).reduce((DOA, [key, value]) => {
+        const camelCaseKey = makeCamelCaseAlias(key);
+        return {
+          ...DOA,
+          [camelCaseKey]: value,
+        };
+      }, {});
+    }
+    if (!Array.isArray(dbRows)) return makeCamelCase(dbRows);
+    return dbRows.map((row) => makeCamelCase(row));
   },
   makeDOASnakeCase: function makeDOASnakeCase(dataObject) {
     return Object.entries(dataObject).reduce((DOA, [key, value]) => {
-      const camelCaseKey = camelToSnakeCase(key);
+      const snakeCaseKey = camelToSnakeCase(key);
       return {
         ...DOA,
-        [camelCaseKey]: value,
+        [snakeCaseKey]: value,
       };
     }, {});
   },

@@ -32,8 +32,8 @@
         cmtUser.append(_authUserHandle);
         comment.append(cmtUser);
         comment.append(body);
-        const footer = btn.parentNode.parentNode;
-        footer.insertBefore(comment, btn.parentNode);
+        const comments = btn.parentNode.parentNode.previousSibling;
+        comments.append(comment);
       } else {
         btn.textContent = 'retry';
       }

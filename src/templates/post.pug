@@ -1,0 +1,14 @@
+extends layout
+include mixins/_post
+
+block styles
+  link(rel="stylesheet", href="/stylesheets/pages/post.css")
+
+block main
+  main.post
+    +_post(post, authUser, isStandAlone)
+
+block scripts
+  script.
+    var _authUserHandle = "#{authUser && authUser.handle}"
+  script(src="/scripts/newComment.js")

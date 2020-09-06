@@ -1,3 +1,4 @@
 mixin _gallery_image(post)
   figure.gallery__image(role='link')
-    img(src=`https://hashgram.s3.amazonaws.com/user-content/${post.imageUid}`)
+    a(href=`/p/${post.imageUid}`)
+      img(src=`https://hashgram.s3.amazonaws.com/user-content/${post.imageUid}`)

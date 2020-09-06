@@ -28,6 +28,22 @@ export function makeGetAllPosts(getAllPostFromDB, getAllCommentsFromDB) {
   };
 }
 
+export function makeGetPost(getPostFromDB, getAllCommentsFromDB) {
+  return async function getPost(req, res, next) {
+    const { imageUid } = req.params;
+    const post = await getPostFromDB({ imageUid });
+    const comments = await getAllCommentsFromDB({ post_id: post.postId });
+    comments.forEach((comment) => {
+      post.comments = post.comments || [];
+      post.comments.push(comment);
+    });
+    res.render('post', {
+      post,
+      isStandAlone: true,
+    });
+  };
+}
+
 export function makeNewPost(createPostInDB) {
   return async function newPost(req, res, next) {
     /* TODO: add validation of missing imageUrl */
@@ -55,5 +71,6 @@ export function installPostControllers(router, postModel) {
 
 export function installFeedController(router, postModel, commentModel) {
   router.get('/', makeGetAllPosts(postModel.getAll, commentModel.getAll));
+  router.get('/p/:imageUid', makeGetPost(postModel.get, commentModel.get));
   return router;
 }

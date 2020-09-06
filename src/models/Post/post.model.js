@@ -29,7 +29,7 @@ function makePost(db, baseModel) {
 
   function get(queryObject, options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
-    const query = db('posts').select(returnColumns).join('users', 'posts.user_id', 'users.id');
+    const query = db('posts').first(returnColumns).join('users', 'posts.user_id', 'users.id');
 
     return baseModel.safeQuery(query, queryObject);
   }

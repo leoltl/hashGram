@@ -24,6 +24,10 @@ function makeComment(db, baseModel) {
       .select(returnColumns)
       .join('users', 'comments.user_id', 'users.id');
 
+    if (typeof queryObject === 'number' || typeof queryObject === 'string') {
+      return baseModel.safeQuery(query, { id: queryObject });
+    }
+
     return baseModel.safeQuery(query, queryObject);
   }
 

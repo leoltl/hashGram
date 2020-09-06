@@ -2,13 +2,12 @@ extends layout
 include mixins/_post
 
 block styles
-  link(rel="stylesheet", href="stylesheets/pages/post.css")
+  link(rel="stylesheet", href="stylesheets/pages/main-feed.css")
 
 block main
   main.index
-    section.post-list
-      each post in posts
-        +_post(post, authUser)
+    each post in posts
+      +_post(post, authUser)
 
 block scripts
   script.
