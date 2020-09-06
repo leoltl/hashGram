@@ -3,7 +3,7 @@ import { authenticationRequired } from '../../middlewares/loadAuthUser';
 export function makeGetAllPosts(getAllPostFromDB) {
   return async function getAllPosts(req, res, next) {
     try {
-      const posts = await getAllPostFromDB();
+      const posts = await getAllPostFromDB(res.locals.authUser?.id);
       res.render('index', {
         posts,
       });
