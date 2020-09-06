@@ -52,7 +52,7 @@ installStorageRoute(router);
 installAuthControllers(router, UserModel);
 installPostControllers(router, PostModel);
 installUserControllers(router, UserModel, PostModel);
-installFeedController(router, PostModel);
+installFeedController(router, PostModel, CommentModel);
 installCommentControllers(router, CommentModel);
 
 app.use(router);

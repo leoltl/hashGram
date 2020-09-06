@@ -6,6 +6,7 @@ const mockRequest = () => ({
 const mockResponse = () => {
   const res = {};
   res.render = jest.fn().mockReturnValue(res);
+  res.locals = { authUse: null };
   return res;
 };
 

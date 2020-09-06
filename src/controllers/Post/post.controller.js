@@ -1,9 +1,22 @@
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
 
-export function makeGetAllPosts(getAllPostFromDB) {
+export function makeGetAllPosts(getAllPostFromDB, getAllCommentsFromDB) {
   return async function getAllPosts(req, res, next) {
     try {
-      const posts = await getAllPostFromDB(res.locals.authUser?.id);
+      const posts = await getAllPostFromDB(res.locals.authUser
+         && { authUserId: res.locals.authUser.id });
+
+      if (posts.length !== 0) {
+        const resultMap = new Map(); // use map to preserve posts order
+        posts.forEach((post) => resultMap.set(post.postId, post));
+        const comments = await getAllCommentsFromDB(Array.from(resultMap.keys()));
+        comments.forEach((comment) => {
+          // comments is added in reference to original post objects
+          const post = resultMap.get(comment.postId);
+          post.comments = post.comments || [];
+          post.comments.push(comment);
+        });
+      }
       res.render('index', {
         posts,
       });
@@ -37,7 +50,7 @@ export function installPostControllers(router, postModel) {
   return router;
 }
 
-export function installFeedController(router, postModel) {
-  router.get('/', makeGetAllPosts(postModel.getFeed));
+export function installFeedController(router, postModel, commentModel) {
+  router.get('/', makeGetAllPosts(postModel.getAll, commentModel.getAll));
   return router;
 }
