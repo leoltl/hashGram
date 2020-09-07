@@ -34,6 +34,8 @@
         comment.append(body);
         const comments = btn.parentNode.parentNode.previousSibling;
         comments.append(comment);
+      } else if (res.status === 401) {
+        window.location.replace('/signin');
       } else {
         btn.textContent = 'retry';
       }

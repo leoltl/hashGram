@@ -5,6 +5,7 @@ mixin _post(post, authUser, isStandAlone)
   article(class=`post${isStandAlone ? '--standalone' : ''}`)
     header.post__header
       .post__user-header-wrapper
+        img(src=`https://www.gravatar.com/avatar/${post.avatar}?d=identicon&s=40`, alt='user profile picture')
       a(href='/' + post.handle)
         p.post__username 
           | #{post.handle}

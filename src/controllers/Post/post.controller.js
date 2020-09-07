@@ -1,38 +1,16 @@
 import { DOAError, ClientError } from '../../lib/errors';
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
-import { mapItemToKey } from '../../lib/utils';
+import { makePostAggregatorService } from './aggregratePost.service';
 
-export function makeGetAllPosts(getAllPostFromDB, getAllCommentsFromDB, getLikesFromDB) {
+export function makeGetAllPosts(getAllPostFromDB, aggregatePostsService) {
   return async function getAllPosts(req, res, next) {
     try {
-      const posts = await getAllPostFromDB(res.locals.authUser
-         && { authUserId: res.locals.authUser.id });
-      if (posts.length) {
-        const resultMap = new Map(); // use map to preserve posts order
-        mapItemToKey(resultMap.set.bind(resultMap), posts, (p) => p.postId);
-        const postIds = Array.from(resultMap.keys());
-
-        const [comments, likes] = await Promise.all([
-          getAllCommentsFromDB(postIds), getLikesFromDB(postIds),
-        ]);
-        comments.forEach((comment) => {
-          // comments is added in reference to original post objects
-          const post = resultMap.get(comment.postId);
-          post.comments = post.comments || [];
-          post.comments.push(comment);
-        });
-
-        likes.forEach((like) => {
-          const post = resultMap.get(like.postId);
-          post.likes = post.likes || [];
-          post.likes.push(like);
-          if (res.locals.authUser && like.handle === res.locals.authUser.handle) {
-            post.liked = true;
-          }
-        });
-      }
+      const userParams = res.locals.authUser ? { authUserId: res.locals.authUser.id } : undefined;
+      const posts = await getAllPostFromDB(userParams);
+      console.log(posts[0]);
+      const aggregatedPosts = await aggregatePostsService.aggregrate(posts, res.locals.authUser);
       res.render('index', {
-        posts,
+        posts: aggregatedPosts,
       });
     } catch (e) {
       console.log(e);
@@ -41,26 +19,14 @@ export function makeGetAllPosts(getAllPostFromDB, getAllCommentsFromDB, getLikes
   };
 }
 
-export function makeGetPost(getPostFromDB, getAllCommentsFromDB, getLikesFromDB) {
+export function makeGetPost(getPostFromDB, aggregatePostsService) {
   return async function getPost(req, res, next) {
     try {
       const { imageUid } = req.params;
       const post = await getPostFromDB({ imageUid });
-      const comments = await getAllCommentsFromDB({ post_id: post.postId });
-      const likes = await getLikesFromDB(post.postId);
-      comments.forEach((comment) => {
-        post.comments = post.comments || [];
-        post.comments.push(comment);
-      });
-      likes.forEach((like) => {
-        post.likes = post.likes || [];
-        post.likes.push(like);
-        if (res.locals.authUser && like.handle === res.locals.authUser.handle) {
-          post.liked = true;
-        }
-      });
+      const [aggreatedPost] = await aggregatePostsService.aggregrate(post, res.locals.authUser);
       res.render('post', {
-        post,
+        post: aggreatedPost,
         isStandAlone: true,
       });
     } catch (e) {
@@ -102,7 +68,6 @@ export function makeLikeDislikePost(likePostInDB, unlikePostInDB) {
       }
       res.status(200).end();
     } catch (e) {
-      console.log(e)
       if (e instanceof DOAError) {
         next(new ClientError({ message: e.message }));
       }
@@ -112,14 +77,19 @@ export function makeLikeDislikePost(likePostInDB, unlikePostInDB) {
 }
 
 export function installPostControllers(router, postModel) {
-  router.post('/new-post', authenticationRequired, makeNewPost(postModel.create));
-  router.post('/api/like-post', authenticationRequired, makeLikeDislikePost(postModel.likePost, postModel.unlikePost));
+  router.post('/new-post',
+    authenticationRequired,
+    makeNewPost(postModel.create));
+  router.post('/api/like-post',
+    authenticationRequired,
+    makeLikeDislikePost(postModel.likePost, postModel.unlikePost));
   router.get('/new-post', newPostPage);
   return router;
 }
 
 export function installFeedController(router, postModel, commentModel) {
-  router.get('/p/:imageUid', makeGetPost(postModel.get, commentModel.getAll, postModel.getLikes));
-  router.get('/', makeGetAllPosts(postModel.getAll, commentModel.getAll, postModel.getLikes));
+  const aggregatePostsService = makePostAggregatorService(commentModel.getAll, postModel.getLikes);
+  router.get('/p/:imageUid', makeGetPost(postModel.get, aggregatePostsService));
+  router.get('/', makeGetAllPosts(postModel.getAll, aggregatePostsService));
   return router;
 }

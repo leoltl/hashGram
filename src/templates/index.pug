@@ -6,8 +6,21 @@ block styles
 
 block main
   main.index
-    each post in posts
-      +_post(post, authUser)
+    if posts.length
+      each post in posts
+        +_post(post, authUser)
+    else
+      .index__suggestion
+        .index__suggestion-header
+          | Welcome to #hashGram
+        .index__suggestion-body
+          | You can visit your 
+          a(href=`/${authUser.handle}`)
+            | profile
+          |, share an image or follow other users. 
+          p Here are some suggestions for you.
+        .index__suggestion_users
+          | list of users....
 
 block scripts
   script.

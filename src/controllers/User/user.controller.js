@@ -12,6 +12,7 @@ export function makeGetUserProfile(
     const { handle = {} } = req.params;
     try {
       const user = await getUserInDB(handle);
+      console.log(user);
       if (!user) {
         throw new ClientError({ message: 'Profile you are finding does not exists.' });
       }

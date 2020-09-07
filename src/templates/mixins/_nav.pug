@@ -14,7 +14,7 @@ mixin _nav(authUser)
         +activityIcon()
       if authUser
         a(href=`/${authUser.handle}` id='profile')
-          +profileIcon()
+          img(src=`https://www.gravatar.com/avatar/${authUser.avatar}?d=identicon&s=24`, alt='user profile picture')
       else 
         a(href="/signin" id="signin")
           +loginIcon()

@@ -22,23 +22,13 @@ article.post {
 }
 
 .post__user-header-wrapper {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
   margin: var(--margin-sm);
   margin-left: var(--margin-md);
   position: relative;
-}
-
-.post__user-header-wrapper::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 1px solid black;
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
 }
 
 .post__username {

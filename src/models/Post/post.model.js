@@ -1,6 +1,6 @@
 function makePost(db, baseModel) {
   const DEFAULT_GET_COLUMNS = [
-    'posts.id as post_id', 'posts.image_uid', 'posts.caption', 'users.handle',
+    'posts.id as post_id', 'posts.image_uid', 'posts.caption', 'users.handle', 'users.avatar',
   ];
 
   function getAll(queryObject = {}, options = {}) {
@@ -99,13 +99,13 @@ function makePost(db, baseModel) {
     return baseModel.safeQuery(countQuery.where(dataObject));
   }
 
-  async function getLikedPosts(userId, postIds) {
-    return db('posts').select('posts.id').count('likes.user_id')
-      .leftJoin('likes', 'posts.id', 'likes.post_id')
-      .where({ user_id: userId })
-      .andWhereIn('likes.post_id', postIds)
-      .groupBy('posts.id');
-  }
+  // async function getLikedPosts(userId, postIds) {
+  //   return db('posts').select('posts.id').count('likes.user_id')
+  //     .leftJoin('likes', 'posts.id', 'likes.post_id')
+  //     .where({ user_id: userId })
+  //     .andWhereIn('likes.post_id', postIds)
+  //     .groupBy('posts.id');
+  // }
 
   // select
   //   c.like_count,
@@ -127,7 +127,6 @@ function makePost(db, baseModel) {
     unlikePost,
     getLikes,
     getLikeCount,
-    getLikedPosts,
   };
 }
 

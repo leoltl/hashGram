@@ -16,8 +16,35 @@ export function mapItemToKey(setFunction, array, getKey) {
   array.forEach((item) => setFunction(getKey(item), item));
 }
 
+export function createMapFromArray(array, getKey) {
+  const dict = new Map();
+  array.forEach((item) => {
+    dict.set(getKey(item), { ...item });
+  });
+  return dict;
+}
+
+export function attachPropAsArrayToMap(map, array, getKey, prop) {
+  array.forEach((item) => {
+    const key = getKey(item);
+    const mapItem = map.get(key);
+    mapItem[prop] = mapItem[prop] || [];
+    mapItem[prop].push(item);
+  });
+}
+
+export function attachPropAsArrayToObject(obj, key, array) {
+  array.forEach((item) => {
+    obj[key] = obj[key] || [];
+    obj[key].push(item);
+  });
+}
+
 export default {
   makeCamelCaseAlias,
   camelToSnakeCase,
   mapItemToKey,
+  createMapFromArray,
+  attachPropAsArrayToMap,
+  attachPropAsArrayToObject,
 };

@@ -10,10 +10,6 @@ exports.seed = function (knex) {
           follower_id: 2,
         },
         {
-          user_id: 1,
-          follower_id: 3,
-        },
-        {
           user_id: 2,
           follower_id: 1,
         },

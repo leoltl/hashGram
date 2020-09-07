@@ -1,7 +1,8 @@
+import uniqueString from 'unique-string';
 import { ClientError } from '../../lib/errors';
 
 function makeUser(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['users.id', 'email', 'full_name', 'handle'];
+  const DEFAULT_GET_COLUMNS = ['users.id', 'email', 'full_name', 'handle', 'avatar'];
 
   async function getAll(options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
@@ -19,7 +20,8 @@ function makeUser(db, baseModel) {
 
   async function create(dataObject, options = {}) {
     const returnColumns = options.columns || ['handle'];
-    const res = await baseModel.safeInsert(db('users').returning(returnColumns), dataObject);
+    const avatar = uniqueString();
+    const res = await baseModel.safeInsert(db('users').returning(returnColumns), { ...dataObject, avatar });
     if (process.env.NODE_ENV === 'test') {
       // workaround sqlite3 driver does not return fields for inserted row
       return this.get({ id: res[0] }, { columns: returnColumns });

@@ -8,8 +8,40 @@ main.index {
   margin-bottom: var(--navbar-height);
 }
 
+.index__suggestion {
+  background: var(--element-bg-color);
+  max-width: 600px;
+  width: 100vw;
+  height: calc(100vh - 2 * var(--navbar-height));
+  border: var(--default-border);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: var(--margin-md);
+  padding-right: var(--margin-md);
+}
+
+.index__suggestion-header {
+  width: 80%;
+  text-align: center;
+  border-bottom: var(--default-border);
+  padding: var(--padding-sm);
+  padding-top: var(--padding-md);
+  font-size: var(--step-up-1);
+}
+
+.index__suggestion-body {
+  padding-top: var(--padding-md);
+  line-height: 1.5em;
+}
+
 @media screen and (min-width: 600px) {
   main.index > article {
     margin: var(--margin-lg);
   } 
+  .index__suggestion {
+    margin-top: var(--margin-lg);
+    max-height: 550px;
+  }
 }

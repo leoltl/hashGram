@@ -1,5 +1,5 @@
 function makeComment(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['comments.id', 'body', 'comments.created_at', 'comments.post_id', 'users.handle'];
+  const DEFAULT_GET_COLUMNS = ['comments.id', 'body', 'comments.created_at', 'comments.post_id', 'users.handle', 'users.avatar'];
 
   function getAll(queryObject, options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
