@@ -1,4 +1,5 @@
 include _comment
+include icons
 
 mixin _post(post, authUser, isStandAlone)
   article(class=`post${isStandAlone ? '--standalone' : ''}`)
@@ -9,6 +10,22 @@ mixin _post(post, authUser, isStandAlone)
           | #{post.handle}
     .post__main-image
       img(src=`https://hashgram.s3.amazonaws.com/user-content/${post.imageUid}`)
+    .post__info
+      .post__actions
+        - let className = post.liked ? 'post__actions-likes--liked' : ''
+        - let action = post.liked ? 'unlike' : 'like'
+        .post__actions-likes(
+          class=className 
+          data-action=action
+          data-post-id=post.postId 
+          data-auth=Boolean(authUser))
+          +activityIcon()
+        .post__actions-saved
+          +savedIcon()
+      .post__likes(class=post.likes && post.likes.length > 0 ? '' : 'post__likes--hidden')
+          | Liked by 
+          span.post__like-count #{post.likes ? post.likes.length : 0}
+          |&nbsp;others
     .post__comments
       +_comment(post.handle, post.caption)
       if (post.comments)

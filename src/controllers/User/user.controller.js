@@ -70,6 +70,9 @@ export default function installUserControllers(router, UserModel, PostModel) {
     UserModel.getFollowing,
     UserModel.isFollowing,
   ));
-  router.post('/api/follow', authenticationRequired, makeFollowUser(UserModel.addFollower, UserModel.removeFollower));
+  router.post('/api/follow', authenticationRequired, makeFollowUser(
+    UserModel.addFollower,
+    UserModel.removeFollower,
+  ));
   return router;
 }

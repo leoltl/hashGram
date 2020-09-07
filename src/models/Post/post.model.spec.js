@@ -38,8 +38,8 @@ describe('Post model', () => {
   describe('get', () => {
     it('happy path', async () => {
       const post = await Post.get({ id: 1 });
-      expect(post[0].handle).toBe('nigelL');
-      expect(post[0].caption).toBe('Have an amazing weekend #Toronto #TorontoWaterfront #CNTower #Night #nightTO - @thelandofdustin');
+      expect(post.handle).toBe('nigelL');
+      expect(post.caption).toBe('Have an amazing weekend #Toronto #TorontoWaterfront #CNTower #Night #nightTO - @thelandofdustin');
     });
     it('should return empty array for an invalid column passed into queryObject', async () => {
       const post = await Post.get({ iddd: 1 });
@@ -51,13 +51,13 @@ describe('Post model', () => {
       expect(post).toBeDefined();
       expect(post.length).toBe(0);
     });
-    it('should return posts for a given user-id', async () => {
+    it('should return first post for a given user-id', async () => {
       const post = await Post.get({ 'users.id': 1 });
-      expect(post.length).toBe(3);
+      expect(post.imageUid).toBe('dd5cc1d86b82cd06738da3300bc1c8aa');
     });
     it('should return posts for a given user email', async () => {
       const post = await Post.get({ 'users.email': 'nigel@email.com' });
-      expect(post.length).toBe(3);
+      expect(post.imageUid).toBe('dd5cc1d86b82cd06738da3300bc1c8aa');
     });
   });
   describe('create', () => {
@@ -68,7 +68,7 @@ describe('Post model', () => {
         caption: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
       };
       const post = await Post.create(newPost);
-      expect(post[0].caption).toBe('This popular jerk chicken joint just opened a second Toronto location @coolrunningsres');
+      expect(post.caption).toBe('This popular jerk chicken joint just opened a second Toronto location @coolrunningsres');
     });
     it('handles optional field', async () => {
       const optionCaption = {
@@ -76,7 +76,7 @@ describe('Post model', () => {
         imageUid: 'd56c0cad6e9576b6104e1294a875ca0d',
       };
       const post = await Post.create(optionCaption);
-      expect(post[0].caption).toBe('');
+      expect(post.caption).toBe('');
     });
     it('handles missing required columns', async () => {
       const MissingURL = {
@@ -84,6 +84,49 @@ describe('Post model', () => {
         caption: 'This popular jerk chicken joint just opened a second Toronto location @coolrunningsres',
       };
       await expect(Post.create(MissingURL)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Missing required field(s): image_uid' }));
+    });
+  });
+  describe('likePost', () => {
+    it('happy path', async () => {
+      const Likes = {
+        user_id: 3,
+        post_id: 2,
+      };
+      const res = await Post.likePost(Likes);
+      expect(res.length).toBe(1);
+    });
+    it('throw DOA error for duplicated likes', async () => {
+      const Likes = {
+        user_id: 1,
+        post_id: 1,
+      };
+      await expect(Post.likePost(Likes)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Field(s) provided: (post_id, likes) is duplicated' }));
+    });
+  });
+  describe('getLikes', () => {
+    it('happy path with array of post_ids', async () => {
+      const results = await Post.getLikes([1, 2]);
+      expect(results.length).toBe(4);
+      expect(results.find((r) => r.postId === 1).likeCount).toBe(3);
+      expect(results.find((r) => r.postId === 2).likeCount).toBe(1);
+    });
+    it('happy path with string of post_id', async () => {
+      const results = await Post.getLikes('1');
+      expect(results.length).toBe(3);
+      expect(results.find((r) => r.postId === 1).likeCount).toBe(3);
+    });
+  });
+  describe('getLikeCount', () => {
+    it('happy path with array of post_ids', async () => {
+      const results = await Post.getLikeCount([1, 2]);
+      expect(results.length).toBe(2);
+      expect(results.find((r) => r.postId === 1).likeCount).toBe(3);
+      expect(results.find((r) => r.postId === 2).likeCount).toBe(1);
+    });
+    it('happy path with string of post_id', async () => {
+      const results = await Post.getLikeCount('1');
+      expect(results.length).toBe(1);
+      expect(results.find((r) => r.postId === 1).likeCount).toBe(3);
     });
   });
 });

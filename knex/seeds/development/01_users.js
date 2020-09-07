@@ -1,7 +1,11 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('users').del()
+  return knex.raw('TRUNCATE TABLE likes RESTART IDENTITY CASCADE')
+    .then(() => knex.raw('TRUNCATE TABLE comments RESTART IDENTITY CASCADE'))
+    .then(() => knex.raw('TRUNCATE TABLE following RESTART IDENTITY CASCADE'))
+    .then(() => knex.raw('TRUNCATE TABLE posts RESTART IDENTITY CASCADE'))
+    .then(() => knex.raw('TRUNCATE TABLE users RESTART IDENTITY CASCADE'))
     .then(() => (
       // Inserts seed entries
       knex('users').insert([

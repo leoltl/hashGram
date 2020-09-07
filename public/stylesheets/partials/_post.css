@@ -51,10 +51,42 @@ article.post {
 }
 
 .post__comments {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: 0 var(--padding-md) var(--padding-sm);
   min-height: 40px;
   max-height: 90px;
   overflow-y: scroll;
+}
+
+.post__likes,
+.post__actions-likes,
+.post__actions-saved {
+  margin: var(--padding-xs) var(--padding-md) 0;
+}
+
+.post__actions-likes--liked svg {
+  fill: red;
+}
+
+.post__like-count {
+  font-weight: 600;
+}
+
+.post__likes--hidden {
+  display: none;
+}
+
+.post__actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post__actions > * {
+  cursor: pointer;
+}
+
+.post__actions-saved {
+  fill: lightgrey;
+  cursor: not-allowed;
 }
 
 article:not(.post--standalone) .post__comments {
