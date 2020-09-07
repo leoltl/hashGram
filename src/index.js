@@ -51,9 +51,11 @@ app.use(makeLoadAuthUserFromSession(UserModel));
 installStorageRoute(router);
 installAuthControllers(router, UserModel);
 installPostControllers(router, PostModel);
-installUserControllers(router, UserModel, PostModel);
 installFeedController(router, PostModel, CommentModel);
 installCommentControllers(router, CommentModel);
+
+// user routes should be last to initialize
+installUserControllers(router, UserModel, PostModel);
 
 app.use(router);
 app.use(errorHandler);

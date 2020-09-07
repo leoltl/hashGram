@@ -12,7 +12,6 @@ export function makeGetUserProfile(
     const { handle = {} } = req.params;
     try {
       const user = await getUserInDB(handle);
-      console.log(user);
       if (!user) {
         throw new ClientError({ message: 'Profile you are finding does not exists.' });
       }
@@ -63,17 +62,41 @@ export function makeFollowUser(addFollowerInDB, removeFollowerInDB) {
   };
 }
 
+export function makeUpdateUser(updateUserInDB) {
+  return async function updateUser(req, res, next) {
+    try {
+      const updates = req.body;
+      // make sure updating auth user
+      await updateUserInDB({ ...updates, handle: res.locals.authUser.handle });
+      res.redirect(`/${res.locals.authUser.handle}`);
+    } catch (e) {
+      console.log(e);
+      res.redirect('/edit-profile');
+    }
+  };
+}
+
+export async function editUserPage(req, res) {
+  if (!res.locals.authUser) {
+    res.redirect('/');
+  }
+  res.render('edit-user');
+}
+
 export default function installUserControllers(router, UserModel, PostModel) {
+  router.get('/edit-profile', editUserPage);
+  router.post('/edit-profile', authenticationRequired, makeUpdateUser(UserModel.update));
+  router.post('/api/follow', authenticationRequired, makeFollowUser(
+    UserModel.addFollower,
+    UserModel.removeFollower,
+  ));
+
   router.get('/:handle', makeGetUserProfile(
     UserModel.get,
     PostModel.getAll,
     UserModel.getFollower,
     UserModel.getFollowing,
     UserModel.isFollowing,
-  ));
-  router.post('/api/follow', authenticationRequired, makeFollowUser(
-    UserModel.addFollower,
-    UserModel.removeFollower,
   ));
   return router;
 }

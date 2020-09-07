@@ -2,7 +2,7 @@ import uniqueString from 'unique-string';
 import { ClientError } from '../../lib/errors';
 
 function makeUser(db, baseModel) {
-  const DEFAULT_GET_COLUMNS = ['users.id', 'email', 'full_name', 'handle', 'avatar'];
+  const DEFAULT_GET_COLUMNS = ['users.id', 'email', 'full_name', 'handle', 'avatar', 'bio'];
 
   async function getAll(options = {}) {
     const returnColumns = options.columns || DEFAULT_GET_COLUMNS;
@@ -27,6 +27,12 @@ function makeUser(db, baseModel) {
       return this.get({ id: res[0] }, { columns: returnColumns });
     }
     return Promise.resolve(res);
+  }
+
+  async function update(dataObject) {
+    const { id, ...rest } = dataObject; // exclude id update
+    const query = db('users').where({ handle: dataObject.handle });
+    return baseModel.safeUpdate(query, rest);
   }
 
   async function getFollowing(dataObject, options = {}) {
@@ -121,6 +127,7 @@ function makeUser(db, baseModel) {
     getAll,
     get,
     create,
+    update,
     getFollower,
     addFollower,
     removeFollower,

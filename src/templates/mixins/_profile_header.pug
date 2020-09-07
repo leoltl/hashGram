@@ -10,7 +10,9 @@ mixin _profile_header(user, authUser)
         - var label = user.isFollowing ? 'unfollow' : 'follow'
           button(class=`profile__follow-btn` data-user-handle=user.handle data-action=label) #{label}
       else 
-        button.secondary Edit Profile
+        button.secondary 
+          a(href='/edit-profile')
+            | Edit Profile
         button.tertiary 
           a(href='/signout')
             | Logout
@@ -29,4 +31,4 @@ mixin _profile_header(user, authUser)
     .profile__name
       | #{user.firstName}
     .profile__bio
-      | bios...
+      | #{user.bio}

@@ -1,9 +1,11 @@
-mixin _text-input(form, field, placeholder, previousFill)
-  label.sr-only(for=`${field}`) #{field}
+mixin _text-input(form, field, placeholder, previousFill, hideLabel=true, disabled=false)
+  label(for=`${field}` class=hideLabel ? 'sr-only': '') 
+    | #{field}
   input(
     class=`${form}-form__input` 
     name=`${field}` 
     type=(field.includes('password') ? 'password' : 'text') 
     placeholder=(placeholder || '')
     value=(previousFill || '')
+    disabled=disabled
   )

@@ -1,0 +1,14 @@
+extends layout
+include mixins/_text-input
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/edit-profile.css")
+
+block main
+  main.edit-profile
+    form.edit-profile(action="/edit-profile" method="POST")
+      +_text-input('edit-profile', 'handle', '', authUser.handle, false, true)
+      +_text-input('edit-profile', 'email', '', authUser.email, false)
+      +_text-input('edit-profile', 'fullName', '', authUser.fullName, false)
+      +_text-input('edit-profile', 'bio', '', authUser.bio, false)
+      button.primary(type='submit') Save Edit

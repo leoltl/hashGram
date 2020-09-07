@@ -48,6 +48,18 @@ const baseModel = {
     }
     return this.makeDOACamelCase(res);
   },
+  safeUpdate: async function safeUpdate(query, dataObject = null) {
+    let res;
+    try {
+      res = await (dataObject
+        ? query.update(this.makeDOASnakeCase(dataObject))
+        : query);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+    return res;
+  },
   safeInsert: async function safeInsert(query, dataObject = null) {
     let res;
     try {
