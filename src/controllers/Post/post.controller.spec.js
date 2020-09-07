@@ -10,7 +10,7 @@ const mockResponse = () => {
   return res;
 };
 
-describe('getAllPosts', () => {
+xdescribe('getAllPosts', () => {
   const mockgetAll = jest.fn().mockReturnValue([]);
   const getAllPosts = makeGetAllPosts(mockgetAll);
   it('happy path', async () => {

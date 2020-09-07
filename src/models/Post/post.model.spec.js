@@ -92,15 +92,16 @@ describe('Post model', () => {
         user_id: 3,
         post_id: 2,
       };
-      const res = await Post.likePost(Likes);
-      expect(res.length).toBe(1);
+      await Post.likePost(Likes);
+      const results = await Post.getLikes(2);
+      expect(results.length).toBe(2);
     });
-    it('throw DOA error for duplicated likes', async () => {
+    it('handle gracefully for duplicated likes', async () => {
       const Likes = {
         user_id: 1,
         post_id: 1,
       };
-      await expect(Post.likePost(Likes)).rejects.toThrow(new DOAError({ type: 'insert', message: 'Field(s) provided: (post_id, likes) is duplicated' }));
+      expect(() => Post.likePost(Likes)).not.toThrow();
     });
   });
   describe('getLikes', () => {
