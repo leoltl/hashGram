@@ -2,7 +2,9 @@ include ./icons
 
 mixin _nav(authUser)
   nav
-    .logo #hashGram
+    .logo 
+      a(href="/" id="home")
+        | #hashGram
     .nav__links
       a(href="/" id="home")
         +homeIcon()

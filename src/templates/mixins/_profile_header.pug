@@ -4,15 +4,16 @@ mixin _profile_header(user, authUser)
       img(src=`https://www.gravatar.com/avatar/${user.avatar}?d=identicon`, alt='user profile picture')
   .profile__header-title
     span.profile__header-handle #{user.handle}
-    if (authUser && authUser.handle != user.handle)
-      if (user.isFollowing)
-      - var label = user.isFollowing ? 'unfollow' : 'follow'
-        button(class=`profile__follow-btn` data-user-handle=user.handle data-action=label) #{label}
     if (authUser)
-      button.secondary Edit Profile
-      button.tertiary 
-        a(href='/signout')
-          | Logout
+      if (authUser.handle != user.handle)
+        if (user.isFollowing)
+        - var label = user.isFollowing ? 'unfollow' : 'follow'
+          button(class=`profile__follow-btn` data-user-handle=user.handle data-action=label) #{label}
+      else 
+        button.secondary Edit Profile
+        button.tertiary 
+          a(href='/signout')
+            | Logout
   .profile__header-stats
     .profile__posts
       div #{user.postsCount} 
