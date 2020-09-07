@@ -61,6 +61,14 @@ section.profile__gallery {
   font-size: var(--step-up-2);
 }
 
+.profile__header-title > * {
+  margin-bottom: var(--margin-xs);
+}
+
+.profile__header-title button.tertiary{
+  padding-top: 0;
+}
+
 .profile__header-about {
   width: 100vw;
   padding: var(--padding-md);
@@ -123,12 +131,15 @@ section.profile__gallery {
   }
 
   .profile__header-title {
-    display: block;
-    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 300px;
     margin: var(--margin-xs) 0;
   }
 
   .profile__header-handle {
+    margin: 0;
     margin-right: var(--margin-sm);
   }
   

@@ -77,3 +77,8 @@ textarea {
   margin-top: var(--margin-sm);
   padding: var(--padding-sm) var(--padding-md);
 }
+
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}

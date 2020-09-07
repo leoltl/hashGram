@@ -8,8 +8,11 @@ mixin _profile_header(user, authUser)
       if (user.isFollowing)
       - var label = user.isFollowing ? 'unfollow' : 'follow'
         button(class=`profile__follow-btn` data-user-handle=user.handle data-action=label) #{label}
-    //- else
-      //- button.secondary Edit Profile
+    if (authUser)
+      button.secondary Edit Profile
+      button.tertiary 
+        a(href='/signout')
+          | Logout
   .profile__header-stats
     .profile__posts
       div #{user.postsCount} 

@@ -70,6 +70,11 @@ export function signupPage(req, res) {
   res.render('signup');
 }
 
+export function signout(req, res) {
+  req.session.user_handle = null;
+  res.redirect('/');
+}
+
 export default function installAuthControllers(router, userModel) {
   const createUser = makeCreateUser(
     userModel.create,
@@ -86,6 +91,8 @@ export default function installAuthControllers(router, userModel) {
 
   router.get('/signup', signupPage);
   router.post('/signup', createUser);
+
+  router.get('/signout', signout);
 
   return router;
 }
