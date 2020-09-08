@@ -99,6 +99,14 @@ function makePost(db, baseModel) {
     return baseModel.safeQuery(countQuery.where(dataObject));
   }
 
+  async function getLikedPosts(userId) {
+    const query = db('posts')
+      .select('posts.id', 'image_uid', 'caption')
+      .join('likes', 'likes.post_id', 'posts.id')
+      .limit(10);
+    return baseModel.safeQuery(query, { 'likes.user_id': userId });
+  }
+
   // async function getLikedPosts(userId, postIds) {
   //   return db('posts').select('posts.id').count('likes.user_id')
   //     .leftJoin('likes', 'posts.id', 'likes.post_id')
@@ -127,6 +135,7 @@ function makePost(db, baseModel) {
     unlikePost,
     getLikes,
     getLikeCount,
+    getLikedPosts,
   };
 }
 

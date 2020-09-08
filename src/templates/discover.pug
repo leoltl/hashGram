@@ -1,0 +1,20 @@
+extends layout
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/discover.css")
+
+block main
+  main.discover
+    .discover__suggestion
+      .discover__suggestion-header
+        | Discover People you may know
+        if !authUser
+          p.discover__suggestion-disclaimer
+            a(href="/signin") Sign in
+            | &nbsp;to see your tailored suggestion
+      ul.discover__suggestion-users
+        each suggestion in suggestions
+          a(href=`/${suggestion.handle}`)
+            li.discover__suggestion-user
+              img(src=`https://www.gravatar.com/avatar/${suggestion.avatar}?d=identicon&s=24`, alt='user profile picture')
+              | #{suggestion.handle}

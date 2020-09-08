@@ -123,7 +123,7 @@ function makeUser(db, baseModel) {
     return Boolean(res.length);
   }
 
-  async function notFollowing(userId) {
+  async function notFollowing(userId = 0) {
     return db('users')
       .select('users.handle', 'users.avatar').leftJoin('following as f', 'users.id', 'f.user_id')
       .where(function () {

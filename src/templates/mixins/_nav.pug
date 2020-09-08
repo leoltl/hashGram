@@ -8,11 +8,11 @@ mixin _nav(authUser)
     .nav__links
       a(href="/" id="home")
         +homeIcon()
-      a(href="#" id="explore")
+      a(href="/discover" id="explore")
         +searchIcon()
       a(href="/new-post" id="new-post")
         +newPostIcon()
-      a(href="#" id="activity")
+      a(href="/activity" id="activity")
         +activityIcon()
       if authUser
         a(href=`/${authUser.handle}` id='profile')

@@ -83,7 +83,18 @@ export async function editUserPage(req, res) {
   res.render('edit-user');
 }
 
+export function makeDiscoverPage(getSuggestedUsersFromDB) {
+  return async function discoverPage(req, res) {
+    const suggestions = await getSuggestedUsersFromDB(res.locals.authUser && res.locals.authUser.id);
+    res.render('discover', {
+      suggestions,
+    });
+  };
+}
+
+
 export default function installUserControllers(router, UserModel, PostModel) {
+  router.get('/discover', makeDiscoverPage(UserModel.notFollowing));
   router.get('/edit-profile', editUserPage);
   router.post('/edit-profile', authenticationRequired, makeUpdateUser(UserModel.update));
   router.post('/api/follow', authenticationRequired, makeFollowUser(

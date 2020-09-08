@@ -1,0 +1,76 @@
+@import '../styles.css';
+
+main.activity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: var(--navbar-height);
+  height: calc(100vh - var(--navbar-height));
+}
+
+.activity__posts {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity__header {
+  width: 80%;
+  max-width: 725px;
+  text-align: center;
+  border-bottom: var(--default-border);
+  padding: var(--padding-sm);
+  padding-top: var(--padding-md);
+}
+
+.activity__header a {
+  font-weight: 600;
+}
+
+section.activity__gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* set rows height equals width with 100 vw - two grid gaps / 3 cols*/
+  grid-auto-rows: calc((min(100vw, 725px) - var(--margin-xs) * 2) / 3 ); 
+  grid-gap: var(--margin-xs);
+  overflow: hidden;
+  width: 100%;
+  max-width: 725px;
+  margin: 0 auto;
+}
+
+.gallery__image {
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery__image img {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+@media screen and (min-width: 600px) {
+  section.activity__gallery {
+    grid-auto-rows: calc((min(100vw, 725px) - var(--margin-lg) * 2) / 3 ); 
+    grid-gap: var(--margin-lg);
+  }
+
+  .activity__header {
+    font-size: var(--step-up-1);
+  }
+}
+
+@media screen and (min-width: 1023px) {
+  section.activity__gallery {
+    max-width: 935px;
+    grid-auto-rows: calc((min(100vw, 935px) - var(--margin-lg) * 2) / 3 ); 
+    grid-gap: var(--margin-lg);
+  }
+
+  .activity__header {
+    width: 80%;
+    max-width: 935px;
+  }
+}

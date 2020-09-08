@@ -1,9 +1,5 @@
 @import '../styles.css';
 
-main.profile {
-  
-}
-
 section.profile__gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

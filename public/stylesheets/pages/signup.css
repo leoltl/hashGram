@@ -25,3 +25,7 @@ form.signup-form > * {
 form.signup-form > *:nth-last-child(2){
   margin-bottom: var(--margin-md);
 }
+
+.signin-box a {
+  font-weight: 600;
+}

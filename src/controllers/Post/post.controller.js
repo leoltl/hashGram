@@ -81,6 +81,18 @@ export function makeLikeDislikePost(likePostInDB, unlikePostInDB) {
   };
 }
 
+function makeActivityPage(getLikedPostsFromDB) {
+  return async function activityPage(req, res) {
+    let posts = [];
+    if (res.locals.authUser) {
+      posts = await getLikedPostsFromDB(res.locals.authUser.id);
+    }
+    res.render('activity', {
+      posts,
+    });
+  };
+}
+
 export function installPostControllers(router, postModel) {
   router.post('/new-post',
     authenticationRequired,
@@ -89,6 +101,7 @@ export function installPostControllers(router, postModel) {
     authenticationRequired,
     makeLikeDislikePost(postModel.likePost, postModel.unlikePost));
   router.get('/new-post', newPostPage);
+  router.get('/activity', makeActivityPage(postModel.getLikedPosts));
   return router;
 }
 

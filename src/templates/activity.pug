@@ -1,0 +1,22 @@
+extends layout
+include mixins/_gallery_image
+include mixins/_profile_header
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/activity.css")
+
+block main
+  main.activity
+    header.activity__header
+      if authUser
+        | Posts you have liked or saved
+      else 
+        a(href="/signin") Sign in
+        | &nbsp;to see your activities
+    if authUser
+      section.activity__gallery
+        each post in posts
+          +_gallery_image(post)
+
+block scripts
+  script(src="scripts/profile.js")
