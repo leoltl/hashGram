@@ -103,6 +103,7 @@ function makePost(db, baseModel) {
     const query = db('posts')
       .select('posts.id', 'image_uid', 'caption')
       .join('likes', 'likes.post_id', 'posts.id')
+      .andWhere({ 'likes.is_active': true })
       .limit(10);
     return baseModel.safeQuery(query, { 'likes.user_id': userId });
   }

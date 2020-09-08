@@ -2,7 +2,8 @@ mixin _profile_header(user, authUser)
   .profile__header-image
     .profile__image-wrapper
       img(src=`https://www.gravatar.com/avatar/${user.avatar}?d=identicon`, alt='user profile picture')
-  .profile__header-title
+  - let ownProfile = authUser && authUser.handle == user.handle 
+  .profile__header-title(class=ownProfile ? 'profile__header-title--own-profile' : '')
     span.profile__header-handle #{user.handle}
     if (authUser)
       if (authUser.handle != user.handle)

@@ -1,6 +1,7 @@
 import { HTTPError, DOAError } from '../lib/errors';
 
 export default function errorHandler(error, req, res, next) {
+  console.log(error);
   if (error instanceof DOAError) {
     res.status(400).json({ message: error.message });
     return;

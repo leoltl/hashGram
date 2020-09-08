@@ -130,8 +130,12 @@ section.profile__gallery {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 300px;
+    max-width: 150px;
     margin: var(--margin-xs) 0;
+  }
+
+  .profile__header-title--own-profile {
+    max-width: 300px;
   }
 
   .profile__header-handle {
