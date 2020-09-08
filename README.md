@@ -16,6 +16,7 @@ The product is fully responsive.
 - **Database**: Knex, Postgres: prod/development, sqlite3: test
 - **Photo Storage**: Amazon Web Service S3 bucket
 - **Templates**: Pug
+- **Testing**: jest, TDD
 - **Authentication**: express session
 - **Client side**: ES6 vanilla Javascript and Sass
 
