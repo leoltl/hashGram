@@ -58,6 +58,6 @@ You can create your own account or login in with one of the following accounts:
 
 
 #### TODO
-- Hashtags
-- Linking users (\@username)
+- add notifications
 - Socket.io
+- support multiples images per post
