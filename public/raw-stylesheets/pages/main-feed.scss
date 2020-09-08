@@ -38,6 +38,8 @@ main.index {
 
 .index__suggestion-users {
   width: 80%;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
 .index__suggestion-user {
