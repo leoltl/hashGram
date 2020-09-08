@@ -36,6 +36,8 @@ main.discover {
 
 .discover__suggestion-users {
   width: 80%;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 
 .discover__suggestion-user {
