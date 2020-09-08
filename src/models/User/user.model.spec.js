@@ -56,6 +56,10 @@ describe('user model', () => {
       expect(users).toBeDefined();
       expect(users.length).toBe(0);
     });
+    it('should return undefined for an non-existed user', async () => {
+      const users = await User.get({ handle: 'nonExist' });
+      expect(users).toBeUndefined();
+    });
   });
   describe('create', () => {
     const userObject = {
