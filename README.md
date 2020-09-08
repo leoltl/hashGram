@@ -5,12 +5,16 @@
 hashGram is a full stack Instagram clone. It's the result of exercising with Node, Postgres and its frameworks.
 The goal was to build a functional clone of some Internet-based photo-sharing application.
 
-I finally decided to copy the web version of Instagram and add some extra features to it, such as the ability to upload images in the browser or to be able to see all the images that I liked in one place.
+The product is fully responsive.
+
+![hashGram](public/screenshot-2.png )
+![hashGram](public/screenshot-3.png )
 
 
 ## The stack
 - **Server side**: Node with Express (ES2017 async/await)
 - **Database**: Knex, Postgres: prod/development, sqlite3: test
+- **Photo Storage**: Amazon Web Service S3 bucket
 - **Templates**: Pug
 - **Authentication**: express session
 - **Client side**: ES6 vanilla Javascript and Sass
