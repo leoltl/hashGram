@@ -7,8 +7,8 @@ The goal was to build a functional clone of some Internet-based photo-sharing ap
 
 The product is fully responsive.
 
-![hashGram](public/screenshot-2.png )
-![hashGram](public/screenshot-3.png )
+<img src="https://user-images.githubusercontent.com/24300420/92531178-a74d8600-f1e2-11ea-9dd0-723a196e27ca.png" alt="hashGram" style="max-width:200px;">
+<img src="https://user-images.githubusercontent.com/24300420/92531195-ae749400-f1e2-11ea-9877-1c93d87b4931.png" alt="hashGram" style="max-width:200px;">
 
 
 ## The stack
