@@ -47,10 +47,7 @@ const UserModel = makeUser(db);
 const PostModel = makePost(db);
 const CommentModel = makeComment(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
-app.get('/api/reseed', (req, res) => {
-  db.seed.run();
-  res.status(200).end();
-});
+
 installStorageRoute(router);
 installAuthControllers(router, UserModel);
 installPostControllers(router, PostModel);
