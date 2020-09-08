@@ -7,6 +7,14 @@ main.post-form {
   align-items: center;
 }
 
+.post-form--empty {
+  margin-top: calc(4 * var(--margin-md));
+}
+
+.post-form--empty a {
+  font-weight: 700;
+}
+
 form.post-form {
   border: var(--default-border);
   padding: var(--padding-lg);

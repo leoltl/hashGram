@@ -85,13 +85,14 @@ export async function editUserPage(req, res) {
 
 export function makeDiscoverPage(getSuggestedUsersFromDB) {
   return async function discoverPage(req, res) {
-    const suggestions = await getSuggestedUsersFromDB(res.locals.authUser && res.locals.authUser.id);
+    const suggestions = await getSuggestedUsersFromDB(
+      res.locals.authUser && res.locals.authUser.id,
+    );
     res.render('discover', {
       suggestions,
     });
   };
 }
-
 
 export default function installUserControllers(router, UserModel, PostModel) {
   router.get('/discover', makeDiscoverPage(UserModel.notFollowing));

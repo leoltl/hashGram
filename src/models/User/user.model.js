@@ -124,15 +124,12 @@ function makeUser(db, baseModel) {
   }
 
   async function notFollowing(userId = 0) {
-    return db('users')
-      .select('users.handle', 'users.avatar').leftJoin('following as f', 'users.id', 'f.user_id')
-      .where(function () {
-        this.whereNot({ 'f.follower_id': userId })
-          .orWhere({ 'f.is_active': false })
-          .orWhereNull('f.follower_id');
-      })
+    const query = db('users')
+      .distinct('users.id', 'users.handle', 'users.avatar').leftJoin('following as f', 'users.id', 'f.user_id')
+      .whereNotIn('user_id', db('following').select('user_id').where({ follower_id: userId }).andWhere({ is_active: true }))
       .andWhereNot({ 'users.id': userId })
       .limit(10);
+    return query;
   }
 
   return {

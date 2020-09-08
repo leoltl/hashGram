@@ -54,9 +54,6 @@ export function makeNewPost(createPostInDB) {
 }
 
 export function newPostPage(req, res) {
-  if (!res.locals.authUser) {
-    return res.redirect('/signin');
-  }
   res.render('new_post');
 }
 
