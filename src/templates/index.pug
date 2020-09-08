@@ -19,8 +19,12 @@ block main
             | profile
           |, share an image or follow other users. 
           p Here are some suggestions for you.
-        .index__suggestion_users
-          | list of users....
+        ul.index__suggestion-users
+          each suggestion in suggestions
+            a(href=`/${suggestion.handle}`)
+              li.index__suggestion-user
+                img(src=`https://www.gravatar.com/avatar/${suggestion.avatar}?d=identicon&s=24`, alt='user profile picture')
+                | #{suggestion.handle}
 
 block scripts
   script.

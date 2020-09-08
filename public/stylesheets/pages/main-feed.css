@@ -36,6 +36,23 @@ main.index {
   line-height: 1.5em;
 }
 
+.index__suggestion-users {
+  width: 80%;
+}
+
+.index__suggestion-user {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border: var(--default-border);
+  margin: var(--margin-sm) 0;
+  padding-left: var(--padding-md);
+}
+
+.index__suggestion-user img {
+  margin-right: var(--margin-md);
+}
+
 @media screen and (min-width: 600px) {
   main.index > article {
     margin: var(--margin-lg);

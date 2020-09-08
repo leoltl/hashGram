@@ -103,7 +103,7 @@ describe('user model', () => {
     it('gets count of follower with aggration option set to count', async () => {
       const dataObj = { 'u.handle': 'nigelL' };
       const result = await User.getFollower(dataObj, { aggregration: 'count' });
-      expect(result.count).toEqual(2);
+      expect(result.count).toEqual(1);
     });
   });
 
@@ -133,6 +133,19 @@ describe('user model', () => {
     it('handles non existing users', async () => {
       const dataObj = { userhandle: 'notexist', followerhandle: 'notexist' };
       expect(() => User.removeFollower(dataObj)).not.toThrow();
+    });
+  });
+
+  describe('notFollowing', () => {
+    it('happy path', async () => {
+      const user = 1;
+      const res = await User.notFollowing(user);
+      expect(res.length).toBe(1);
+    });
+    it('handles following record with is_active = false', async () => {
+      const user = 2;
+      const res = await User.notFollowing(user);
+      expect(res.length).toBe(1);
     });
   });
 });

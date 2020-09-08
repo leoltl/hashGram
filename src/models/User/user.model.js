@@ -123,6 +123,18 @@ function makeUser(db, baseModel) {
     return Boolean(res.length);
   }
 
+  async function notFollowing(userId) {
+    return db('users')
+      .select('users.handle', 'users.avatar').leftJoin('following as f', 'users.id', 'f.user_id')
+      .where(function () {
+        this.whereNot({ 'f.follower_id': userId })
+          .orWhere({ 'f.is_active': false })
+          .orWhereNull('f.follower_id');
+      })
+      .andWhereNot({ 'users.id': userId })
+      .limit(10);
+  }
+
   return {
     getAll,
     get,
@@ -133,6 +145,7 @@ function makeUser(db, baseModel) {
     removeFollower,
     getFollowing,
     isFollowing,
+    notFollowing,
   };
 }
 

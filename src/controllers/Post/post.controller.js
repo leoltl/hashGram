@@ -2,15 +2,20 @@ import { DOAError, ClientError } from '../../lib/errors';
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
 import { makePostAggregatorService } from './aggregratePost.service';
 
-export function makeGetAllPosts(getAllPostFromDB, aggregatePostsService) {
+export function makeGetAllPosts(getAllPostFromDB, aggregatePostsService, getSuggestedUsersFromDB) {
   return async function getAllPosts(req, res, next) {
+    let suggestedUsers = [];
     try {
       const userParams = res.locals.authUser ? { authUserId: res.locals.authUser.id } : undefined;
       const posts = await getAllPostFromDB(userParams);
-      console.log(posts[0]);
       const aggregatedPosts = await aggregatePostsService.aggregrate(posts, res.locals.authUser);
+      if (posts.length === 0) {
+        // if res.locals.authUser not exists, then posts.length will never be 0
+        suggestedUsers = await getSuggestedUsersFromDB(res.locals.authUser.id);
+      }
       res.render('index', {
         posts: aggregatedPosts,
+        suggestions: suggestedUsers,
       });
     } catch (e) {
       console.log(e);
@@ -87,9 +92,9 @@ export function installPostControllers(router, postModel) {
   return router;
 }
 
-export function installFeedController(router, postModel, commentModel) {
+export function installFeedController(router, postModel, commentModel, userModel) {
   const aggregatePostsService = makePostAggregatorService(commentModel.getAll, postModel.getLikes);
   router.get('/p/:imageUid', makeGetPost(postModel.get, aggregatePostsService));
-  router.get('/', makeGetAllPosts(postModel.getAll, aggregatePostsService));
+  router.get('/', makeGetAllPosts(postModel.getAll, aggregatePostsService, userModel.notFollowing));
   return router;
 }

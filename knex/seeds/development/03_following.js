@@ -13,6 +13,11 @@ exports.seed = function (knex) {
           user_id: 2,
           follower_id: 1,
         },
+        {
+          user_id: 3,
+          follower_id: 2,
+          is_active: false,
+        },
       ])
     ));
 };
