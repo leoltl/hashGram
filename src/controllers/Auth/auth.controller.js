@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt';
 import { DOAError, ClientError } from '../../lib/errors';
 import domainValidators from '../../models/domainValidators';
+import { trimFields } from '../../lib/utils';
 
 export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserField) {
   return async function createUser(req, res, next) {
@@ -9,8 +10,9 @@ export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserF
     try {
       throwOnInvalidUserField(payload);
       const { passwordConfirm, ...newUser } = payload; // exclude password confirm
-      newUser.password = hashFunction(newUser.password);
-      const [handle] = await createUserInDB(newUser);
+      const sanitizedUser = trimFields(newUser);
+      sanitizedUser.password = hashFunction(sanitizedUser.password);
+      const [handle] = await createUserInDB(sanitizedUser);
       req.session.user_handle = handle;
       res.redirect('/');
     } catch (e) {
@@ -29,12 +31,15 @@ export function makeSigninUser(getUserFromDB, compareHash) {
     if (res.locals.authUser) {
       return res.redirect('/');
     }
-    const { handle, password: plainPassword } = req.body;
+    const sanitizedUser = trimFields(req.body);
+    const { handle, password: plainPassword } = sanitizedUser;
     try {
-      const user = await getUserFromDB(handle, { columns: ['handle', 'password'] });
-      if (user && compareHash(plainPassword, user.password)) {
-        req.session.user_handle = user.handle;
-        return res.redirect('/');
+      if (handle.trim() && plainPassword.trim()) {
+        const user = await getUserFromDB(handle, { columns: ['handle', 'password'] });
+        if (user && compareHash(plainPassword, user.password)) {
+          req.session.user_handle = user.handle;
+          return res.redirect('/');
+        }
       }
       req.session.error_msg = 'Authentication failed. Please try again.';
       res.redirect('/signin');

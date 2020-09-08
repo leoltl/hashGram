@@ -40,6 +40,13 @@ export function attachPropAsArrayToObject(obj, key, array) {
   });
 }
 
+export function trimFields(obj) {
+  return Object.entries(obj).reduce((fields, [key, value]) => {
+    fields[key] = value.trim();
+    return fields;
+  }, {});
+}
+
 export default {
   makeCamelCaseAlias,
   camelToSnakeCase,
@@ -47,4 +54,5 @@ export default {
   createMapFromArray,
   attachPropAsArrayToMap,
   attachPropAsArrayToObject,
+  trimFields,
 };
