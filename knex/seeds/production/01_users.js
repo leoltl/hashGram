@@ -10,7 +10,6 @@ exports.seed = function(knex) {
       // Inserts seed entries
       knex('users').insert([
         {
-          id: 1,
           email: 'guest1@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'Guest One',
@@ -18,7 +17,6 @@ exports.seed = function(knex) {
           avatar: 'a4cbebb64217a13bbbc8b4c8cfcf4fc1',
         },
         {
-          id: 2,
           email: 'guest2@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'Guest Two',
@@ -26,7 +24,6 @@ exports.seed = function(knex) {
           avatar: '413d8d3f4daa7974a236839cf67a3913',
         },
         {
-          id: 3,
           email: 'guest3@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'Guest Three',
@@ -34,7 +31,6 @@ exports.seed = function(knex) {
           avatar: '04c870aa4598be7af04c9cedaf860a64',
         },
         {
-          id: 4,
           email: 'nigel@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'nigel L',
@@ -42,7 +38,6 @@ exports.seed = function(knex) {
           avatar: 'a4cbebb64217a13bbbc8b4c8cfcf4fc1',
         },
         {
-          id: 5,
           email: 'nakaz@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'nakaz L',
@@ -50,7 +45,6 @@ exports.seed = function(knex) {
           avatar: '413d8d3f4daa7974a236839cf67a3913',
         },
         {
-          id: 6,
           email: 'jaywon@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'jaywon L',
@@ -58,7 +52,6 @@ exports.seed = function(knex) {
           avatar: '04c870aa4598be7af04c9cedaf860a64',
         },
         {
-          id: 7,
           email: 'leanneg@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'Leanne Graham',
@@ -66,7 +59,6 @@ exports.seed = function(knex) {
           avatar: 'a4cbebb64217a13bbbc8b4c8cfcf4fc1',
         },
         {
-          id: 8,
           email: 'ervinh@email.com',
           password: '$2b$10$Jay7jkbMTB/K3D9xzFM7NemDCGKQEx5GmKPybwU1zDABIGxQ/ye02',
           full_name: 'Ervin Howell',
