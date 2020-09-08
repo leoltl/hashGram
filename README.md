@@ -1,6 +1,6 @@
 # hashGram
 
-![hashGram](public/images/screenshots/1.jpg)
+![hashGram](public/screenshot-1.png )
 
 hashGram is a full stack Instagram clone. It's the result of exercising with Node, Postgres and its frameworks.
 The goal was to build a functional clone of some Internet-based photo-sharing application.
