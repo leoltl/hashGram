@@ -46,7 +46,7 @@ const baseModel = {
       }
       throw e;
     }
-    return this.makeDOACamelCase(res);
+    return res?.length ? this.makeDOACamelCase(res) : res;
   },
   safeUpdate: async function safeUpdate(query, dataObject = null) {
     let res;
