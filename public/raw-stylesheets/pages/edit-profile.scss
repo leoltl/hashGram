@@ -1,0 +1,27 @@
+@import '../styles.scss';
+
+main.edit-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form.edit-profile {
+  border: var(--default-border);
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-lg);
+  margin: var(--margin-lg);
+  margin-bottom: 0;
+  width: 100vw;
+  max-width: 600px;
+  max-height: calc(100vh - 2 * var(--navbar-height));
+}
+
+label {
+  text-transform: capitalize;
+}
+
+form.edit-profile > * {
+  margin-bottom: var(--margin-md);
+}

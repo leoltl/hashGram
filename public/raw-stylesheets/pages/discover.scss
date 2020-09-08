@@ -1,0 +1,70 @@
+@import '../styles.scss';
+
+main.discover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--navbar-height);
+}
+
+.discover__suggestion {
+  background: var(--element-bg-color);
+  max-width: 600px;
+  width: 100vw;
+  height: calc(100vh - 2 * var(--navbar-height));
+  border: var(--default-border);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: var(--margin-md);
+  padding-right: var(--margin-md);
+}
+
+.discover__suggestion-header {
+  width: 80%;
+  text-align: center;
+  border-bottom: var(--default-border);
+  padding: var(--padding-sm);
+  padding-top: var(--padding-md);
+}
+
+.discover__suggestion-body {
+  padding-top: var(--padding-md);
+  line-height: 1.5em;
+}
+
+.discover__suggestion-users {
+  width: 80%;
+}
+
+.discover__suggestion-user {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border: var(--default-border);
+  margin: var(--margin-sm) 0;
+  padding-left: var(--padding-md);
+}
+
+.discover__suggestion-user img {
+  margin-right: var(--margin-md);
+}
+
+.discover__suggestion-disclaimer {
+  font-size: var(--step-down-1);
+}
+.discover__suggestion-disclaimer a {
+  font-weight: 600;
+}
+
+@media screen and (min-width: 600px) {
+  .discover__suggestion {
+    margin-top: var(--margin-lg);
+    max-height: 550px;
+  }
+
+  .discover__suggestion-header {
+    font-size: var(--step-up-1);
+  }
+}

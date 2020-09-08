@@ -1,0 +1,31 @@
+@import '../styles.scss';
+
+main.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form.signup-form {
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding-lg);
+  margin: var(--margin-lg);
+  margin-bottom: 0;
+  max-width: 348px;
+  height: 300px;
+}
+
+form.signup-form > * {
+  margin-bottom: var(--margin-sm);
+  max-width: 258px;
+}
+
+form.signup-form > *:nth-last-child(2){
+  margin-bottom: var(--margin-md);
+}
+
+.signin-box a {
+  font-weight: 600;
+}
