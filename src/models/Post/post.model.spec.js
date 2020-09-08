@@ -76,7 +76,7 @@ describe('Post model', () => {
         imageUid: 'd56c0cad6e9576b6104e1294a875ca0d',
       };
       const post = await Post.create(optionCaption);
-      expect(post.caption).toBe('');
+      expect(post.caption).toBe(null);
     });
     it('handles missing required columns', async () => {
       const MissingURL = {
