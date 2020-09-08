@@ -14,9 +14,10 @@ block main
         a(href="/signin") Sign in
         | &nbsp;to see your activities
     if authUser
-      section.activity__gallery
-        each post in posts
-          +_gallery_image(post)
+      if posts.length > 0
+        section.activity__gallery
+          each post in posts
+            +_gallery_image(post)
 
 block scripts
   script(src="scripts/profile.js")

@@ -39,6 +39,9 @@ section.activity__gallery {
   width: 100%;
   max-width: 725px;
   margin: 0 auto;
+  padding-bottom: calc(2 * var(--navbar-height));
+  min-height: 500px;
+  overflow-y: scroll;
 }
 
 .gallery__image {
@@ -53,8 +56,8 @@ section.activity__gallery {
 
 @media screen and (min-width: 600px) {
   section.activity__gallery {
-    grid-auto-rows: calc((min(100vw, 725px) - var(--margin-lg) * 2) / 3 ); 
-    grid-gap: var(--margin-lg);
+    grid-auto-rows: calc((min(100vw, 725px) - var(--margin-md) * 2) / 3 ); 
+    grid-gap: var(--margin-md);
   }
 
   .activity__header {
