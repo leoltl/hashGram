@@ -4,6 +4,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import morgan from 'morgan';
+import favicon from 'serve-favicon';
 
 import db from '../knex/knex';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
@@ -40,6 +41,7 @@ app.use(session({
     httpOnly: false,
   },
 }));
+app.use(favicon(path.join(__dirname, '..', 'public', 'favicon', 'favicon.ico')));
 app.use('/stylesheets', express.static(path.join(__dirname, '..', 'public', 'stylesheets')));
 app.use('/scripts', express.static(path.join(__dirname, '..', 'public', 'scripts')));
 
