@@ -28,7 +28,7 @@ mixin _post(post, authUser, isStandAlone)
           span.post__like-count #{post.likes ? post.likes.length : 0}
           |&nbsp;others
     .post__comments
-      if (!isStandAlone || body)
+      if (!isStandAlone || post.caption)
         +_comment(post.handle, post.caption)
       if (post.comments)
         - let newestComments = isStandAlone ? post.comments : post.comments.slice(-2)
