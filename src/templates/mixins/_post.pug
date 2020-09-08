@@ -28,11 +28,12 @@ mixin _post(post, authUser, isStandAlone)
           span.post__like-count #{post.likes ? post.likes.length : 0}
           |&nbsp;others
     .post__comments
-      +_comment(post.handle, post.caption)
+      if (!isStandAlone || body)
+        +_comment(post.handle, post.caption)
       if (post.comments)
         - let newestComments = isStandAlone ? post.comments : post.comments.slice(-2)
         each comment in newestComments
-          +_comment(comment.handle, comment.body)
+          +_comment(comment.handle, comment.body, isStandAlone)
     .post__footer
       .post__new-comment
         textarea(name='comment' data-post-id=post.postId rows='1' placeholder='Add a comment...')
