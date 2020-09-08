@@ -80,11 +80,7 @@ module.exports = {
       directory: path.join(__dirname, '/knex/mmigrations'),
     },
     seeds: {
-<<<<<<< HEAD
-      directory: path.join(__dirname, '/knex/seeds/development'),
-=======
       directory: path.join(__dirname, '/knex/seeds/production'),
->>>>>>> master
     },
   },
 
