@@ -23,7 +23,7 @@
   }
 
   async function getSignedRequest(file) {
-    const res = await fetch(`/api/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+    const res = await fetch(`/api/sign-s3?file-name=${file.name}&file-type=${file.type}&file-size=${file.size}`);
     if (res.ok) {
       const data = await res.json();
       uploadFile(file, data.signedRequest, data.url, data.imageUid);
@@ -34,6 +34,10 @@
   uploader.onchange = () => {
     const file = uploader.files[0];
     if (file === null) {
+      return;
+    }
+    if (file.size >= 3000000) {
+      window.alert('Only accept image smaller than 3MB.');
       return;
     }
     getSignedRequest(file);
