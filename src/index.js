@@ -5,8 +5,10 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import morgan from 'morgan';
 import favicon from 'serve-favicon';
+import connectRedis from 'connect-redis';
 
 import db from '../knex/knex';
+import redisClient from './redis';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
 import { makeUser, makePost, makeComment } from './models';
 import {
@@ -22,7 +24,6 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 const router = express.Router();
-
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'templates'));
 
@@ -33,14 +34,22 @@ if (process.env.NODE_ENV !== 'production') {
     },
   }));
 }
+
+/* parse json and forms */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+/* express session with redis as storage */
+const RedisStore = connectRedis(session);
 app.use(session({
+  store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   cookie: {
-    httpOnly: false,
+    httpOnly: true,
   },
 }));
+
+/* serves static files */
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon', 'favicon.ico')));
 app.use('/stylesheets', express.static(path.join(__dirname, '..', 'public', 'stylesheets')));
 app.use('/scripts', express.static(path.join(__dirname, '..', 'public', 'scripts')));
