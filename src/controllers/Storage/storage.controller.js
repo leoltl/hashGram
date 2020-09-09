@@ -10,6 +10,7 @@ export default function installStorageRoute(router) {
     const s3 = new aws.S3();
     const uniqueImageID = uniqueString();
     const fileType = req.query['file-type'];
+    const fileSize = req.query['file-size'];
     const FOLDER = 'user-content';
     const s3Params = {
       Bucket: `${S3_BUCKET}/${FOLDER}`,
@@ -21,6 +22,10 @@ export default function installStorageRoute(router) {
 
     if (!fileType.match(RegExp(/image\//))) {
       return res.status(500).json({ message: 'Only accept image.' });
+    }
+
+    if (!fileSize || fileSize >= 3000000) {
+      return res.status(500).json({ message: 'File size exceeded limit.' });
     }
 
     s3.getSignedUrl('putObject', s3Params, (err, data) => {
