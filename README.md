@@ -13,7 +13,7 @@ The product is fully responsive.
 
 ## The stack
 - **Server side**: Node with Express (ES2017 async/await)
-- **Database**: Knex, Postgres: prod/development, sqlite3: test, Redis
+- **Database**: Knex, Postgres: prod/development, sqlite3: test, Redis: user session store
 - **Photo Storage**: Amazon Web Service S3 bucket
 - **Templates**: Pug
 - **Testing**: jest, TDD
