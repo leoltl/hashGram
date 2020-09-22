@@ -12,8 +12,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-
-
 async function consumer(connection, queue) {
   try {
     const channel = await connection.createChannel();
@@ -22,8 +20,8 @@ async function consumer(connection, queue) {
     if (queueOK) {
       channel.consume(queue, (message) => {
         if (message !== null) {
-          const instruction = JSON.parse(message.content.toString())
-          onEmailRequest(instruction, () => channel.ack(message))
+          const emailConfig = JSON.parse(message.content.toString())
+          onEmailRequest(emailConfig, () => channel.ack(message))
         }
       });
     }
@@ -32,13 +30,13 @@ async function consumer(connection, queue) {
   }
 }
 
-function onEmailRequest(payload, ack) {
+function onEmailRequest(config, ack) {
   transporter.verify(function(error, success) {
     if (error) {
       throw error
     }
-
-    sendMail(payload, function (error, info) {
+    // if transporter is available
+    sendMail(config, function (error, info) {
       if (error) {
         console.error(error);
         return;
@@ -49,8 +47,8 @@ function onEmailRequest(payload, ack) {
   });
 }
 
-function sendMail(payload, cb) {
-  const mailContent = buildMessage(payload);
+function sendMail(config, cb) {
+  const mailContent = buildMessage(config);
   console.log(mailContent)
   transporter.sendMail(mailContent, cb);
 }

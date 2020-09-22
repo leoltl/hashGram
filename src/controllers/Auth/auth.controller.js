@@ -14,13 +14,12 @@ export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserF
       sanitizedUser.password = hashFunction(sanitizedUser.password);
       const [{ handle }] = await createUserInDB(sanitizedUser);
       req.session.user_handle = handle
-      const data = {
+      const emailConfig = JSON.stringify({
         to: sanitizedUser.email,
         user: handle,
         verificationCode: '123456',
-      }
-      const msg = JSON.stringify(data);
-      await publishToMessageQueue('job', msg);
+      });
+      await publishToMessageQueue('job', emailConfig);
       res.redirect('/');
     } catch (e) {
       if (e instanceof ClientError || e instanceof DOAError) {
