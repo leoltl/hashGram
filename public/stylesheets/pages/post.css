@@ -285,6 +285,7 @@ article.post {
   background: var(--element-bg-color);
   max-width: 600px;
   border-radius: 2px;
+  overflow: hidden;
 }
 
 .post__main-image {
@@ -293,7 +294,7 @@ article.post {
 }
 
 .post__main-image img {
-  width: 99.6%;
+  width: 100%;
 }
 
 .post__header {
