@@ -19,7 +19,7 @@ The product is fully responsive.
 - **Templates**: Pug
 - **Testing**: jest, TDD
 - **Client side**: ES6 vanilla Javascript and Sass
-- other tools: eslint, babel, express session
+- other tools: eslint, babel, express session, nodemailer
 
 ## Live App
 **View it on [here](https://leoltl-hashgram.herokuapp.com/)**
