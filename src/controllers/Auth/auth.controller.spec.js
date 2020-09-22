@@ -1,8 +1,8 @@
-import { signinPage, signupPage, makeSigninUser } from './auth.controller';
+import { signinPage, signupPage, makeSigninUser, makeCreateUser } from './auth.controller';
 
 const mockRequest = (body) => ({
   body,
-  session: {},
+  session: { user_handle: undefined },
 });
 const mockResponse = (authUser) => {
   const res = {};
@@ -12,9 +12,41 @@ const mockResponse = (authUser) => {
   return res;
 };
 
-/* TODO!!! */
-xdescribe('makeCreateUser', () => {
-  it('TODO', () => {});
+describe('createuser', () => {
+  const mockHashFn = (str) => str;
+  const createUserInDB = jest.fn().mockReturnValue([{ handle: 'testhandle' }])
+  const throwOnInvalidUserField = () => true;
+  const publishToMessageQueue = jest.fn().mockReturnValue([]);
+  const createUser = makeCreateUser(createUserInDB, mockHashFn, throwOnInvalidUserField, publishToMessageQueue);
+
+  it('should call createUserInDB function', async () => {
+    const newuser = { email: 'test@email.com', full_name: 'test', handle: 'testhandle', password: '123', passwordConfirm: '123' }
+    const req = mockRequest(newuser);
+    const res = mockResponse();
+
+    await createUser(req, res);
+    const {passwordConfirm, ...persistUser } = newuser
+    expect(createUserInDB).toBeCalledWith(persistUser);
+  });
+  
+  it('should call publishToMessageQueue function', async () => {
+    const newuser = { email: 'test@email.com', full_name: 'test', handle: 'testhandle', password: '123', passwordConfirm: '123' }
+    const req = mockRequest(newuser);
+    const res = mockResponse();
+
+    await createUser(req, res);
+    const emailData = JSON.stringify({ to: newuser.email, user: newuser.handle, verificationCode: '123456' });
+    expect(publishToMessageQueue).toBeCalledWith("job", emailData);
+  });
+
+  it('should set req session user_handle to newly created user\'s handle ', async () => {
+    const newuser = { email: 'test@email.com', full_name: 'test', handle: 'testhandle', password: '123', passwordConfirm: '123' }
+    const req = mockRequest(newuser);
+    const res = mockResponse();
+
+    await createUser(req, res);
+    expect(req.session.user_handle).toBe(newuser.handle);
+  });
 });
 
 describe('signinPage', () => {

@@ -6,9 +6,10 @@ import session from 'express-session';
 import morgan from 'morgan';
 import favicon from 'serve-favicon';
 import connectRedis from 'connect-redis';
+import messageQueue from './config/messageQueue';
 
 import db from '../knex/knex';
-import redisClient from './redis';
+import redisClient from './config/redis';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
 import { makeUser, makePost, makeComment } from './models';
 import {
@@ -41,8 +42,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* express session with redis as storage */
 const RedisStore = connectRedis(session);
+
 app.use(session({
-  store: new RedisStore({ client: redisClient }),
+  store: process.env.NODE_ENV !== 'production' ? session.MemoryStore() : new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   cookie: {
     httpOnly: true,
@@ -60,7 +62,7 @@ const CommentModel = makeComment(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
 
 installStorageRoute(router);
-installAuthControllers(router, UserModel);
+installAuthControllers(router, UserModel, messageQueue);
 installPostControllers(router, PostModel);
 installFeedController(router, PostModel, CommentModel, UserModel);
 installCommentControllers(router, CommentModel);

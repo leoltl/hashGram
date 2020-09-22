@@ -4,7 +4,7 @@ import { DOAError, ClientError } from '../../lib/errors';
 import domainValidators from '../../models/domainValidators';
 import { trimFields } from '../../lib/utils';
 
-export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserField) {
+export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserField, publishToMessageQueue) {
   return async function createUser(req, res, next) {
     const payload = req.body || {};
     try {
@@ -12,8 +12,15 @@ export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserF
       const { passwordConfirm, ...newUser } = payload; // exclude password confirm
       const sanitizedUser = trimFields(newUser);
       sanitizedUser.password = hashFunction(sanitizedUser.password);
-      const [handle] = await createUserInDB(sanitizedUser);
-      req.session.user_handle = handle;
+      const [{ handle }] = await createUserInDB(sanitizedUser);
+      req.session.user_handle = handle
+      const data = {
+        to: sanitizedUser.email,
+        user: handle,
+        verificationCode: '123456',
+      }
+      const msg = JSON.stringify(data);
+      await publishToMessageQueue('job', msg);
       res.redirect('/');
     } catch (e) {
       if (e instanceof ClientError || e instanceof DOAError) {
@@ -80,11 +87,12 @@ export function signout(req, res) {
   res.redirect('/');
 }
 
-export default function installAuthControllers(router, userModel) {
+export default function installAuthControllers(router, userModel, messageQueue) {
   const createUser = makeCreateUser(
     userModel.create,
     (password) => bcrypt.hashSync(password, 10),
     domainValidators.User,
+    messageQueue.publish
   );
   const signinUser = makeSigninUser(
     userModel.get,
