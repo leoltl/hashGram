@@ -25,6 +25,7 @@ The product is fully responsive.
 
 ## Live App
 **View it on [here](https://leoltl-hashgram.herokuapp.com/)**
+*The App is hosted on Heroku, it might take some to spin up the deno*
 
 You can create your own account or login in with one of the following accounts:
 
