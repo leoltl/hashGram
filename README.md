@@ -5,6 +5,8 @@
 hashGram is a full stack Instagram clone. It's the result of exercising with Node, Postgres and its frameworks.
 The goal was to build a functional clone of some Internet-based photo-sharing application.
 
+It has a separate process running for handling email sending which is communicating with the main app via message queue (rabbitMQ). Redis is also used in the project to persist short lived data (e.g. store of user sessions and email verification code which is valid for 15 mins). It is my first attempt to build a distributed styled system.
+
 The product is fully responsive.
 
 <img src="https://user-images.githubusercontent.com/24300420/92531178-a74d8600-f1e2-11ea-9dd0-723a196e27ca.png" alt="hashGram" style="max-width:200px;">
@@ -13,7 +15,7 @@ The product is fully responsive.
 
 ## The stack
 - **Server side**: Node with Express (ES2017 async/await)
-- **Database**: Knex, Postgres: prod/development, sqlite3: test, Redis: user session store
+- **Database**: Knex, Postgres: prod/development, sqlite3: test, Redis
 - **Message Queue**: RabbitMQ, amqplib
 - **Photo Storage**: Amazon Web Service S3 bucket
 - **Templates**: Pug
@@ -59,6 +61,6 @@ You can create your own account or login in with one of the following accounts:
 
 
 #### TODO
-- add notifications
-- Socket.io
+- add notifications via WebSocket
+- set up database query cache with redis
 - support multiples images per post
