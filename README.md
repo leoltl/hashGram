@@ -3,7 +3,7 @@
 ![hashGram](public/screenshot-1.png )
 
 hashGram is a full stack Instagram clone. It's the result of exercising with Node, Postgres and its frameworks.
-The goal was to build a functional clone of some Internet-based photo-sharing application.
+The goal was to build a functional clone of some Internet-based photo-sharing application in TDD manner.
 
 It has a separate process running for handling email sending which is communicating with the main app via message queue (rabbitMQ). Redis is also used in the project to persist short lived data (e.g. store of user sessions and email verification code which is valid for 15 mins). It is my first attempt to build a distributed styled system.
 
