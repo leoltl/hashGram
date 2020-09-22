@@ -7,6 +7,11 @@ block styles
 block main
   main.signin
     form.signin-form(action="/verify-email", method="post")
+      small You will receive an email with a 6-digit email verification code from noreply.hashgram@gmail.com
+      br
+      | Enter the 6-digits code in the following box to confirm your email.
+      br
+      
       +_text-input('signin', 'code', 'Email Verification Code')
       button.signin-form__input-submit(type='submit') Verify
     div.signup-box
