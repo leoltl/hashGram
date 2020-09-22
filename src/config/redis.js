@@ -5,7 +5,6 @@ const client = (function () {
     return redis.createClient(process.env.REDIS_URL);
   }
   return redis.createClient();
-  // return null;
 }());
 
 export default client;

@@ -46,6 +46,20 @@ nav {
   width : 100%;
 }
 
+.flash-errors {
+  position: absolute;
+  bottom: -100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-40%);
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin-top: var(--margin-sm);
+  padding: var(--padding-sm) var(--padding-md);
+}
+
+
 @media screen and (min-width: 770px) {
   nav {
     justify-content: space-between;

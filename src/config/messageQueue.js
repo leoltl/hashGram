@@ -18,7 +18,7 @@ function makePublisher() {
     try {
       const queueOK = await channel.assertQueue(queue);
       if (queueOK) {
-        channel.sendToQueue(queue, Buffer.from(message))
+        channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)))
       }
     } catch (e) {
       console.log(e);

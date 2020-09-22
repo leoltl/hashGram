@@ -44,7 +44,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const RedisStore = connectRedis(session);
 
 app.use(session({
-  store: process.env.NODE_ENV !== 'production' ? session.MemoryStore() : new RedisStore({ client: redisClient }),
+  // store: process.env.NODE_ENV !== 'production' ? session.MemoryStore() : new RedisStore({ client: redisClient }),
+  store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   cookie: {
     httpOnly: true,
@@ -62,7 +63,7 @@ const CommentModel = makeComment(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
 
 installStorageRoute(router);
-installAuthControllers(router, UserModel, messageQueue);
+installAuthControllers(router, UserModel, messageQueue, redisClient);
 installPostControllers(router, PostModel);
 installFeedController(router, PostModel, CommentModel, UserModel);
 installCommentControllers(router, CommentModel);

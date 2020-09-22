@@ -1,0 +1,15 @@
+extends layout
+include mixins/_text-input
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/signin.css")
+
+block main
+  main.signin
+    form.signin-form(action="/verify-email", method="post")
+      +_text-input('signin', 'code', 'Email Verification Code')
+      button.signin-form__input-submit(type='submit') Verify
+    div.signup-box
+      p 
+        | Did not receive the code? 
+        a(href='/resend-verify-email') Send again.

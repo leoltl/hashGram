@@ -16,35 +16,36 @@ describe('createuser', () => {
   const mockHashFn = (str) => str;
   const createUserInDB = jest.fn().mockReturnValue([{ handle: 'testhandle' }])
   const throwOnInvalidUserField = () => true;
-  const publishToMessageQueue = jest.fn().mockReturnValue([]);
-  const createUser = makeCreateUser(createUserInDB, mockHashFn, throwOnInvalidUserField, publishToMessageQueue);
+  const emailVerificationService = { sendVerificationCode: jest.fn() };
+  const createUser = makeCreateUser(createUserInDB, mockHashFn, throwOnInvalidUserField, emailVerificationService);
 
   it('should call createUserInDB function', async () => {
     const newuser = { email: 'test@email.com', full_name: 'test', handle: 'testhandle', password: '123', passwordConfirm: '123' }
     const req = mockRequest(newuser);
     const res = mockResponse();
+    const next = jest.fn()
 
-    await createUser(req, res);
+    await createUser(req, res, next);
     const {passwordConfirm, ...persistUser } = newuser
     expect(createUserInDB).toBeCalledWith(persistUser);
   });
   
-  it('should call publishToMessageQueue function', async () => {
+  it('should call emailVerificationService.sendVerificationCode function', async () => {
     const newuser = { email: 'test@email.com', full_name: 'test', handle: 'testhandle', password: '123', passwordConfirm: '123' }
     const req = mockRequest(newuser);
     const res = mockResponse();
 
     await createUser(req, res);
-    const emailData = JSON.stringify({ to: newuser.email, user: newuser.handle, verificationCode: '123456' });
-    expect(publishToMessageQueue).toBeCalledWith("job", emailData);
+    expect(emailVerificationService.sendVerificationCode).toBeCalledWith("test@email.com", "testhandle");
   });
-
+  
   it('should set req session user_handle to newly created user\'s handle ', async () => {
     const newuser = { email: 'test@email.com', full_name: 'test', handle: 'testhandle', password: '123', passwordConfirm: '123' }
     const req = mockRequest(newuser);
     const res = mockResponse();
+    const next = jest.fn()
 
-    await createUser(req, res);
+    await createUser(req, res, next);
     expect(req.session.user_handle).toBe(newuser.handle);
   });
 });

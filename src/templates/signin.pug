@@ -6,8 +6,6 @@ block styles
 
 block main
   main.signin
-    if error_msg 
-      .flash-errors #{error_msg}
     form.signin-form(action="/signin", method="post")
       +_text-input('signin', 'handle', 'Username')
       +_text-input('signin', 'password', 'Password')    

@@ -6,8 +6,6 @@ block styles
 
 block main
   main.signup
-    if error_msg 
-        .flash-errors #{error_msg}
     form.signup-form(action="/signup", method="post")
       +_text-input('signup', 'handle', 'User handle', prevFilled && prevFilled.handle)
       +_text-input('signup', 'fullName', 'Full name', prevFilled && prevFilled.fullName)

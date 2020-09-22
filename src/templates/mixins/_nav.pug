@@ -20,3 +20,5 @@ mixin _nav(authUser)
       else 
         a(href="/signin" id="signin")
           +loginIcon()
+    if error_msg
+      .flash-errors !{error_msg}

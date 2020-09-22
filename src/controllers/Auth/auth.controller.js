@@ -2,9 +2,13 @@
 import bcrypt from 'bcrypt';
 import { DOAError, ClientError } from '../../lib/errors';
 import domainValidators from '../../models/domainValidators';
-import { trimFields } from '../../lib/utils';
+import { trimFields, genEmailVerificationCode } from '../../lib/utils';
+import { authenticationRequired } from '../../middlewares/loadAuthUser';
+import makeEmailVerificationService from './emailVerification.service';
 
-export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserField, publishToMessageQueue) {
+export function makeCreateUser(
+    createUserInDB, hashFunction, throwOnInvalidUserField, emailVerificationService
+  ) {
   return async function createUser(req, res, next) {
     const payload = req.body || {};
     try {
@@ -13,15 +17,15 @@ export function makeCreateUser(createUserInDB, hashFunction, throwOnInvalidUserF
       const sanitizedUser = trimFields(newUser);
       sanitizedUser.password = hashFunction(sanitizedUser.password);
       const [{ handle }] = await createUserInDB(sanitizedUser);
-      req.session.user_handle = handle
-      const emailConfig = JSON.stringify({
-        to: sanitizedUser.email,
-        user: handle,
-        verificationCode: '123456',
-      });
-      await publishToMessageQueue('job', emailConfig);
-      res.redirect('/');
+      
+      // save user to session
+      req.session.user_handle = handle;
+
+      await emailVerificationService.sendVerificationCode(sanitizedUser.email, handle);
+     
+      res.redirect('/verify-email');
     } catch (e) {
+      console.log(e)
       if (e instanceof ClientError || e instanceof DOAError) {
         req.session.error_msg = e.message;
         req.session.prevFilled = payload;
@@ -55,6 +59,51 @@ export function makeSigninUser(getUserFromDB, compareHash) {
   };
 }
 
+export function makeResendEmail(emailVerificationService) {
+  return async function resendEmail(req, res, next) {
+    try {
+      if (res.locals.authUser.active) {
+        return res.redirect('/');
+      }
+      const { email, handle } = res.locals.authUser;
+      await emailVerificationService.sendVerificationCode(email, handle);
+      res.redirect('/verify-email');
+    } catch (e) {
+      next(e);
+    }
+  }
+}
+
+export function makeVerifyUserEmail(updateUserInDB, emailVerificationService) {
+  return async function verifyEmail(req, res, next) {
+    try {
+      const { code } = req.body;
+      const { handle } = res.locals.authUser;
+
+      const success = await emailVerificationService.verify(handle, code);
+
+      if (success) {
+        await updateUserInDB({ active: true, handle })
+        return res.redirect('/');
+      }
+      
+      // TODO
+      // return to previous page and show error message code not match.
+      res.locals.error_msg = 'Verification code is incorrect.'
+      res.render('verify-email');
+    } catch (e) {
+      next(e)
+    }
+  }
+}
+
+export function verifiyEmailPage(req, res) {
+  if (res.locals.authUser.active) {
+    return res.redirect('/');
+  }
+  res.render('verify-email');
+}
+
 export function signinPage(req, res) {
   if (res.locals.authUser) {
     return res.redirect('/');
@@ -86,23 +135,43 @@ export function signout(req, res) {
   res.redirect('/');
 }
 
-export default function installAuthControllers(router, userModel, messageQueue) {
+export default function installAuthControllers(router, userModel, messageQueue, redisClient) {
+  const emailVerificationService = makeEmailVerificationService(
+    messageQueue.publish,
+    genEmailVerificationCode,
+    (key, value) => redisClient.setex(key, 15 * 60, value),
+    redisClient.get.bind(redisClient),
+  )
+  
   const createUser = makeCreateUser(
     userModel.create,
     (password) => bcrypt.hashSync(password, 10),
     domainValidators.User,
-    messageQueue.publish
+    emailVerificationService,
   );
+
   const signinUser = makeSigninUser(
     userModel.get,
     bcrypt.compareSync,
   );
+
+  const verifyEmail = makeVerifyUserEmail(
+    userModel.update,
+    emailVerificationService,
+  )
+ 
+  const resendEmail = makeResendEmail(emailVerificationService);
 
   router.get('/signin', signinPage);
   router.post('/signin', signinUser);
 
   router.get('/signup', signupPage);
   router.post('/signup', createUser);
+
+  router.get('/verify-email', authenticationRequired, verifiyEmailPage);
+  router.post('/verify-email', authenticationRequired, verifyEmail);
+
+  router.get('/resend-verify-email', authenticationRequired, resendEmail);
 
   router.get('/signout', signout);
 

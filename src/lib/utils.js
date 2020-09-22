@@ -47,6 +47,14 @@ export function trimFields(obj) {
   }, {});
 }
 
+export function genEmailVerificationCode() {
+  return `${getRandomNumberBetween(100000, 999999)}`;
+}
+
+function getRandomNumberBetween(min,max){
+  return Math.floor(Math.random()*(max-min+1)+min);
+}
+
 export default {
   makeCamelCaseAlias,
   camelToSnakeCase,
@@ -55,4 +63,5 @@ export default {
   attachPropAsArrayToMap,
   attachPropAsArrayToObject,
   trimFields,
+  genEmailVerificationCode,
 };

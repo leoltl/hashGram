@@ -1,3 +1,4 @@
+require('dotenv').config();
 const amqplib = require('amqplib');
 const nodemailer = require('nodemailer');
 
@@ -5,7 +6,7 @@ const CloudAMQP_URI = process.env.CloudAMQP_URI;
  
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_host,
-  port: SMTP_port,
+  port: process.env.SMTP_port,
   auth: {
     user: process.env.SMTP_user,
     pass: process.env.SMTP_pass
