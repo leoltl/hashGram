@@ -3,6 +3,7 @@ import installUserControllers from './User/user.controller';
 import { installPostControllers, installFeedController } from './Post/post.controller';
 import installStorageRoute from './Storage/storage.controller';
 import installCommentControllers from './Comment/comment.controller';
+import installChatController from './Chat/chat.controller';
 
 export {
   installAuthControllers,
@@ -11,4 +12,5 @@ export {
   installFeedController,
   installStorageRoute,
   installCommentControllers,
+  installChatController,
 };

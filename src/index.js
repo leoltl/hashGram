@@ -11,7 +11,7 @@ import messageQueue from './config/messageQueue';
 import db from '../knex/knex';
 import redisClient from './config/redis';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
-import { makeUser, makePost, makeComment } from './models';
+import { makeUser, makePost, makeComment, makeChat } from './models';
 import {
   installAuthControllers,
   installUserControllers,
@@ -19,6 +19,7 @@ import {
   installFeedController,
   installCommentControllers,
   installStorageRoute,
+  installChatController
 } from './controllers';
 
 const app = express();
@@ -57,6 +58,7 @@ app.use('/scripts', express.static(path.join(__dirname, '..', 'public', 'scripts
 const UserModel = makeUser(db);
 const PostModel = makePost(db);
 const CommentModel = makeComment(db);
+const ChatModel = makeChat(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
 
 installStorageRoute(router);
@@ -64,6 +66,7 @@ installAuthControllers(router, UserModel, messageQueue, redisClient);
 installPostControllers(router, PostModel);
 installFeedController(router, PostModel, CommentModel, UserModel);
 installCommentControllers(router, CommentModel);
+installChatController(router, ChatModel);
 
 // user routes should be last to initialize
 installUserControllers(router, UserModel, PostModel);
