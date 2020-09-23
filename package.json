@@ -6,6 +6,7 @@
   "scripts": {
     "start": "concurrently \"babel-node src/index.js\" \"node src/jobs\"",
     "start:dev": "concurrently \"nodemon --exec babel-node src/index.js\" \"node src/jobs\"",
+    "start:main": "babel-node src/bin/www",
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -48,6 +49,7 @@
     "pug": "^3.0.0",
     "redis": "^3.0.2",
     "serve-favicon": "^2.5.0",
-    "unique-string": "^2.0.0"
+    "unique-string": "^2.0.0",
+    "ws": "^7.3.1"
   }
 }

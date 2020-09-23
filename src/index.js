@@ -21,8 +21,6 @@ import {
   installStorageRoute,
 } from './controllers';
 
-const PORT = process.env.PORT || 3000;
-
 const app = express();
 const router = express.Router();
 app.set('view engine', 'pug');
@@ -42,15 +40,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* express session with redis as storage */
 const RedisStore = connectRedis(session);
-
-app.use(session({
-  // store: process.env.NODE_ENV !== 'production' ? session.MemoryStore() : new RedisStore({ client: redisClient }),
+const sessionParser = session({
   store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   cookie: {
     httpOnly: true,
   },
-}));
+})
+app.use(sessionParser);
 
 /* serves static files */
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon', 'favicon.ico')));
@@ -74,6 +71,7 @@ installUserControllers(router, UserModel, PostModel);
 app.use(router);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+
+export default app;
+
+export { sessionParser };
