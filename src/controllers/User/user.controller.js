@@ -2,11 +2,7 @@ import { DOAError, ClientError, HTTPError } from '../../lib/errors';
 import { authenticationRequired } from '../../middlewares/loadAuthUser';
 
 export function makeGetUserProfile(
-  getUserInDB,
-  getAllPostInDB,
-  getFollowerInDB,
-  getFollowingInDB,
-  isFollowingInDB,
+  getUserInDB, getAllPostInDB, getFollowerInDB, getFollowingInDB, isFollowingInDB,
 ) {
   return async function getUserProfile(req, res, next) {
     const { handle = {} } = req.params;
