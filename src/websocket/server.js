@@ -43,17 +43,29 @@ chatWsServer.on('connection', (ws, req) => {
   userSocketMap.set(req.session.user_handle, ws);
 
   ws.on('message', (data) => {
-    const { type, to, message } = JSON.parse(data);
-    const from = req.session.user_handle;
-    const body = JSON.stringify({ type, message, to, from });
+    const { type, ...rest } = JSON.parse(data);
     if (type === 'newMessage') {
-      messageQueue.publish(type, { message, to, from });
+      const { body, to } = rest;
+      const from = req.session.user_handle;
+      if (from === to) { 
+        ws.send('You can\'t message yourself.');
+        return
+      }
+      const serializedPayload = JSON.stringify({ type, body, to, from });
+
+      // publish the message to chat queue for chat service to persist message to db
+      messageQueue.publish("chat", { type, body, to, from });
+
+      // try getting 'to' user from userSocketMap and forward the message, do nothing if user not connected as websocket,
+      userSocketMap.get(to)?.send(serializedPayload);
+
+      // resend the received message back to originated socket.
+      ws.send(serializedPayload);
     }
-    userSocketMap.get(to)?.send(body);
-    ws.send(body);
   });
 
   ws.on('close', () => { 
+    console.log('someone disconnected')
     userSocketMap.del(req.session.user_handle); 
   });
 });
