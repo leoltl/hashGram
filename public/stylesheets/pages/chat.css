@@ -142,6 +142,29 @@ nav {
 .logo {
   font-size: var(--step-up-1);
 }
+@media screen and (min-width: 770px) {
+  .logo {
+    flex-grow: 2;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 11px;
+  }
+}
+@media screen and (min-width: 1080px) {
+  .logo {
+    padding-right: 1.25%;
+  }
+}
+
+a#chat {
+  position: absolute;
+  right: 10px;
+}
+@media screen and (min-width: 770px) {
+  a#chat {
+    position: initial;
+  }
+}
 
 #profile {
   box-sizing: content-box;
@@ -298,6 +321,11 @@ body {
   align-items: center;
 }
 
+input:disabled,
+button:disabled {
+  opacity: 0.4;
+}
+
 .online {
   position: relative;
   transform: translateX(12px);
@@ -410,7 +438,7 @@ body {
   overflow-y: scroll;
 }
 .chatapp__main-container .chatbox__messages {
-  margin-top: 5px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column-reverse;
 }

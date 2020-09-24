@@ -17,6 +17,11 @@ body {
   }
 }
 
+input:disabled,
+button:disabled {
+  opacity: 0.4;
+}
+
 .online{
   position: relative;
   transform: translateX(12px);
@@ -130,7 +135,7 @@ body {
       overflow-y: scroll;
     }
     &__messages {
-      margin-top: 5px;
+      margin-top: 10px;
       display: flex;
       flex-direction: column-reverse;
       @media screen and (min-width: 769px){

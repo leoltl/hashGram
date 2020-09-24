@@ -28,8 +28,8 @@ function ChatBox({ body, setBody, messages, focusChatBox, setFocusChatBox, handl
         <div ref={messagesEndRef}> </div>
       </div>
       <form onSubmit={handleSubmit} >
-        <input name="message" value={body} onChange={handleChange} />
-        <button type="submit">Send</button>
+        <input name="message" value={body} onChange={handleChange}  disabled={!selected}/>
+        <button type="submit" disabled={!selected}>Send</button>
       </form>
     </section>
   )

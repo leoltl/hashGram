@@ -30,6 +30,24 @@ nav {
 
 .logo {
   font-size: var(--step-up-1);
+  @media screen and (min-width: 770px) {
+    flex-grow: 2;    
+    display: flex;
+    justify-content: space-between;
+    padding-right: 11px;
+  }
+  
+  @media screen and (min-width: 1080px) {
+    padding-right: 1.25%;
+  }
+}
+
+a#chat {
+  position: absolute;
+  right: 10px;
+  @media screen and (min-width: 770px) {
+    position: initial;
+  }
 }
 
 #profile {

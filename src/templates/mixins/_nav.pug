@@ -5,6 +5,8 @@ mixin _nav(authUser)
     .logo 
       a(href="/" id="home")
         | #hashGram
+      a(href="/chat" id="chat")
+        +chatIcon()
     .nav__links
       a(href="/" id="home")
         +homeIcon()

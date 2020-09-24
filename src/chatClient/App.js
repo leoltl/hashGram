@@ -156,8 +156,10 @@ function AppContainer() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    chatws.send(JSON.stringify({ type: 'newMessage', to: selected, body }));
-    setBody('')
+    if (selected) {
+      chatws.send(JSON.stringify({ type: 'newMessage', to: selected, body }));
+      setBody('')
+    }
   }
 
   return (
