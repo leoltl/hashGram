@@ -27,12 +27,12 @@ button:disabled {
   transform: translateX(12px);
   &::after {
     content: "";
-    height: 5px;
-    width: 5px;
+    height: 7px;
+    width: 7px;
     background-color: green;
     border-radius: 50%;
     position: absolute;
-    top: 25%;
+    top: 30%;
     right: 100%;
   }
 }
@@ -42,12 +42,12 @@ button:disabled {
   transform: translateX(12px);
   &::after {
     content: "";
-    height: 5px;
-    width: 5px;
+    height: 7px;
+    width: 7px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    top: 25%;
+    top: 30%;
     right: 100%;
   }
 }

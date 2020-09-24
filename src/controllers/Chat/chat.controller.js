@@ -29,6 +29,12 @@ export function makeGetChats(getChatsInDB) {
 }
 
 export function chatApp(req, res) {
+  if (!res.locals.authUser) {
+    req.session.error_msg = 'Authentication required for this route. Please signin to access this feature';
+    res.redirect('/signin');
+    return
+  }
+  
   res.render('chat')
 }
 

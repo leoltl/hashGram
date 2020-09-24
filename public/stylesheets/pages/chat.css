@@ -182,7 +182,7 @@ a#chat {
 
 .flash-errors {
   position: absolute;
-  bottom: -100%;
+  bottom: -90vh;
   left: 50%;
   transform: translateX(-50%) translateY(-40%);
   background: #f8d7da;
@@ -332,12 +332,12 @@ button:disabled {
 }
 .online::after {
   content: "";
-  height: 5px;
-  width: 5px;
+  height: 7px;
+  width: 7px;
   background-color: green;
   border-radius: 50%;
   position: absolute;
-  top: 25%;
+  top: 30%;
   right: 100%;
 }
 
@@ -347,12 +347,12 @@ button:disabled {
 }
 .offline::after {
   content: "";
-  height: 5px;
-  width: 5px;
+  height: 7px;
+  width: 7px;
   background-color: red;
   border-radius: 50%;
   position: absolute;
-  top: 25%;
+  top: 30%;
   right: 100%;
 }
 
