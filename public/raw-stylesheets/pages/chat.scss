@@ -4,6 +4,49 @@ body {
   --statusbar-height: 30px;
 }
 
+.app {
+  @media screen and (min-width: 769px){
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__status-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.online{
+  position: relative;
+  transform: translateX(12px);
+  &::after {
+    content: "";
+    height: 5px;
+    width: 5px;
+    background-color: green;
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    right: 100%;
+  }
+}
+
+.offline{
+  position: relative;
+  transform: translateX(12px);
+  &::after {
+    content: "";
+    height: 5px;
+    width: 5px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 25%;
+    right: 100%;
+  }
+}
+
 .app__status-bar {
   height: var(--statusbar-height);
 }
@@ -13,9 +56,8 @@ body {
   height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height));
   overflow-x: hidden;
   position: relative;
-  section {
-    outline: var(--default-border);
-  }
+  max-width: 768px;
+  border: var(--default-border);
 
   .chatlist {
     min-width: 200px;
@@ -32,18 +74,34 @@ body {
         padding-right: 20px;
         border-radius: 50%;
       }
+      &--unfocus {
+        .chatlist__user {
+          visibility: hidden;
+        }
+        @media screen and (min-width: 769px){
+          transform: translateX(0);
+          .chatlist__user {
+            visibility: visible;
+          }
+        }
+      }
     }
   }
 
   .chatbox {
+    overflow: hidden;
+    border-left: var(--default-border);
     top: 0;
     left: 0;
-    width: calc(100vw - 70px);
     min-width: calc(100vw - 70px);
     height: 100%;
     z-index: 2;
     background: white;
     transform: translateX(-130px);
+    @media screen and (min-width: 769px){
+      transform: translateX(0);
+      min-width: 568px;
+    }
     transition: transform 0.3s ease-out;
     position: relative;
     &--unfocus {
@@ -52,20 +110,34 @@ body {
     }
     &__messages-wrapper {
       height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height) - 31px);
+      width: 100%;
       display: flex;
       flex-direction: column;
       overflow-y: scroll;
     }
     &__messages {
+      margin-top: 5px;
       display: flex;
       flex-direction: column-reverse;
     }
     form {
       width: 100%;
       display: flex;
-      position:fixed;
+      position: fixed;
+      bottom: 1px;
+      padding-right: 4px;
+      z-index: 2;
       input {
         flex-grow: 2;
+      }
+      button {
+        width: 80px;
+      }
+      @media screen and (min-width: 769px){
+        padding-right: 5px;
+        button {
+          width: 120px;
+        }
       }
     }
     &__message {

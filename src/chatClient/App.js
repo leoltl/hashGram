@@ -5,22 +5,14 @@ import ChatList from './components/ChatList';
 
 var chatws;
 
-function reducer(state, action) {
-  switch(action.type) {
-    case 'setHistory':
-      return {...state, [action.payload.from]: action.payload.history}
-    case 'newMessage':
-      return {...state, [action.payload.from]: [action.payload.message, ...state[action.payload.from]]}
-    default:
-      return state;
-  }
-}
-
-function App({ online, selected, setSelected, body, setBody, chats, messages, focusChatBox, setFocusChatBox, handleSubmit}) {
+function App({ online, selected, setSelected, body, setBody, chats, state, focusChatBox, setFocusChatBox, handleSubmit}) {
   return (
     <div className="app">
       <div className="app__status-bar">
-        Status: {online ? "online" : 'offline'}
+        {selected} 
+        {selected 
+          ? (online ? <div class="online"></div> : <div class="offline"></div>)
+          : ''}
       </div>
       <div className="chatapp__main-container">
         <ChatList
@@ -34,7 +26,7 @@ function App({ online, selected, setSelected, body, setBody, chats, messages, fo
           body={body}
           selected={selected}
           setBody={setBody}
-          messages={messages[selected]}
+          messages={state[selected]}
           focusChatBox={focusChatBox}
           setFocusChatBox={setFocusChatBox}
           handleSubmit={handleSubmit}
@@ -44,13 +36,34 @@ function App({ online, selected, setSelected, body, setBody, chats, messages, fo
   );
 }
 
+
+
+function reducer(state, action) {
+  switch(action.type) {
+    case 'setChats':
+      return {...state, chats: action.payload}
+    case 'setHistory':
+      return {...state, [action.payload.from]: action.payload.history}
+    case 'newMessage':
+      if (notInChats(state,action.payload.from)) {
+        return { ...state, chats: [{ user_handle: action.payload.from }, ...state.chats]}
+      }
+      return {...state, [action.payload.from]: [action.payload.message, ...(state[action.payload.from] || [])]}
+    default:
+      return state;
+  }
+}
+
+function notInChats(state, from) {
+  return !state.chats.find(i => i.user_handle === from)
+}
+
 function AppContainer() {
   const [online, setOnline] = useState(false);
   const [focusChatBox, setFocusChatBox] = useState(false);
   const [selected, setSelected] = useState(null);
   const [body, setBody] = useState('');
-  const [chats, setChats] = useState([]) 
-  const [messages, dispatch] = useReducer(reducer, {});
+  const [state, dispatch] = useReducer(reducer, {});
 
 
   useEffect(() => {
@@ -58,7 +71,7 @@ function AppContainer() {
       
       fetch('/api/chats')
         .then(res => res.json())
-        .then(chats => setChats(chats));
+        .then(chats => dispatch({ type: 'setChats', payload: chats }));
       
       chatws = new WebSocket("ws://localhost:3000/chat")
       chatws.onmessage = (msg) => {
@@ -69,9 +82,10 @@ function AppContainer() {
         if (message.type === 'newMessage') {
           return dispatch({ type: 'newMessage', payload: { from: message.from, message }});
         }
+        if (message.type === 'checkOnline') {
+          return setOnline(message.online)
+        }
       };
-      chatws.onopen = () => setOnline(true);
-      chatws.onclose = () => setOnline(false);
       chatws.onerror = console.log
     }())
 
@@ -86,7 +100,17 @@ function AppContainer() {
         .then(res => res.json())
         .then(history => dispatch({ type: 'setHistory', payload: { from: selected, history }}))
       }
-    }())
+    }());
+
+    if (selected) {
+      chatws.send(JSON.stringify({ type: 'checkOnline', user: selected }))
+      var checkUser = setInterval(() => {
+        chatws.send(JSON.stringify({ type: 'checkOnline', user: selected }))
+      }, 5000)
+    }
+    return () => {
+      clearInterval(checkUser)
+    }
   }, [selected])
 
   function handleSubmit(e) {
@@ -96,7 +120,10 @@ function AppContainer() {
   }
 
   return (
-    <App {...{online, selected, setSelected, body, setBody, chats, messages, focusChatBox, setFocusChatBox, handleSubmit}}/>
+    <App {...{
+      chats: state.chats,
+      setSelected,
+      online, selected, body, setBody, state, focusChatBox, setFocusChatBox, handleSubmit }}/>
   )
 }
 

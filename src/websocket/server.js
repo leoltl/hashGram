@@ -26,6 +26,10 @@ function makeUserSocketMap() {
     }
   }
 
+  function has(user_handle) {
+    return _map.has(user_handle);
+  }
+
   function del(user_handle) {
     _map.delete(user_handle);
   }
@@ -35,6 +39,7 @@ function makeUserSocketMap() {
     get,
     reverse,
     del,
+    has,
   }
 }
 
@@ -60,6 +65,14 @@ chatWsServer.on('connection', (ws, req) => {
 
       // resend the received message back to originated socket.
       ws.send(JSON.stringify({ type: 'loopback', body, to, from }));
+    }
+
+    if (type === 'checkOnline') {
+      const { user } = rest;
+      const online = userSocketMap.has(user);
+      console.log('checkOnline', user, online)
+      
+      ws.send(JSON.stringify({ type: 'checkOnline', online }))
     }
   });
 

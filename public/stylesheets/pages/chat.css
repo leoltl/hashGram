@@ -285,6 +285,49 @@ body {
   --statusbar-height: 30px;
 }
 
+@media screen and (min-width: 769px) {
+  .app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.app__status-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.online {
+  position: relative;
+  transform: translateX(12px);
+}
+.online::after {
+  content: "";
+  height: 5px;
+  width: 5px;
+  background-color: green;
+  border-radius: 50%;
+  position: absolute;
+  top: 25%;
+  right: 100%;
+}
+
+.offline {
+  position: relative;
+  transform: translateX(12px);
+}
+.offline::after {
+  content: "";
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: 25%;
+  right: 100%;
+}
+
 .app__status-bar {
   height: var(--statusbar-height);
 }
@@ -294,9 +337,8 @@ body {
   height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height));
   overflow-x: hidden;
   position: relative;
-}
-.chatapp__main-container section {
-  outline: var(--default-border);
+  max-width: 768px;
+  border: var(--default-border);
 }
 .chatapp__main-container .chatlist {
   min-width: 200px;
@@ -315,10 +357,22 @@ body {
   padding-right: 20px;
   border-radius: 50%;
 }
+.chatapp__main-container .chatlist__item--unfocus .chatlist__user {
+  visibility: hidden;
+}
+@media screen and (min-width: 769px) {
+  .chatapp__main-container .chatlist__item--unfocus {
+    transform: translateX(0);
+  }
+  .chatapp__main-container .chatlist__item--unfocus .chatlist__user {
+    visibility: visible;
+  }
+}
 .chatapp__main-container .chatbox {
+  overflow: hidden;
+  border-left: var(--default-border);
   top: 0;
   left: 0;
-  width: calc(100vw - 70px);
   min-width: calc(100vw - 70px);
   height: 100%;
   z-index: 2;
@@ -327,17 +381,25 @@ body {
   transition: transform 0.3s ease-out;
   position: relative;
 }
+@media screen and (min-width: 769px) {
+  .chatapp__main-container .chatbox {
+    transform: translateX(0);
+    min-width: 568px;
+  }
+}
 .chatapp__main-container .chatbox--unfocus {
   transform: translateX(0);
   transition: transform 0.3s ease-out;
 }
 .chatapp__main-container .chatbox__messages-wrapper {
   height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height) - 31px);
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
 }
 .chatapp__main-container .chatbox__messages {
+  margin-top: 5px;
   display: flex;
   flex-direction: column-reverse;
 }
@@ -345,9 +407,23 @@ body {
   width: 100%;
   display: flex;
   position: fixed;
+  bottom: 1px;
+  padding-right: 4px;
+  z-index: 2;
 }
 .chatapp__main-container .chatbox form input {
   flex-grow: 2;
+}
+.chatapp__main-container .chatbox form button {
+  width: 80px;
+}
+@media screen and (min-width: 769px) {
+  .chatapp__main-container .chatbox form {
+    padding-right: 5px;
+  }
+  .chatapp__main-container .chatbox form button {
+    width: 120px;
+  }
 }
 .chatapp__main-container .chatbox__message {
   display: flex;
