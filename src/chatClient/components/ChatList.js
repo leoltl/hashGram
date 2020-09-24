@@ -9,7 +9,7 @@ function ChatList({ chats, setSelected, focusChatBox, handleClick, selected, new
       onClick={handleClick}
     >
       <input name="new-chat" placeholder="Start a new chat..." onChange={handleNewChat} value={newChat} onKeyDown={handleCreateChat}/>
-      
+      <button className="secondary"> > </button>
       {chats && 
         chats.map(chat => 
         <ChatListItem

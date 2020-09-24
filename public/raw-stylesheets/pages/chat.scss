@@ -68,16 +68,34 @@ button:disabled {
     min-width: 200px;
     height: 100%;
     z-index: 1;
+    position: relative;
     input {
       width: 100%;
     }
+    button {
+      display: none;
+    }
+    max-height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height));
+    overflow-y: scroll;
     &--unfocus {
       input {
         visibility: hidden;
+        position: relative;
+      }
+      button {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 70px;
+        height: 40px;
       }
       @media screen and (min-width: 769px){
         input {
           visibility: visible;
+        }
+        button {
+          display: none;
         }
       }
     }

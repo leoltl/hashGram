@@ -372,16 +372,34 @@ button:disabled {
   min-width: 200px;
   height: 100%;
   z-index: 1;
+  position: relative;
+  max-height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height));
+  overflow-y: scroll;
 }
 .chatapp__main-container .chatlist input {
   width: 100%;
 }
+.chatapp__main-container .chatlist button {
+  display: none;
+}
 .chatapp__main-container .chatlist--unfocus input {
   visibility: hidden;
+  position: relative;
+}
+.chatapp__main-container .chatlist--unfocus button {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 40px;
 }
 @media screen and (min-width: 769px) {
   .chatapp__main-container .chatlist--unfocus input {
     visibility: visible;
+  }
+  .chatapp__main-container .chatlist--unfocus button {
+    display: none;
   }
 }
 .chatapp__main-container .chatlist__item {
