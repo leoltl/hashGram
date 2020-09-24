@@ -345,6 +345,17 @@ body {
   height: 100%;
   z-index: 1;
 }
+.chatapp__main-container .chatlist input {
+  width: 100%;
+}
+.chatapp__main-container .chatlist--unfocus input {
+  visibility: hidden;
+}
+@media screen and (min-width: 769px) {
+  .chatapp__main-container .chatlist--unfocus input {
+    visibility: visible;
+  }
+}
 .chatapp__main-container .chatlist__item {
   cursor: pointer;
   padding-left: 20px;
@@ -402,6 +413,11 @@ body {
   margin-top: 5px;
   display: flex;
   flex-direction: column-reverse;
+}
+@media screen and (min-width: 769px) {
+  .chatapp__main-container .chatbox__messages {
+    margin-top: 25px;
+  }
 }
 .chatapp__main-container .chatbox form {
   width: 100%;

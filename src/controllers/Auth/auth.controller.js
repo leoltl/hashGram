@@ -45,9 +45,11 @@ export function makeSigninUser(getUserFromDB, compareHash) {
     const { handle, password: plainPassword } = sanitizedUser;
     try {
       if (handle.trim() && plainPassword.trim()) {
-        const user = await getUserFromDB(handle, { columns: ['handle', 'password'] });
+        const user = await getUserFromDB(handle, { columns: ['handle', 'avatar', 'password'] });
         if (user && compareHash(plainPassword, user.password)) {
           req.session.user_handle = user.handle;
+          req.session.avatar = user.avatar || '';
+          console.log(req.session)
           return res.redirect('/');
         }
       }

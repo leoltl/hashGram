@@ -43,8 +43,13 @@ function makeUserSocketMap() {
   }
 }
 
+const avatarCache = {}
+
 chatWsServer.on('connection', (ws, req) => {
   console.log('new connection')
+  // cache user avatar
+  avatarCache[req.session.user_handle] = req.session.avatar;
+  // save socket to user handle
   userSocketMap.set(req.session.user_handle, ws);
 
   ws.on('message', (data) => {
@@ -72,7 +77,13 @@ chatWsServer.on('connection', (ws, req) => {
       const online = userSocketMap.has(user);
       console.log('checkOnline', user, online)
       
-      ws.send(JSON.stringify({ type: 'checkOnline', online }))
+      ws.send(JSON.stringify({ type, online }))
+    }
+
+    if (type === 'avatar') {
+      const { user } = rest;
+      console.log('avatar', user, avatarCache[user])
+      ws.send(JSON.stringify({ type, payload: { user_handle: user, avatar: avatarCache[user] || '' }}))
     }
   });
 
@@ -86,6 +97,7 @@ export default function registerWSUpgradeHandler(server, sessionParser) {
   server.on('upgrade', function upgrade(req, socket, head) {
     sessionParser(req, {}, () => {
       // TODO check authentication logic.
+      console.log(req.session)
       if (!req.session.user_handle) {
         socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
         socket.destroy();

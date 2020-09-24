@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
 import ChatListItem from './ChatListItem';
 
-function ChatList({ chats, setSelected, focusChatBox, setFocusChatBox, selected }) {
-  function handleClick() {
-      focusChatBox ? setFocusChatBox(false) : selected && setSelected(null)
-  }
+function ChatList({ chats, setSelected, focusChatBox, handleClick, selected, newChat, handleNewChat, handleCreateChat }) {
+  
   return (
     <section 
       className={`chatlist${focusChatBox ? ' chatlist--unfocus' : ''}`} 
       onClick={handleClick}
     >
+      <input name="new-chat" placeholder="Start a new chat..." onChange={handleNewChat} value={newChat} onKeyDown={handleCreateChat}/>
+      
       {chats && 
         chats.map(chat => 
         <ChatListItem
@@ -23,14 +23,20 @@ function ChatList({ chats, setSelected, focusChatBox, setFocusChatBox, selected 
   )
 }
 
-function ChatListContainer({ chats, setSelected, focusChatBox, setFocusChatBox, selected }) {
+function ChatListContainer({ chats, setSelected, focusChatBox, setFocusChatBox, selected, newChat, handleNewChat, handleCreateChat }) {
+  function handleClick() {
+    focusChatBox ? setFocusChatBox(false) : selected && setSelected(null)
+}
   return (
     <ChatList 
       chats={chats}
       selected={selected}
       setSelected={setSelected}
       focusChatBox={focusChatBox}
-      setFocusChatBox={setFocusChatBox}
+      newChat={newChat}
+      handleNewChat={handleNewChat} 
+      handleCreateChat={handleCreateChat}
+      handleClick={handleClick}
     />
   )
 }

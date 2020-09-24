@@ -63,6 +63,19 @@ body {
     min-width: 200px;
     height: 100%;
     z-index: 1;
+    input {
+      width: 100%;
+    }
+    &--unfocus {
+      input {
+        visibility: hidden;
+      }
+      @media screen and (min-width: 769px){
+        input {
+          visibility: visible;
+        }
+      }
+    }
     &__item {
       cursor: pointer;
       padding-left: 20px;
@@ -86,6 +99,7 @@ body {
         }
       }
     }
+    
   }
 
   .chatbox {
@@ -119,6 +133,9 @@ body {
       margin-top: 5px;
       display: flex;
       flex-direction: column-reverse;
+      @media screen and (min-width: 769px){
+        margin-top: 25px;
+      }
     }
     form {
       width: 100%;

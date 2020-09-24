@@ -16,7 +16,6 @@ function ChatBox({ body, setBody, messages, focusChatBox, setFocusChatBox, handl
   }
 
   useLayoutEffect(scrollToBottom, [messages]);
-  console.log('paint')
   return (
     <section 
       className={`chatbox${focusChatBox ? '' : ' chatbox--unfocus'}`} 

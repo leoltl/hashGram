@@ -5,7 +5,7 @@ import ChatList from './components/ChatList';
 
 var chatws;
 
-function App({ online, selected, setSelected, body, setBody, chats, state, focusChatBox, setFocusChatBox, handleSubmit}) {
+function App({ online, selected, setSelected, body, setBody, chats, state, focusChatBox, setFocusChatBox, handleSubmit, newChat, handleNewChat, handleCreateChat }) {
   return (
     <div className="app">
       <div className="app__status-bar">
@@ -21,6 +21,9 @@ function App({ online, selected, setSelected, body, setBody, chats, state, focus
           setSelected={setSelected}
           focusChatBox={focusChatBox}
           setFocusChatBox={setFocusChatBox}
+          newChat={newChat}
+          handleNewChat={handleNewChat} 
+          handleCreateChat={handleCreateChat}
         />
         <ChatBox 
           body={body}
@@ -40,13 +43,19 @@ function App({ online, selected, setSelected, body, setBody, chats, state, focus
 
 function reducer(state, action) {
   switch(action.type) {
+    case 'avatar':
+      const chats = [action.payload, ...state.chats.filter(chat => chat.user_handle !== action.payload.user_handle)];
+      return {...state, chats};
     case 'setChats':
       return {...state, chats: action.payload}
     case 'setHistory':
       return {...state, [action.payload.from]: action.payload.history}
     case 'newMessage':
       if (notInChats(state,action.payload.from)) {
-        return { ...state, chats: [{ user_handle: action.payload.from }, ...state.chats]}
+        return { ...state, 
+                chats: [{ user_handle: action.payload.from }, ...state.chats],
+                [action.payload.from]: [action.payload.message]
+              }
       }
       return {...state, [action.payload.from]: [action.payload.message, ...(state[action.payload.from] || [])]}
     default:
@@ -64,7 +73,21 @@ function AppContainer() {
   const [selected, setSelected] = useState(null);
   const [body, setBody] = useState('');
   const [state, dispatch] = useReducer(reducer, {});
+  const [newChat, setNewChat] = useState('');
 
+  function handleNewChat(e) {
+    setNewChat(e.target.value);
+  }
+
+  function handleCreateChat(e) {
+    if(e.keyCode === 13) {
+      chatws.send(JSON.stringify({ type: 'avatar', user: newChat }))
+      setSelected(newChat);
+      setNewChat('');
+    }
+  }
+
+  console.log(state)
 
   useEffect(() => {
     (function(){
@@ -85,6 +108,9 @@ function AppContainer() {
         if (message.type === 'checkOnline') {
           return setOnline(message.online)
         }
+        if (message.type === 'avatar') {
+          return dispatch({ type: 'avatar', payload: message.payload })
+        }
       };
       chatws.onerror = console.log
     }())
@@ -93,6 +119,7 @@ function AppContainer() {
       chatws.close();
     }
   }, []);
+
   useEffect(() => {
     (async function () {
       if (selected) {
@@ -122,8 +149,8 @@ function AppContainer() {
   return (
     <App {...{
       chats: state.chats,
-      setSelected,
-      online, selected, body, setBody, state, focusChatBox, setFocusChatBox, handleSubmit }}/>
+      setSelected, online, selected, body, setBody, state, 
+      focusChatBox, setFocusChatBox, handleSubmit, newChat, handleNewChat, handleCreateChat }}/>
   )
 }
 
