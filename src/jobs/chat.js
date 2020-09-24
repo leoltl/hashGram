@@ -17,7 +17,7 @@ export default function handler(ack) {
 
 async function persistMessage(from, to, body) {
   if (from === to) return;
-
+  if (!from || !to) return;
   async function genUUID() {
     const { rows: [{ uuid_generate_v4 }]} = await db.raw('select uuid_generate_v4()')
     return uuid_generate_v4;
@@ -39,8 +39,13 @@ async function persistMessage(from, to, body) {
         // create new 'chatroom' (chat_id in chat_user table) if previous chat does not exist
         chat_id = await genUUID();
         await trx('chat_user')
-          .insert([{ chat_id, user_handle: from }, { chat_id, user_handle: to } ])
+          .insert([{ chat_id, user_handle: from, }, { chat_id, user_handle: to } ])
+      } else {
+        await trx('chat_user')
+          .update('last_chat', db.fn.now())
+          .where('chat_id', chat_id)
       }
+
       // insert message with the chatroom id
       await trx('messages')
         .insert({

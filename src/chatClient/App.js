@@ -5,36 +5,43 @@ import ChatList from './components/ChatList';
 
 var chatws;
 
-function App({ online, selected, setSelected, body, setBody, chats, state, focusChatBox, setFocusChatBox, handleSubmit, newChat, handleNewChat, handleCreateChat }) {
+function App({ online, selected, setSelected, body, setBody, chats, state, err, focusChatBox, setFocusChatBox, handleSubmit, newChat, handleNewChat, handleCreateChat }) {
+  console.log('app err', err)
   return (
     <div className="app">
-      <div className="app__status-bar">
-        {selected} 
-        {selected 
-          ? (online ? <div class="online"></div> : <div class="offline"></div>)
-          : ''}
-      </div>
-      <div className="chatapp__main-container">
-        <ChatList
-          chats={chats}
-          selected={selected}
-          setSelected={setSelected}
-          focusChatBox={focusChatBox}
-          setFocusChatBox={setFocusChatBox}
-          newChat={newChat}
-          handleNewChat={handleNewChat} 
-          handleCreateChat={handleCreateChat}
-        />
-        <ChatBox 
-          body={body}
-          selected={selected}
-          setBody={setBody}
-          messages={state[selected]}
-          focusChatBox={focusChatBox}
-          setFocusChatBox={setFocusChatBox}
-          handleSubmit={handleSubmit}
-        />
-      </div>
+      {err 
+        ? `Page has error: ${JSON.stringify(err)}` 
+        : (
+          <>
+            <div className="app__status-bar">
+              {selected} 
+              {selected 
+                ? (online ? <div class="online"></div> : <div class="offline"></div>)
+                : ''}
+            </div>
+            <div className="chatapp__main-container">
+              <ChatList
+                chats={chats}
+                selected={selected}
+                setSelected={setSelected}
+                focusChatBox={focusChatBox}
+                setFocusChatBox={setFocusChatBox}
+                newChat={newChat}
+                handleNewChat={handleNewChat} 
+                handleCreateChat={handleCreateChat}
+              />
+              <ChatBox 
+                body={body}
+                selected={selected}
+                setBody={setBody}
+                messages={state[selected]}
+                focusChatBox={focusChatBox}
+                setFocusChatBox={setFocusChatBox}
+                handleSubmit={handleSubmit}
+              />
+            </div>
+          </>
+      )}
     </div> 
   );
 }
@@ -74,6 +81,7 @@ function AppContainer() {
   const [body, setBody] = useState('');
   const [state, dispatch] = useReducer(reducer, {});
   const [newChat, setNewChat] = useState('');
+  const [err, setErr] = useState(null); 
 
   function handleNewChat(e) {
     setNewChat(e.target.value);
@@ -87,14 +95,13 @@ function AppContainer() {
     }
   }
 
-  console.log(state)
-
   useEffect(() => {
     (function(){
       
       fetch('/api/chats')
         .then(res => res.json())
-        .then(chats => dispatch({ type: 'setChats', payload: chats }));
+        .then(chats => dispatch({ type: 'setChats', payload: chats }))
+        .catch(e => setErr(e))
       
       chatws = new WebSocket("ws://localhost:3000/chat")
       chatws.onmessage = (msg) => {
@@ -112,7 +119,14 @@ function AppContainer() {
           return dispatch({ type: 'avatar', payload: message.payload })
         }
       };
-      chatws.onerror = console.log
+      chatws.onclose = (e) => {
+        console.log('close', )
+        setErr('Can\'t establish server connection, please reauthenticate and retry.')
+      }
+      chatws.onerror = (e) => {
+        console.log(e)
+        setErr('Can\'t establish server connection, please reauthenticate and retry.')
+      }
     }())
 
     return () => {
@@ -149,7 +163,7 @@ function AppContainer() {
   return (
     <App {...{
       chats: state.chats,
-      setSelected, online, selected, body, setBody, state, 
+      setSelected, online, selected, body, setBody, state, err,
       focusChatBox, setFocusChatBox, handleSubmit, newChat, handleNewChat, handleCreateChat }}/>
   )
 }

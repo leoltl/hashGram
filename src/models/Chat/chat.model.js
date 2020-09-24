@@ -27,6 +27,7 @@ function makeChat(db) {
         db('chat_user').select('chat_id').where({ user_handle: user })
       )
       .whereNot({ user_handle: user })
+      .orderBy('chat_user.last_chat', 'desc')
       .join('users', 'chat_user.user_handle', 'users.handle')
   }
 
