@@ -1,0 +1,12 @@
+extends layout
+include mixins/_post
+
+block styles
+  link(rel="stylesheet", href="stylesheets/pages/chat.css")
+
+block main
+  main.index
+    #root
+
+block scripts
+  script(src="scripts/app.bundle.js")

@@ -35,20 +35,23 @@ function makeUser(db, baseModel) {
     return baseModel.safeUpdate(query, rest);
   }
 
+  /*
+  * TODO refactor getFollowing and getFollower into one function... 
+  */
   async function getFollowing(dataObject, options = {}) {
     const returnColumns = options.columns || ['follower.handle'];
-    const query = options.aggregration === 'count'
-      ? db('following')
-        .join('users as u', 'following.user_id', 'u.id')
-        .join('users as follower', 'following.follower_id', 'follower.id')
-        .andWhere({ is_active: true })
-        .count({ count: '*' })
-        .first()
-      : db('following')
-        .join('users as u', 'following.user_id', 'u.id')
-        .join('users as follower', 'following.follower_id', 'follower.id')
-        .select(returnColumns)
-        .andWhere({ is_active: true });
+
+    let query = db('following')
+      .join('users as u', 'following.user_id', 'u.id')
+      .join('users as follower', 'following.follower_id', 'follower.id')
+      .andWhere({ is_active: true })
+
+    if (options.aggregration === 'count') {
+      query = query.count({ count: '*' }).first();
+    } else {
+      query = query.select(returnColumns)
+    }
+
     if (typeof dataObject === 'string') {
       return baseModel.safeQuery(query, { 'follower.handle': dataObject });
     }
@@ -57,18 +60,18 @@ function makeUser(db, baseModel) {
 
   async function getFollower(dataObject, options = {}) {
     const returnColumns = options.columns || ['follower.handle'];
-    const query = options.aggregration === 'count'
-      ? db('following')
-        .join('users as u', 'following.user_id', 'u.id')
-        .join('users as follower', 'following.follower_id', 'follower.id')
-        .count({ count: '*' })
-        .andWhere({ is_active: true })
-        .first()
-      : db('following')
-        .join('users as u', 'following.user_id', 'u.id')
-        .join('users as follower', 'following.follower_id', 'follower.id')
-        .select(returnColumns)
-        .andWhere({ is_active: true });
+
+    let query = db('following')
+      .join('users as u', 'following.user_id', 'u.id')
+      .join('users as follower', 'following.follower_id', 'follower.id')
+      .andWhere({ is_active: true })
+    
+    if (options.aggregration === 'count') {
+      query = query.count({ count: '*' }).first();
+    } else {
+      query = query.select(returnColumns)
+    }
+
     if (typeof dataObject === 'string') {
       return baseModel.safeQuery(query, { 'u.handle': dataObject });
     }

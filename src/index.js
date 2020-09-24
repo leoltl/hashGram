@@ -11,7 +11,7 @@ import messageQueue from './config/messageQueue';
 import db from '../knex/knex';
 import redisClient from './config/redis';
 import { errorHandler, makeLoadAuthUserFromSession } from './middlewares';
-import { makeUser, makePost, makeComment } from './models';
+import { makeUser, makePost, makeComment, makeChat } from './models';
 import {
   installAuthControllers,
   installUserControllers,
@@ -19,9 +19,8 @@ import {
   installFeedController,
   installCommentControllers,
   installStorageRoute,
+  installChatController
 } from './controllers';
-
-const PORT = process.env.PORT || 3000;
 
 const app = express();
 const router = express.Router();
@@ -42,15 +41,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* express session with redis as storage */
 const RedisStore = connectRedis(session);
-
-app.use(session({
-  // store: process.env.NODE_ENV !== 'production' ? session.MemoryStore() : new RedisStore({ client: redisClient }),
+const sessionParser = session({
   store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   cookie: {
     httpOnly: true,
   },
-}));
+})
+app.use(sessionParser);
 
 /* serves static files */
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon', 'favicon.ico')));
@@ -60,6 +58,7 @@ app.use('/scripts', express.static(path.join(__dirname, '..', 'public', 'scripts
 const UserModel = makeUser(db);
 const PostModel = makePost(db);
 const CommentModel = makeComment(db);
+const ChatModel = makeChat(db);
 app.use(makeLoadAuthUserFromSession(UserModel));
 
 installStorageRoute(router);
@@ -67,6 +66,7 @@ installAuthControllers(router, UserModel, messageQueue, redisClient);
 installPostControllers(router, PostModel);
 installFeedController(router, PostModel, CommentModel, UserModel);
 installCommentControllers(router, CommentModel);
+installChatController(router, ChatModel);
 
 // user routes should be last to initialize
 installUserControllers(router, UserModel, PostModel);
@@ -74,6 +74,7 @@ installUserControllers(router, UserModel, PostModel);
 app.use(router);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+
+export default app;
+
+export { sessionParser };
