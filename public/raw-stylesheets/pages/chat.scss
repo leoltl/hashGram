@@ -1,0 +1,107 @@
+@import '../styles.scss';
+
+body {
+  --statusbar-height: 30px;
+}
+
+.app__status-bar {
+  height: var(--statusbar-height);
+}
+
+.chatapp__main-container {
+  display: flex;
+  height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height));
+  overflow-x: hidden;
+  position: relative;
+  section {
+    outline: var(--default-border);
+  }
+
+  .chatlist {
+    min-width: 200px;
+    height: 100%;
+    z-index: 1;
+    &__item {
+      cursor: pointer;
+      padding-left: 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      border-bottom: var(--default-border);
+      img {
+        padding-right: 20px;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .chatbox {
+    top: 0;
+    left: 0;
+    width: calc(100vw - 70px);
+    min-width: calc(100vw - 70px);
+    height: 100%;
+    z-index: 2;
+    background: white;
+    transform: translateX(-130px);
+    transition: transform 0.3s ease-out;
+    position: relative;
+    &--unfocus {
+      transform: translateX(0);
+      transition: transform 0.3s ease-out;
+    }
+    &__messages-wrapper {
+      height: calc(100vh - 2 * var(--navbar-height) - var(--statusbar-height) - 31px);
+      display: flex;
+      flex-direction: column;
+      overflow-y: scroll;
+    }
+    &__messages {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      position:fixed;
+      input {
+        flex-grow: 2;
+      }
+    }
+    &__message {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 25px;
+      padding-right: 50px;
+      padding-bottom: 3px;
+      p {
+        padding: 10px 12.5px;
+        border-radius: 10px;
+        position: relative;
+        z-index: 2;
+        background: white;
+        background-color: #eee;
+      }
+      &--reversed {
+        padding-left: 50px;
+        padding-right: 25px;
+        align-items: flex-end;
+        p {
+          border: 1px solid #ddd;
+          background-color:white;
+        }
+      }
+      small {
+        margin-top: 3px;
+        font-size: 0.7rem;
+        visibility: hidden;
+      }
+      &:hover {
+        small {
+          visibility: visible;
+        }
+      }
+    }
+  }
+}

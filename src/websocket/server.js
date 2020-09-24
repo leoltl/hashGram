@@ -51,16 +51,15 @@ chatWsServer.on('connection', (ws, req) => {
         ws.send('You can\'t message yourself.');
         return
       }
-      const serializedPayload = JSON.stringify({ type, body, to, from });
 
       // publish the message to chat queue for chat service to persist message to db
       messageQueue.publish("chat", { type, body, to, from });
 
       // try getting 'to' user from userSocketMap and forward the message, do nothing if user not connected as websocket,
-      userSocketMap.get(to)?.send(serializedPayload);
+      userSocketMap.get(to)?.send(JSON.stringify({ type, body, to, from }));
 
       // resend the received message back to originated socket.
-      ws.send(serializedPayload);
+      ws.send(JSON.stringify({ type: 'loopback', body, to, from }));
     }
   });
 

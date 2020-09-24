@@ -28,8 +28,13 @@ export function makeGetChats(getChatsInDB) {
   }
 }
 
+export function chatApp(req, res) {
+  res.render('chat')
+}
+
 export default function installCommentController(router, chatModel) {
   router.get('/api/chat/history', authenticationRequired, makeGetChatHistory(chatModel.get));
   router.get('/api/chats', authenticationRequired, makeGetChats(chatModel.getChats));
+  router.get('/chat', chatApp)
   return router;
 }
