@@ -15,6 +15,7 @@
     "db:seed:prod": "node_modules/.bin/knex seed:run --env production",
     "db:rollback": "node_modules/.bin/knex migrate:rollback",
     "build:client": "webpack",
+    "build": "webpack",
     "start:dev:client": "webpack --watch"
   },
   "keywords": [],
