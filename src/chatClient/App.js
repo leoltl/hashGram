@@ -103,7 +103,7 @@ function AppContainer() {
         .then(chats => dispatch({ type: 'setChats', payload: chats }))
         .catch(e => setErr(e))
       
-      chatws = new WebSocket(process.env.WS_URL)
+      chatws = new WebSocket(process.env.WS_URL || env.WS_URL || 'wss://leoltlleoltl-hashgram.herokuapp.com')
       chatws.onmessage = (msg) => {
         const message = JSON.parse(msg.data);
         if (message.type === 'loopback') {
