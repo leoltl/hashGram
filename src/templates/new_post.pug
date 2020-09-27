@@ -23,6 +23,10 @@ block main
         input(type='file' id="file-upload" accept='image/*' class='sr-only')
         input(class='sr-only' type='text' name='imageUid' id='img-uid')
         +_text-input(post, 'caption', 'Write a caption...')
+        
+        label(for='blur' id="blur") 
+          | blur
+          input(type='range', name="blur" min='0' max='15' step='1' value='0')
         button(type='submit') Share
     else
       .post-form--empty

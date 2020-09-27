@@ -63,7 +63,7 @@ app.use(makeLoadAuthUserFromSession(UserModel));
 
 installStorageRoute(router);
 installAuthControllers(router, UserModel, messageQueue, redisClient);
-installPostControllers(router, PostModel);
+installPostControllers(router, PostModel, messageQueue);
 installFeedController(router, PostModel, CommentModel, UserModel);
 installCommentControllers(router, CommentModel);
 installChatController(router, ChatModel);

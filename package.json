@@ -16,7 +16,8 @@
     "db:rollback": "node_modules/.bin/knex migrate:rollback",
     "build:client": "webpack",
     "build": "webpack",
-    "start:dev:client": "webpack --watch"
+    "start:dev:client": "webpack --watch",
+    "styles": "sass public/raw-stylesheets/pages:public/stylesheets/pages"
   },
   "keywords": [],
   "author": "Leo Lee",

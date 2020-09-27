@@ -41,15 +41,31 @@ export function makeGetPost(getPostFromDB, aggregatePostsService) {
   };
 }
 
-export function makeNewPost(createPostInDB) {
+export function makeNewPost(createPostInDB, publishToMessageQueue) {
   return async function newPost(req, res, next) {
-    /* TODO: add validation of missing imageUrl */
-    const { caption, imageUid } = req.body;
-    const { id: userId } = res.locals.authUser;
-    await createPostInDB({
-      caption, userId, imageUid,
-    });
-    res.redirect('/');
+    try {
+      const { caption, imageUid, blur } = req.body;
+    
+      if (!imageUid || blur < 0 || blur >= 15) {
+        // invalid input
+        return res.redirect('/new-post')
+      }
+
+      const { id: userId } = res.locals.authUser;
+      const imageProcessingConfig = {
+        resource_key: imageUid,
+        filters: []
+      }
+      if (blur !== 0) { imageProcessingConfig.filters.push(['blur', parseInt(blur, 10)])}
+      await createPostInDB({
+        caption, userId, imageUid,
+      });
+      await publishToMessageQueue("upload", imageProcessingConfig)
+      res.redirect(`/p/${imageUid}`);
+    } catch (e) {
+      next(e)
+    }
+    
   };
 }
 
@@ -90,13 +106,14 @@ function makeActivityPage(getLikedPostsFromDB) {
   };
 }
 
-export function installPostControllers(router, postModel) {
+export function installPostControllers(router, postModel, messageQueue) {
   router.post('/new-post',
     authenticationRequired,
-    makeNewPost(postModel.create));
+    makeNewPost(postModel.create, messageQueue.publish));
   router.post('/api/like-post',
     authenticationRequired,
-    makeLikeDislikePost(postModel.likePost, postModel.unlikePost));
+    makeLikeDislikePost(postModel.likePost, postModel.unlikePost),
+    );
   router.get('/new-post', newPostPage);
   router.get('/activity', makeActivityPage(postModel.getLikedPosts));
   return router;

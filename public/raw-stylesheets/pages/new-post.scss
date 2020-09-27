@@ -54,6 +54,16 @@ label svg {
   margin-right: var(--margin-xs);
 }
 
+#blur {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  input[type="range"] {
+    width: 80%;
+  }
+}
+
 @media screen and (min-width: 600px) {
   .post-form__preview {
     height: clamp(100px, 95vw, 500px);
