@@ -9,7 +9,7 @@ function makePublisher() {
       return conn.createChannel()
     })
     .then(ch => {
-      console.log('rabbitMQ connected')
+      console.log('rabbitMQ connected - publisher')
       channel = ch;
     })
     .catch(console.log);
@@ -29,4 +29,40 @@ function makePublisher() {
   }
 }
 
-export default makePublisher();
+function makeConsumer() {
+  let channel;
+  // connect to CloudAMQP and create a single channel
+  amqplib
+    .connect(process.env.CloudAMQP_URI)
+    .then(conn => {
+      return conn.createChannel()
+    })
+    .then(ch => {
+      console.log('rabbitMQ connected - consumer')
+      channel = ch;
+    })
+    .catch(console.log);
+
+  async function consume(queue, makeHandler, options) {
+    try {
+      const queueOK = await channel.assertQueue(queue);
+      if (queueOK) {
+        const handler = makeHandler(channel);
+        channel.consume(queue, handler, options);
+        channel.cancel
+      }
+    } catch (e) {
+      console.log(e) 
+    }
+  }
+
+  return {
+    consume: consume,
+  }
+}
+
+
+export default {
+  publisher: makePublisher(),
+  consumer: makeConsumer()
+};

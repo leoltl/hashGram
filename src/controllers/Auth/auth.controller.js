@@ -139,7 +139,7 @@ export function signout(req, res) {
 
 export default function installAuthControllers(router, userModel, messageQueue, redisClient) {
   const emailVerificationService = makeEmailVerificationService(
-    messageQueue.publish,
+    messageQueue.publisher.publish,
     genEmailVerificationCode,
     (key, value) => redisClient.setex(key, 15 * 60, value),
     redisClient.get.bind(redisClient),

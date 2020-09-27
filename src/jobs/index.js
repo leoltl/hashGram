@@ -8,7 +8,7 @@ const CloudAMQP_URI = process.env.CloudAMQP_URI;
 async function consumer(connection, queue, makeHandler) {
   try {
     const channel = await connection.createChannel();
-    const queueOK = channel.assertQueue(queue);
+    const queueOK = await channel.assertQueue(queue);
     if (queueOK) {
       const handler = makeHandler(channel.ack.bind(channel));
       channel.consume(queue, handler);

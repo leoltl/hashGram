@@ -41,12 +41,12 @@ export function makeGetPost(getPostFromDB, aggregatePostsService) {
   };
 }
 
-export function makeNewPost(createPostInDB, publishToMessageQueue) {
+export function makeNewPost(createPostInDB, publishToMessageQueue, consumeOnComplete) {
   return async function newPost(req, res, next) {
     try {
       const { caption, imageUid, blur } = req.body;
     
-      if (!imageUid || blur < 0 || blur >= 15) {
+      if (!imageUid || blur < 0 || blur > 15) {
         // invalid input
         return res.redirect('/new-post')
       }
@@ -60,8 +60,30 @@ export function makeNewPost(createPostInDB, publishToMessageQueue) {
       await createPostInDB({
         caption, userId, imageUid,
       });
-      await publishToMessageQueue("upload", imageProcessingConfig)
-      res.redirect(`/p/${imageUid}`);
+
+      await publishToMessageQueue("upload", imageProcessingConfig);
+      
+      (new Promise(function (resolve, reject) { 
+        consumeOnComplete("completed", function handler(channel) {
+          return function (message) {
+            console.log(message, message.content.toString())
+            const payload = JSON.parse(message.content.toString())
+            if (payload['resource-key'] === imageUid) {
+              channel.ack(message);
+              channel.cancel(imageUid, (err) => {
+                channel.nackAll();
+              });
+              resolve();
+            }
+          }
+        }, { consumerTag: imageUid });
+        setTimeout(() => {
+          reject()
+          }, 60000);
+        }
+      )).then(() => res.redirect(`/p/${imageUid}`))
+      .catch(() => res.redirect('/'))
+      
     } catch (e) {
       next(e)
     }
@@ -109,7 +131,7 @@ function makeActivityPage(getLikedPostsFromDB) {
 export function installPostControllers(router, postModel, messageQueue) {
   router.post('/new-post',
     authenticationRequired,
-    makeNewPost(postModel.create, messageQueue.publish));
+    makeNewPost(postModel.create, messageQueue.publisher.publish, messageQueue.consumer.consume));
   router.post('/api/like-post',
     authenticationRequired,
     makeLikeDislikePost(postModel.likePost, postModel.unlikePost),
