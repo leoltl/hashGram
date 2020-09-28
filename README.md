@@ -13,8 +13,10 @@ The product is fully responsive.
 
 ![hashGram](public/hashgram.gif )
 
-<img src="https://user-images.githubusercontent.com/24300420/92531195-ae749400-f1e2-11ea-9877-1c93d87b4931.png" alt="hashGram" style="max-width:200px;">
+Apply image filter (only blur filter for now)
 
+*image filter is apply on server side with python image-processing app (https://github.com/leoltl/hashGram-image-process)*
+![hashGram](public/screenshot-4.JPG )
 
 ## The stack
 - **Server side**: Node with Express (ES2017 async/await), WebSocket
@@ -28,7 +30,8 @@ The product is fully responsive.
 
 ## Live App
 **View it on [here](https://leoltl-hashgram.herokuapp.com/)**
-*The App is hosted on Heroku, it might take some to spin up the deno*
+
+**The App is hosted on Heroku, it might take some time to spin up the deno*
 
 You can create your own account or login in with one of the following accounts:
 
@@ -65,6 +68,7 @@ You can create your own account or login in with one of the following accounts:
 - I will receive an email on signup to with a confirmation code to verifiy my email address later in the app
 - I can send other users real time direct messages.
 - I can see the messages persisted to database and view the history at later time.
+- I can apply simple filter to the photos that I share
 
 #### TODO
 - add notifications via WebSocket
@@ -73,3 +77,4 @@ You can create your own account or login in with one of the following accounts:
 
 
 <img src="https://user-images.githubusercontent.com/24300420/92531178-a74d8600-f1e2-11ea-9dd0-723a196e27ca.png" alt="hashGram" style="max-width:200px;">
+<img src="https://user-images.githubusercontent.com/24300420/92531195-ae749400-f1e2-11ea-9877-1c93d87b4931.png" alt="hashGram" style="max-width:200px;">
