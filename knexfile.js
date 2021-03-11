@@ -66,14 +66,15 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    // connection: {
-    //   host:     process.env.DB_HOST || 'localhost',
-    //   database: process.env.DB_NAME || 'hashgram',
-    //   user:     process.env.DB_USER || 'hashgram',
-    //   password: process.env.DB_PASSWORD || 'hashgram',
-    //   ssl: true,
-    // },
-    connection: `${process.env.DATABASE_URL}?sslmode=require`,
+    connection: {
+      host:     process.env.DB_HOST || 'localhost',
+      database: process.env.DB_NAME || 'hashgram',
+      user:     process.env.DB_USER || 'hashgram',
+      password: process.env.DB_PASSWORD || 'hashgram',
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
     pool: {
       min: 2,
       max: 10,
