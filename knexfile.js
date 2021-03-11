@@ -71,6 +71,7 @@ module.exports = {
       database: process.env.DB_NAME || 'hashgram',
       user:     process.env.DB_USER || 'hashgram',
       password: process.env.DB_PASSWORD || 'hashgram',
+      ssl: { rejectUnauthorized: false }
     },
     pool: {
       min: 2,
